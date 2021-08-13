@@ -1485,7 +1485,7 @@
                 </ul>
                 </li>
             <?php }
-            if ($this->aauth->get_user()->roleid > 4) {
+            if ($this->aauth->get_user()->roleid > 4 || $this->aauth->get_user()->roleid==1 || $this->aauth->get_user()->roleid==-1) {
                 ?>
                 <li class="menu-item   has-sub <?php if ($this->li_a == "export") {
                     echo ' open';

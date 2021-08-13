@@ -1699,7 +1699,7 @@
                     </ul>
                 </li>
             <?php }
-            if ($this->aauth->get_user()->roleid > 4 || $this->aauth->get_user()->roleid==1) {
+            if ($this->aauth->get_user()->roleid > 4 || $this->aauth->get_user()->roleid==1 || $this->aauth->get_user()->roleid==-1) {
                 ?>
                 <li class="dropdown mega-dropdown nav-item" data-menu="megamenu"><a class="dropdown-toggle nav-link"
                                                                                     href="#" data-toggle="dropdown"><i
