@@ -1,0 +1,1571 @@
+<table  class="table table-striped table-bordered zero-configuration" cellspacing="0" width="90%">
+	<thead>
+	<tr>
+		<th>#</th>
+		<th>Name</th>                        
+		<th>Email</th>
+		<th>Mobile</th>
+		<th>Source</th>
+		<th>Date</th>
+		<th>State</th>
+		<th>City</th>
+		<th>Pincode</th>
+		<th>Shop Type</th>		
+		<th>Status</th>
+		<th>Assign To</th>
+		<th>New (Date Time)</th>
+		<th>Contacted (Date Time)</th>
+		<th>Qualified (Date Time)</th>
+		<th>Proposal Sent (Date Time)</th>
+		<th>Coverted to Customer (Date Time)</th>
+		<th>Not Coverted to Customer (Date Time)</th>
+		<th>Junk</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+						
+	<tr>
+		<td>72</td>
+		<td>Devendra</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>8527626445</td>							
+		<td>Direct</td>
+		<td>2021-01-14 07:19:18</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 07:19:18</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-19 14:55:17</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>71</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 07:02:55</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 07:02:55</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-19 14:55:21</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>70</td>
+		<td>JAYDEEP</td>                        
+		<td>jroysarkar@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:56:32</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 06:56:32</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-19 14:55:25</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>69</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:55:29</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 06:55:29</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-19 16:41:41</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>68</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:55:14</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td>Jaydeep Roy Sarkar</td>
+		
+		<td>2021-01-14 06:55:14</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>67</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:47:47</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-14 06:47:47</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>66</td>
+		<td>JAYDEEP</td>                        
+		<td>jroysarkar@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:44:50</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-14 06:44:50</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>65</td>
+		<td>Devendra</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>8527626445</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:43:54</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 06:43:54</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>64</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:31:39</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 06:31:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-19 16:42:17</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>63</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:23:43</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Business Manager</td>
+		
+		<td>2021-01-14 06:23:43</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>62</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:22:42</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 06:22:42</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>61</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:20:01</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 06:20:01</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>60</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:15:00</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 06:15:00</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>59</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:13:03</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 06:13:03</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>58</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 06:12:00</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 06:12:00</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>57</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 05:57:48</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 05:57:48</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>56</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 05:57:16</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 05:57:16</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>55</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 05:56:44</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 05:56:44</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>54</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 05:56:10</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 05:56:10</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>53</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 05:50:34</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>N/A</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 05:50:34</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>52</td>
+		<td>JAYDEEP</td>                        
+		<td>devendra.cartnyou@gmail.com</td>
+		<td>+919732212158</td>							
+		<td>Direct</td>
+		<td>2021-01-14 05:49:14</td>
+		<td>Andhra Pradesh</td>
+		<td>kasjndkasnd</td>
+		<td>736146</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-14 05:49:14</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>51</td>
+		<td>ABHI UPLETA</td>                        
+		<td>abhishekdadhania91@gmail.com</td>
+		<td>8128260081</td>							
+		<td></td>
+		<td>2021-01-07 10:19:26</td>
+		<td>Gujarat</td>
+		<td>upleta</td>
+		<td>360490</td>
+		<td>Rented</td>
+		<td>Coverted to Customer</td>
+		<td>Sales Manager</td>
+		
+		<td>2021-01-07 10:19:26</td>
+		<td></td>
+		<td>2021-01-14 14:53:28</td>
+		<td>2021-01-14 14:54:18</td>
+		<td>2021-01-15 16:33:09</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>50</td>
+		<td>Brahaspat singh</td>                        
+		<td>brahaspat.sisodia@gmail.com</td>
+		<td>9926666083</td>							
+		<td></td>
+		<td>2021-01-07 08:18:30</td>
+		<td>Madhya Pradesh</td>
+		<td>Indore</td>
+		<td>452001</td>
+		<td>Owned</td>
+		<td>Coverted to Customer</td>
+		<td>Sales Manager</td>
+		
+		<td>2021-01-07 08:26:54</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-15 15:31:37</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>49</td>
+		<td>Amit </td>                        
+		<td>amit.kumar0407@gmail.com</td>
+		<td>9806669777</td>							
+		<td></td>
+		<td>2021-01-07 07:36:36</td>
+		<td>Madhya Pradesh</td>
+		<td>Jabalpur</td>
+		<td>482008</td>
+		<td>Rented</td>
+		<td>Coverted to Customer</td>
+		<td>Sales Manager</td>
+		
+		<td>2021-01-07 08:26:54</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-15 14:53:39</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>48</td>
+		<td>Syed Ahmar Shakir</td>                        
+		<td>sashakir786@gmail.com</td>
+		<td>09919928863</td>							
+		<td></td>
+		<td>2021-01-06 14:05:44</td>
+		<td>Uttar Pradesh</td>
+		<td>Lucknow</td>
+		<td>226003</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>47</td>
+		<td>Mohammad abdul maman</td>                        
+		<td>nadeemhussainns1@gmail.com</td>
+		<td>7014796746</td>							
+		<td></td>
+		<td>2021-01-05 15:10:06</td>
+		<td>Rajasthan</td>
+		<td>Rajsamand </td>
+		<td>313324</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td>2021-01-06 13:05:48</td>
+		<td>2021-01-06 13:05:58</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>46</td>
+		<td>Ram mahajan </td>                        
+		<td>mahajanagency31@gmail.com</td>
+		<td>9200859999</td>							
+		<td></td>
+		<td>2021-01-05 10:31:36</td>
+		<td>Madhya Pradesh</td>
+		<td>Karelo</td>
+		<td>487221</td>
+		<td>Owned</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-06 08:00:57</td>
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-05 14:08:31</td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>45</td>
+		<td>Ram mahajan </td>                        
+		<td>mahajanagency31@gmail.com</td>
+		<td>9200859999</td>							
+		<td></td>
+		<td>2021-01-05 10:30:53</td>
+		<td>Madhya Pradesh</td>
+		<td>Kareli </td>
+		<td>487221</td>
+		<td>N/A</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-06 08:00:58</td>
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>44</td>
+		<td>Vikram samal</td>                        
+		<td>vikramsamalsamsung@gmail.com</td>
+		<td>9303636488</td>							
+		<td></td>
+		<td>2021-01-05 08:35:19</td>
+		<td>Madhya Pradesh</td>
+		<td>Raigarh</td>
+		<td>496001</td>
+		<td>Rented</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-06 08:00:58</td>
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>43</td>
+		<td>Dhanraj kumawat</td>                        
+		<td>dhanrajkumawat20@gmail.com</td>
+		<td>8233461519</td>							
+		<td></td>
+		<td>2021-01-04 09:28:31</td>
+		<td>Rajasthan</td>
+		<td>Rajasamand</td>
+		<td>313324</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>42</td>
+		<td>Dharmendera </td>                        
+		<td>Dharmpoonia471@gmail.com</td>
+		<td>9414591000</td>							
+		<td></td>
+		<td>2021-01-04 03:46:02</td>
+		<td>Rajasthan</td>
+		<td>Bikaner </td>
+		<td>334023</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>41</td>
+		<td>Naveen maheshwari</td>                        
+		<td>maheshwarienterprise4@gmail.com</td>
+		<td>9460827070</td>							
+		<td></td>
+		<td>2021-01-03 16:53:39</td>
+		<td>Rajasthan</td>
+		<td>Fatehnagar</td>
+		<td>313205</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>40</td>
+		<td>Deepak kumar pareek</td>                        
+		<td>deepakcellular@gmail.com</td>
+		<td>9929099991</td>							
+		<td></td>
+		<td>2021-01-03 16:20:55</td>
+		<td>Rajasthan</td>
+		<td>Makrana</td>
+		<td>341505</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>39</td>
+		<td>Deepak pareek</td>                        
+		<td>deepakcellular@gmail.com</td>
+		<td>9929410484</td>							
+		<td></td>
+		<td>2021-01-03 16:19:39</td>
+		<td>Rajasthan</td>
+		<td>Makrana</td>
+		<td>341505</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>38</td>
+		<td>Harish jain</td>                        
+		<td>chinki222180@gmail.com</td>
+		<td>8432200200</td>							
+		<td></td>
+		<td>2021-01-03 16:01:27</td>
+		<td>Rajasthan</td>
+		<td>Sawai madhopur</td>
+		<td>322001</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>37</td>
+		<td>Ashish</td>                        
+		<td>gauravkhandelwal599@gmail.com</td>
+		<td>9460319771</td>							
+		<td></td>
+		<td>2021-01-03 14:30:20</td>
+		<td>Rajasthan</td>
+		<td>Bharatpur</td>
+		<td>321001</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>36</td>
+		<td>Ramjan</td>                        
+		<td>chhimparamzan@gmail.com</td>
+		<td>9784944786</td>							
+		<td></td>
+		<td>2021-01-03 13:03:28</td>
+		<td>Rajasthan</td>
+		<td>Bikaner</td>
+		<td>331803</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>35</td>
+		<td>MANOJ BATHLA</td>                        
+		<td>manojanta1234@gmail.com</td>
+		<td>9829122379</td>							
+		<td></td>
+		<td>2021-01-03 11:36:47</td>
+		<td>Rajasthan</td>
+		<td>Anta</td>
+		<td>325202</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>34</td>
+		<td>Pankaj Mangal</td>                        
+		<td>pankajmobilesmailbox@rediffmail.com</td>
+		<td>9057615252</td>							
+		<td></td>
+		<td>2021-01-03 10:55:22</td>
+		<td>Rajasthan</td>
+		<td>Dholpur</td>
+		<td>328021</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>33</td>
+		<td>Arvind bhardwaj</td>                        
+		<td>arvindbhardwaj104@gmail.com</td>
+		<td>9509238886</td>							
+		<td></td>
+		<td>2021-01-03 10:32:39</td>
+		<td>Rajasthan</td>
+		<td>GANGAPUR CITY</td>
+		<td>322201</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>32</td>
+		<td>Rajveer Sevkani</td>                        
+		<td>parwatibarmer97@gmail.com</td>
+		<td>9772989999</td>							
+		<td></td>
+		<td>2021-01-03 10:18:42</td>
+		<td>Rajasthan</td>
+		<td>Barmer </td>
+		<td>344001</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>31</td>
+		<td>Sayed</td>                        
+		<td>laziraworldmobicafe@gmail.com</td>
+		<td>9929590888</td>							
+		<td></td>
+		<td>2021-01-03 09:54:35</td>
+		<td>Rajasthan</td>
+		<td>jalore</td>
+		<td>343001</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-06 07:51:59</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>30</td>
+		<td>Ghanshyam</td>                        
+		<td>ghanshyam.rankawat@yahoo.com</td>
+		<td>9829556175</td>							
+		<td></td>
+		<td>2021-01-03 09:15:24</td>
+		<td>Rajasthan</td>
+		<td>Pali</td>
+		<td>306401</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>29</td>
+		<td>Nadeem hussain</td>                        
+		<td>nadeemsilawat777@gmail.com</td>
+		<td>7737933777</td>							
+		<td></td>
+		<td>2021-01-03 09:00:15</td>
+		<td>Rajasthan</td>
+		<td>Rajsamand</td>
+		<td>313324</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>28</td>
+		<td>Nitin bhatia</td>                        
+		<td>ni3bhatia@gmail.com</td>
+		<td>9252600000</td>							
+		<td></td>
+		<td>2021-01-03 08:38:00</td>
+		<td>Rajasthan</td>
+		<td>Nathdwara</td>
+		<td>313301</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>27</td>
+		<td>Manish lamba</td>                        
+		<td>manish.lamba88@gmail.com</td>
+		<td>09828027850</td>							
+		<td></td>
+		<td>2020-12-30 18:09:09</td>
+		<td>Rajasthan</td>
+		<td>Bhiwadi</td>
+		<td>301707</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>26</td>
+		<td>Manish</td>                        
+		<td>motwanimanish28@gmail.com</td>
+		<td>8058683687</td>							
+		<td></td>
+		<td>2020-12-30 14:48:25</td>
+		<td>Rajasthan</td>
+		<td>Bhilwara</td>
+		<td>311001</td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-05 11:58:54</td>
+		<td></td>
+		<td>2021-01-05 13:56:45</td>
+		<td>2021-01-06 07:51:59</td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>25</td>
+		<td>Test data</td>                        
+		<td>testjaydeep@cartnyou</td>
+		<td>9832212158</td>							
+		<td></td>
+		<td>2020-12-30 13:39:50</td>
+		<td>West Bengal</td>
+		<td>Siliguri</td>
+		<td>736146</td>
+		<td>Rented</td>
+		<td>New</td>
+		<td>Jaydeep Roy Sarkar</td>
+		
+		<td>2020-12-30 13:39:50</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>2021-01-07 08:26:54</td>			
+	</tr>						
+						
+	<tr>
+		<td>24</td>
+		<td>Vijay Agrawal </td>                        
+		<td>mobile.jpr@gmail.com</td>
+		<td>09829078786</td>							
+		<td></td>
+		<td>2020-12-30 06:40:36</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>23</td>
+		<td>Dilip Kumar Sharma</td>                        
+		<td>deepashu6@gmail.com</td>
+		<td>9829932100</td>							
+		<td></td>
+		<td>2020-12-30 06:22:48</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>22</td>
+		<td>Aditya Telecom mahwa</td>                        
+		<td>adityatelecome5555@gmail.com</td>
+		<td>9982555577</td>							
+		<td></td>
+		<td>2020-12-30 06:03:02</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>21</td>
+		<td>Prem Prakash Gupta </td>                        
+		<td>premprakashgupta555@gmail.com</td>
+		<td>9829599552</td>							
+		<td></td>
+		<td>2020-12-30 04:12:04</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>20</td>
+		<td>Sanvi anand</td>                        
+		<td>ravianand1755@gmail.com</td>
+		<td>9549317706</td>							
+		<td></td>
+		<td>2020-12-30 04:10:49</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>19</td>
+		<td>Jada ji</td>                        
+		<td>vishnoihelpline@gmail.com</td>
+		<td>9828927066</td>							
+		<td></td>
+		<td>2020-12-30 04:09:11</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>18</td>
+		<td>Jaswant</td>                        
+		<td>govindsales007@rediffmail.com</td>
+		<td>9413308408</td>							
+		<td></td>
+		<td>2020-12-30 04:08:42</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>17</td>
+		<td>sanjay sharma</td>                        
+		<td>jmd.mobiles@gmail.com</td>
+		<td>9636804464</td>							
+		<td></td>
+		<td>2020-12-30 03:39:37</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>16</td>
+		<td>sanjay sharma</td>                        
+		<td>jmd.mobiles@gmail.com</td>
+		<td>9636804464</td>							
+		<td></td>
+		<td>2020-12-30 03:38:55</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>15</td>
+		<td>Deepankur Chouhan</td>                        
+		<td>brcomputerkekri@gmail.com</td>
+		<td>8104270266</td>							
+		<td></td>
+		<td>2020-12-30 03:38:29</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>14</td>
+		<td>Royal marketing </td>                        
+		<td>Real_sikar@yahoo.com</td>
+		<td>9214306660 </td>							
+		<td></td>
+		<td>2020-12-29 09:56:13</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Rented</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>13</td>
+		<td>Sandeep Gupta</td>                        
+		<td>Sandeepgupta022@gmail.com</td>
+		<td>9829932536</td>							
+		<td></td>
+		<td>2020-12-29 08:38:15</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>12</td>
+		<td>Sandeep Gupta</td>                        
+		<td>Sandeepgupta022@gmail.com</td>
+		<td>9829932536</td>							
+		<td></td>
+		<td>2020-12-29 08:37:55</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>11</td>
+		<td>Ramsingh</td>                        
+		<td>govindsales007@rediffmail.com</td>
+		<td>09950677383</td>							
+		<td></td>
+		<td>2020-12-29 08:18:03</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>New</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>10</td>
+		<td>Chiragbhai - ref Upleta - 7.5lakhs</td>                        
+		<td>nilkanth.upleta@gmail.com</td>
+		<td>9974652888</td>							
+		<td></td>
+		<td>2020-12-21 06:37:05</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Owned</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-07 07:58:02</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>9</td>
+		<td>jalpalsingh --Ref.. upleta---7.5lakhs</td>                        
+		<td>jaspalsinghbedi986@gmail.com</td>
+		<td>9825048444</td>							
+		<td></td>
+		<td>2020-12-21 06:35:50</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>N/A</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-07 07:58:02</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>8</td>
+		<td>Maulik Patel - Prakashbhai REf---7.5lakh</td>                        
+		<td>maulikpatel4050@gmail.com</td>
+		<td>9879660533</td>							
+		<td></td>
+		<td>2020-12-21 06:31:28</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Rented</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-07 07:58:02</td>
+		<td></td>
+		<td>2021-01-06 07:51:59</td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>7</td>
+		<td>kiranbhai nadiad --- Bharatbhai REf. 15lakhs</td>                        
+		<td>kiranjain687@yahoo.in</td>
+		<td>8733015555</td>							
+		<td></td>
+		<td>2020-12-21 06:29:38</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>Rented</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-07 07:58:02</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>4</td>
+		<td>shivam</td>                        
+		<td></td>
+		<td>9950098511</td>							
+		<td></td>
+		<td>2020-12-15 06:39:17</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>N/A</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-07 07:58:02</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>3</td>
+		<td>Rajubhai Ahmedabad</td>                        
+		<td></td>
+		<td>7984014548</td>							
+		<td></td>
+		<td>2020-12-15 06:31:01</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>N/A</td>
+		<td>Not Coverted to Customer</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-05 07:48:25</td>
+		<td></td>
+		<td>2021-01-05 07:46:01</td>
+		<td></td>
+		<td>2021-01-07 07:58:02</td>			
+	</tr>						
+						
+	<tr>
+		<td>2</td>
+		<td>Maheshbhai Mehta</td>                        
+		<td></td>
+		<td>9327430882</td>							
+		<td></td>
+		<td>2020-12-15 06:29:39</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>N/A</td>
+		<td>Contacted</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-07 07:58:02</td>
+		<td>2021-01-05 07:48:25</td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+						
+	<tr>
+		<td>1</td>
+		<td>Gopalbhai</td>                        
+		<td></td>
+		<td>9426524114</td>							
+		<td></td>
+		<td>2020-12-15 05:28:00</td>
+		<td>Gujarat</td>
+		<td>Nadiad</td>
+		<td>N/A</td>
+		<td>Rented</td>
+		<td>Qualified</td>
+		<td></td>
+		
+		<td>2021-01-07 06:20:39</td>
+		<td>2021-01-05 14:09:53</td>
+		<td>2021-01-07 07:58:02</td>
+		<td></td>
+		<td></td>
+		<td></td>			
+	</tr>						
+		</tbody>
+	
+	
+</table>
+				
