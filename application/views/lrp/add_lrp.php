@@ -8,7 +8,7 @@
         <div class="card-body">
 
 
-            <form method="post" id="data_form" class="form-horizontal">
+            <form method="post" id="data_form" class="form-horizontal" action="<?php echo base_url(); ?>customers/add_trc_lrp">
 
                 <h5><?php echo $this->lang->line('New TRC') ?></h5>
                 <hr>

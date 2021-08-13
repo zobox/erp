@@ -1810,6 +1810,7 @@ class Customers_model extends CI_Model
         $this->db->join("geopos_warehouse as b","a.users_id=b.franchise_id",'left');
         $this->db->where("b.warehouse_type",2);
         $query = $this->db->get();
+        //echo $this->db->last_query(); exit;
         $data = array();
 
         if($query->num_rows()>0)

@@ -1768,6 +1768,7 @@ class Invoices extends CI_Controller
 									$this->db->select('a.id');
 									$this->db->select('a.serial_id');
 									$this->db->select('b.purchase_id');
+									$this->db->select('b.purchase_pid');
 									$this->db->from('tbl_warehouse_serials as a');
 									$this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
 									$this->db->where('a.pid',$product_id[$key]);
@@ -1789,10 +1790,11 @@ class Invoices extends CI_Controller
 									$id = $query['id']; 
 									$s_id = $query['serial_id'];
 									$purchase_id = $query['purchase_id'];
+									$purchase_pid = $query['purchase_pid'];
 								   
 								if($id>0 && $s_id>0){                           
 									
-									$purchase_price = $this->products->getPurchasePriceByPID($purchase_id,$product_id[$key]);
+									$purchase_price = $this->products->getPurchasePriceByPID($purchase_id,$purchase_pid);
 									
 									//Marginal GST Start    
 									$this->db->select("b.*,a.type");
@@ -2200,6 +2202,7 @@ class Invoices extends CI_Controller
                             $this->db->select('a.id');
                             $this->db->select('a.serial_id');
                             $this->db->select('b.purchase_id');
+                            $this->db->select('b.purchase_pid');
                             $this->db->from('tbl_warehouse_serials as a');
                             $this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
                             $this->db->where('b.product_id',$product_id[$key]);
@@ -2221,10 +2224,11 @@ class Invoices extends CI_Controller
                             $id = $query['id']; 
                             $s_id = $query['serial_id'];
                             $purchase_id = $query['purchase_id'];
+                            $purchase_pid = $query['purchase_pid'];
                            // echo 'tttt3434';die;
                         if($id>0 && $s_id>0){                           
                             
-                            $purchase_price = $this->products->getPurchasePriceByPID($purchase_id,$product_id[$key]);
+                            $purchase_price = $this->products->getPurchasePriceByPID($purchase_id,$purchase_pid);
 
                             //Marginal GST Start    
                             $this->db->select("b.*,a.type");
@@ -2761,6 +2765,7 @@ class Invoices extends CI_Controller
 							$this->db->select('a.id');
 							$this->db->select('a.serial_id');
 							$this->db->select('b.purchase_id');
+							$this->db->select('b.purchase_pid');
 							$this->db->from('tbl_warehouse_serials as a');
 							$this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
 							$this->db->where('b.product_id',$product_id[$key]);
@@ -2778,9 +2783,11 @@ class Invoices extends CI_Controller
 							$id = $query['id']; 
 							$s_id = $query['serial_id'];
 							$purchase_id = $query['purchase_id'];
+							$purchase_pid = $query['purchase_pid'];
+							
 						if($id>0 && $s_id>0){
 							
-							$purchase_price = $this->products->getPurchasePriceByPID($purchase_id,$product_id[$key]);
+							$purchase_price = $this->products->getPurchasePriceByPID($purchase_id,$purchase_pid);
 									
 							//Marginal GST Start    
 							$this->db->select("b.*,a.type");

@@ -1166,6 +1166,18 @@ class Customers extends CI_Controller
 		$this->load->view('fixed/footer');
     }
 
+    public function getState($state)
+    {
+        $this->db->select('abbreviation');
+        $this->db->from("state");
+        $this->db->where("name",$state);
+        $query = $this->db->get();
+        if($query->num_rows()>0)
+        {
+            return $query->result_array()[0];
+        }
+    }
+
     public function add_trc()
     {
         $head['usernm'] = $this->aauth->get_user()->username;
@@ -1178,7 +1190,6 @@ class Customers extends CI_Controller
 
     public function add_trc_lrp()
     {
-
         $username = $this->input->post('username', true);
         $name       = $this->input->post('name');
         $email      = $this->input->post('email');
@@ -1193,7 +1204,6 @@ class Customers extends CI_Controller
         $state_code = $this->getState($state);
         
         
-
         $data = array();
         $data2= array();
 
@@ -1212,6 +1222,7 @@ class Customers extends CI_Controller
         }
         else
         {
+            $hasspassword = password_hash($password, PASSWORD_BCRYPT);
             $data = array(
              'agency_id'   => $username,
              'name'        => $name,
@@ -1220,11 +1231,11 @@ class Customers extends CI_Controller
              'city'        => $city,
              'region'      => $region,
              'pincode'     => $pincode,
-             'password'    => md5($password),
-             'hass_p'      => $c_password,
+             'password'    => $hasspassword,
+             'hass_p'      => $password,
              'date_created'=> date('Y-m-d h:i:s')
             );
-           
+
             if($this->db->insert("users_lrp",$data))
             {
                 $user_id = $this->db->insert_id();
@@ -1236,8 +1247,7 @@ class Customers extends CI_Controller
                 $data2['extra']          = $city.'-'.$name;
                 $data2['loc']            = 0;
                 $data2['warehouse_type'] = 2; 
-                $this->db->insert('geopos_warehouse', $data2);
-              
+                $this->db->insert('geopos_warehouse', $data2);              
                 
                 $wid = $this->db->insert_id();              
                 
@@ -1267,7 +1277,7 @@ class Customers extends CI_Controller
         $head['usernm'] = $this->aauth->get_user()->username;
         $head['title'] = 'TRC List';
         $this->load->view('fixed/header', $head);
-        
+        //$list = $this->customers->getTrcList();
         $this->load->view('lrp/trclist');
         $this->load->view('fixed/footer');
     }
