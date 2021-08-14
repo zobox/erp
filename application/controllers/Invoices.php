@@ -2753,8 +2753,7 @@ class Invoices extends CI_Controller
                     'unit' => $product_unit[$key],
                     'serial' => $serial_no[$key]
                 );
-                
-                
+				
                 
                 if($product_subtotal[$key]>0){  }else{ $transok = false;  echo json_encode(array('status' => 'Error', 'message' =>'Total Invoice Value Should be Greater than 0 !')); $stock_transfer_status = 0; exit; }
 
