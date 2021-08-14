@@ -2613,8 +2613,7 @@ class Invoices extends CI_Controller
                 $transok = false;
                 exit;
             }
-        }
-        
+        }        
                         
         $currency = $this->input->post('mcurrency');
         //$customer_id = $this->input->post('customer_id');       
@@ -2902,7 +2901,6 @@ class Invoices extends CI_Controller
                 "Invalid Entry!"));
             $transok = false;
         }
-        
     }
 	
 	
