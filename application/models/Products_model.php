@@ -3501,7 +3501,7 @@ FROM geopos_products $whr");
 	  
 	  
 	  
-	   public function getPurchasePriceByPID($purchase_id,$pid)
+	  public function getPurchasePriceByPID($purchase_id,$pid)
       {
         $this->db->select('a.type,b.price');
         $this->db->from("geopos_purchase as a");

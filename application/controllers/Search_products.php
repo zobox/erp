@@ -1512,6 +1512,64 @@ class Search_products extends CI_Controller
             echo json_encode($out);
         }
     }
+
+
+
+    public function sale_lrp()
+    {
+        $result = array();
+        $out = array();
+        $row_num = $this->input->post('row_num', true);
+        $name = $this->input->post('name_startsWith', true);
+        $wid = $this->input->post('wid', true);
+        $qw = '';
+        if ($wid > 0) {
+            $qw = "(b.twid='$wid' ) AND ";
+        }
+        $join = '';
+        
+        $qw.= 'b.status!=0 && b.status!=2 &&
+                b.status!=3 && b.status!=8 && b.is_present=1 && c.status!=8
+                && c.status!=0 && ';
+
+        if ($name) {           
+
+            $sql = "SELECT a.pid,a.merge,a.sub,a.product_name,
+            a.product_code,a.fproduct_price,a.sale_price,a.product_price,a.taxrate,a.disrate,
+            a.product_des,a.unit,c.purchase_id,c.purchase_pid FROM geopos_products as a 
+            INNER JOIN tbl_warehouse_serials as b ON b.pid=a.pid 
+            INNER JOIN geopos_product_serials as c ON c.id=b.serial_id
+
+
+
+            WHERE " . $qw . " a.status=1 
+            AND UPPER(a.product_name) LIKE '%" . strtoupper($name) . "%' OR UPPER(a.product_code) 
+            LIKE '" . strtoupper($name) . "%' GROUP BY(a.pid) LIMIT 6"; 
+
+
+            
+            $query = $this->db->query($sql);
+            
+
+            $result = $query->result_array();
+            //print_r($result); exit;
+            foreach ($result as $row) {
+                $purchase_record = $this->products->getPurchasePriceByPID($purchase_id,$purchase_pid);
+                $purchase_price = $purchase_record[0]['price'];
+                if($row['merge'] == 0){
+                    //if($row['sub'] == 0){
+                        $name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['product_code'],$row_num);
+                        array_push($out, $name);
+                    //} 
+                }else{
+                    $name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['product_code'],$row_num);
+                    array_push($out, $name);
+                }
+                
+            }           
+            echo json_encode($out);
+        }
+    }
     
 
 }

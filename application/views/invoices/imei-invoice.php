@@ -20,7 +20,7 @@
                                
                                 <div id="customer">
                                     <div id="customer_pass"></div><?php echo $this->lang->line('From Warehouse') ?> <select
-                                            id="s_warehouses" name="s_warehouses"
+                                            id="to_warehouses" name="to_warehouses"
                                             class="form-control round required">
                                             <option value="">Select Warehouse</option>
                                         <?php //echo $this->common->default_warehouse();
@@ -29,6 +29,8 @@
                                         } ?>
                                     </select>
                                 </div>
+
+                                <input type="hidden" name="s_warehouses" id="s_warehouses" value="1">
                                 <div class="col-sm-12 pt-4 pl-0 pb-2"><label for=""
                                                                  class="caption"><?php echo $this->lang->line('Serial No'); ?></label>
 
@@ -36,7 +38,7 @@
                                             <div class="input-group-addon"><span class="icon-calendar4"
                                                                                  aria-hidden="true"></span></div>
                                             <input type="text" class="form-control" placeholder="Serial No" name="serial"                                                   
-                                                   autocomplete="false" id="serial_no_trc_sale">
+                                                   autocomplete="false" id="serial_no_lrp">
                                         </div>
                                     </div>
                                
@@ -148,7 +150,7 @@
                             <tr>
                                 <td><input type="text" class="form-control text-center" name="product_name[]"
                                            placeholder="<?php echo $this->lang->line('Enter Product name') ?>"
-                                           id='stock_return-0'>
+                                           id='sale_lrp-0'>
 										    <input type="hidden" value="" id="cnt">
                                 </td>
                                 <td><input type="text" class="form-control req amnt" name="product_qty[]" id="amount-0"
@@ -187,7 +189,7 @@
                             <tr class="last-item-row">
                                 <td class="add-row">
                                     <button type="button" class="btn btn-success" aria-label="Left Align"
-                                            id="addproduct_stock_return">
+                                            id="addproduct_lrp">
                                         <i class="fa fa-plus-square"></i> <?php echo $this->lang->line('Add Row') ?>
                                     </button>
                                 </td>
@@ -257,7 +259,7 @@
                     <input type="hidden" value="new_i" id="inv_page">
                     <input type="hidden" value="invoices/actionstr" id="action-url">
                     <!--<input type="hidden" value="search_product_by_serialb2b" id="billtype">-->
-                    <input type="hidden" value="stock_return" id="billtype">
+                    <input type="hidden" value="sale_lrp" id="billtype">
                     <input type="hidden" value="0" name="counter" id="ganak">
                     <input type="hidden" value="<?= currency($this->aauth->get_user()->loc); ?>" name="currency">
                     <input type="hidden" value="<?= $taxdetails['handle']; ?>" name="taxformat" id="tax_format">
