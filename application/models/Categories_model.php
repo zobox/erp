@@ -2043,5 +2043,23 @@ class Categories_model extends CI_Model
 		}
 		return false;
 	}
+
+	public function trc_warehouse()
+	{
+		$this->db->select("*");
+		$this->db->from("geopos_warehouse");
+		$this->db->where("warehouse_type",2);
+		$query = $this->db->get();
+		$data = array();
+		if($query->num_rows()>0)
+		{
+		foreach($query->result() as $key=>$row)
+		{
+			$data[]= $row;
+		}
+		return $data;
+	    }
+	    return false;
+	}
 	
 }

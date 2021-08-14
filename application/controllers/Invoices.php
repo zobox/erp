@@ -2613,7 +2613,8 @@ class Invoices extends CI_Controller
                 $transok = false;
                 exit;
             }
-        }        
+        }
+        
                         
         $currency = $this->input->post('mcurrency');
         //$customer_id = $this->input->post('customer_id');       
@@ -2901,6 +2902,7 @@ class Invoices extends CI_Controller
                 "Invalid Entry!"));
             $transok = false;
         }
+        
     }
 	
 	
@@ -2950,5 +2952,102 @@ class Invoices extends CI_Controller
         //output to json format
         echo json_encode($output);
     }
+
+
+    public function imei_invoice()
+    {
+        $data['emp'] = $this->plugins->universal_api(69);
+        if ($data['emp']['key1']) {
+            $this->load->model('employee_model', 'employee');
+            $data['employee'] = $this->employee->list_employee();
+        }
+        $eid = $this->session->userdata('id');
+        $data['swarehouse'] = $this->employee->getWarehouseByEmpID($eid);
+        $data['wid'] = $data['swarehouse']->id;
+        $data['franchise_id'] = $data['swarehouse']->franchise_id;
+        $this->load->library("Common");
+        $data['custom_fields_c'] = $this->custom->add_fields(1);
+        $this->load->model('customers_model', 'customers');
+        $this->load->model('plugins_model', 'plugins');
+        $data['exchange'] = $this->plugins->universal_api(5);
+        $data['customergrouplist'] = $this->customers->group_list();
+        $data['lastinvoice'] = $this->invocies->lastinvoice();
+        //$data['warehouse'] = $this->invocies->warehouses();
+        $data['terms'] = $this->invocies->billingterms();
+        $data['currency'] = $this->invocies->currencies();
+        $this->load->library("Common");
+        $data['taxlist'] = $this->common->taxlist($this->config->item('tax'));
+        $head['title'] = "New Invoice";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $data['taxdetails'] = $this->common->taxdetail();
+        $data['custom_fields'] = $this->custom->add_fields(2);
+        $data['locations'] = $this->locations->locations_list();
+        if($_SESSION['s_role']=='r_2')
+        {
+            $data['fwarehouse'] = $this->categories_model->getWarehouseByEmpID($eid);
+        }else{
+            $data['fwarehouse'] = json_decode(json_encode($this->invocies->warehouses()));
+        }
+        $data['lrc_warehouse'] = $this->categories_model->trc_warehouse();
+        $this->load->view('fixed/header', $head);
+        $this->load->view('invoices/imei-invoice', $data);
+        $this->load->view('fixed/footer');
+    }
+    public function imei_manage_invoice()
+    {
+        $head['title'] = "IMEI Manage Invoice";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('invoices/imei-manage-invoice');
+        $this->load->view('fixed/footer');
+    }
+    public function sparepart_invoice()
+    {
+        $data['emp'] = $this->plugins->universal_api(69);
+        if ($data['emp']['key1']) {
+            $this->load->model('employee_model', 'employee');
+            $data['employee'] = $this->employee->list_employee();
+        }
+        $eid = $this->session->userdata('id');
+        $data['swarehouse'] = $this->employee->getWarehouseByEmpID($eid);
+        $data['wid'] = $data['swarehouse']->id;
+        $data['franchise_id'] = $data['swarehouse']->franchise_id;
+        $this->load->library("Common");
+        $data['custom_fields_c'] = $this->custom->add_fields(1);
+        $this->load->model('customers_model', 'customers');
+        $this->load->model('plugins_model', 'plugins');
+        $data['exchange'] = $this->plugins->universal_api(5);
+        $data['customergrouplist'] = $this->customers->group_list();
+        $data['lastinvoice'] = $this->invocies->lastinvoice();
+        //$data['warehouse'] = $this->invocies->warehouses();
+        $data['terms'] = $this->invocies->billingterms();
+        $data['currency'] = $this->invocies->currencies();
+        $this->load->library("Common");
+        $data['taxlist'] = $this->common->taxlist($this->config->item('tax'));
+        $head['title'] = "New Invoice";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $data['taxdetails'] = $this->common->taxdetail();
+        $data['custom_fields'] = $this->custom->add_fields(2);
+        $data['locations'] = $this->locations->locations_list();
+        if($_SESSION['s_role']=='r_2')
+        {
+            $data['fwarehouse'] = $this->categories_model->getWarehouseByEmpID($eid);
+        }else{
+            $data['fwarehouse'] = json_decode(json_encode($this->invocies->warehouses()));
+        }
+        $data['twarehouse'] = $this->categories_model->warehouse_list();
+        $this->load->view('fixed/header', $head);
+        $this->load->view('invoices/sparepart-invoice', $data);
+        $this->load->view('fixed/footer');
+    }
+    public function sparepart_invoice_manage()
+    {
+        $head['title'] = "IMEI Manage Invoice";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('invoices/sparepart-invoice-manage');
+        $this->load->view('fixed/footer');
+    }
+
 
 }

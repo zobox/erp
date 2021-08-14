@@ -802,6 +802,26 @@
                                                     data-toggle="dropdown"><?php echo $this->lang->line('Manage Invoices'); ?></a>
                             </ul>
                         </li>
+
+                        <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a
+                                    class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i
+                                        class="icon-basket"></i><?php echo $this->lang->line('LRC Sales') ?></a>
+                            <ul class="dropdown-menu">
+                                <li data-menu=""><a class="dropdown-item" href="<?= base_url(); ?>invoices/imei_invoice"
+                                                    data-toggle="dropdown"><?php echo $this->lang->line('IMEI Invoice'); ?></a>
+                                </li>
+                                <li data-menu=""><a class="dropdown-item" href="<?php echo base_url(); ?>invoices/imei_manage_invoice"
+                                                    data-toggle="dropdown"><?php echo $this->lang->line('IMEI Manage Invoice'); ?></a>
+                                </li>
+                                <li data-menu=""><a class="dropdown-item" href="<?= base_url(); ?>invoices/sparepart_invoice"
+                                                    data-toggle="dropdown"><?php echo $this->lang->line('Sparepart Invoice'); ?></a>
+                                </li>
+                                <li data-menu=""><a class="dropdown-item" href="<?php echo base_url(); ?>invoices/sparepart_invoice_manage"
+                                                    data-toggle="dropdown"><?php echo $this->lang->line('Sparepart Manage Invoice'); ?></a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a
                                     class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"><i
                                         class="icon-basket"></i><?php echo $this->lang->line('Zobox Sales') ?></a>
