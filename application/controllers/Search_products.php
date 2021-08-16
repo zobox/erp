@@ -1338,7 +1338,7 @@ class Search_products extends CI_Controller
     }
 	
 	
-	 public function search_product_by_serialsr()
+	public function search_product_by_serialsr()
     {
         $this->load->model('plugins_model', 'plugins');
         $billing_settings = $this->plugins->universal_api(67);
@@ -1512,10 +1512,9 @@ class Search_products extends CI_Controller
             echo json_encode($out);
         }
     }
-
-
-
-    public function sale_lrp()
+	
+	
+	public function sale_lrp()
     {
         $result = array();
         $out = array();
@@ -1532,8 +1531,8 @@ class Search_products extends CI_Controller
                 b.status!=3 && b.status!=8 && b.is_present=1 && c.status!=8
                 && c.status!=0 && ';
 
-        if ($name) {           
-
+        if ($name) {
+            
             $sql = "SELECT a.pid,a.merge,a.sub,a.product_name,
             a.product_code,a.fproduct_price,a.sale_price,a.product_price,a.taxrate,a.disrate,
             a.product_des,a.unit,c.purchase_id,c.purchase_pid FROM geopos_products as a 
@@ -1554,9 +1553,9 @@ class Search_products extends CI_Controller
             $result = $query->result_array();
             //print_r($result); exit;
             foreach ($result as $row) {
-                $purchase_record = $this->products->getPurchasePriceByPID($purchase_id,$purchase_pid);
-                $purchase_price = $purchase_record[0]['price'];
-                if($row['merge'] == 0){
+				$purchase_record = $this->products->getPurchasePriceByPID($row['purchase_id'],$row['purchase_pid']);
+				$purchase_price = $purchase_record[0]['price'];
+                if($row['merge'] == 0){					
                     //if($row['sub'] == 0){
                         $name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['product_code'],$row_num);
                         array_push($out, $name);
@@ -1568,6 +1567,73 @@ class Search_products extends CI_Controller
                 
             }           
             echo json_encode($out);
+        }
+    }
+	
+	
+	public function search_product_lrp()
+    {
+        $this->load->model('plugins_model', 'plugins');
+        $billing_settings = $this->plugins->universal_api(67);
+        $result = array();
+        $out = array();
+        $row_num = $this->input->post('row_num', true);
+        $name = $this->input->post('name_startsWith', true);    
+        
+        $wid = $this->input->post('wid', true);
+        //$wid = 1;
+        $qw = '';
+        if ($wid > 0) {
+            $qw = "(tbl_warehouse_serials.twid='$wid') AND";
+        }
+        if ($billing_settings['key2']) $qw .= "(geopos_products.expiry IS NULL OR DATE (geopos_products.expiry)<" . date('Y-m-d') . ") AND ";
+        $join = '';
+
+        if ($this->aauth->get_user()->loc) {
+            $join = 'LEFT JOIN geopos_warehouse ON geopos_warehouse.id=geopos_products.warehouse';
+            $join2 = 'LEFT JOIN geopos_warehouse ON geopos_warehouse.id=geopos_products.warehouse';
+            if (BDATA) $qw .= '(geopos_warehouse.loc=' . $this->aauth->get_user()->loc . ' OR geopos_warehouse.loc=0) AND '; else $qw .= '(geopos_warehouse.loc=' . $this->aauth->get_user()->loc . ' ) AND ';
+        } elseif (!BDATA) {
+            $join = 'LEFT JOIN geopos_warehouse ON geopos_warehouse.id=geopos_products.warehouse';
+            $qw .= '(geopos_warehouse.loc=0) AND ';
+        }
+        $e = '';
+        if ($billing_settings['key1'] == 1) {
+            $e .= ',geopos_product_serials.serial,geopos_product_serials.id as serial_id,geopos_product_serials.purchase_id,geopos_product_serials.purchase_pid';
+            $join .= ' LEFT JOIN tbl_warehouse_serials ON geopos_product_serials.id=tbl_warehouse_serials.serial_id';
+            $join .= ' LEFT JOIN geopos_products ON geopos_product_serials.product_id=geopos_products.pid';  
+            //$qw .= '(geopos_product_serials.status=7) AND ';
+        }
+        $qw.= 'tbl_warehouse_serials.status!=0 && tbl_warehouse_serials.status!=2 &&
+                tbl_warehouse_serials.status!=3 && tbl_warehouse_serials.status!=8 && tbl_warehouse_serials.is_present=1 && geopos_product_serials.status!=8
+                && geopos_product_serials.status!=0 && ';
+
+        if ($name) {
+
+            if ($billing_settings['key1'] == 2) {
+                $e .= ',geopos_product_serials.serial,geopos_product_serials.id as serial_id,geopos_product_serials.purchase_id,geopos_product_serials.purchase_pid';
+                $sql = "SELECT count(tbl_warehouse_serials.id) as qty, geopos_products.pid,geopos_products.product_name,geopos_products.sale_price,geopos_products.product_price,geopos_products.zobulk_sale_price,geopos_products.hsn_code,geopos_products.taxrate,geopos_products.disrate,geopos_products.product_des,geopos_products.qty as pqty,geopos_products.unit $e  FROM geopos_product_serials LEFT JOIN geopos_products  ON geopos_products.pid=geopos_product_serials.product_id $join WHERE " . $qw . "(UPPER(geopos_product_serials.serial) = '" . strtoupper($name) . "') GROUP By(geopos_products.pid)  LIMIT 1";
+                $query = $this->db->query($sql);
+                //$query = $this->db->query("SELECT count(tbl_warehouse_serials.id) as qty,geopos_products.pid,geopos_products.product_name,geopos_products.product_price,geopos_products.hsn_code,geopos_products.taxrate,geopos_products.disrate,geopos_products.product_des,geopos_products.qty as pqty,geopos_products.unit $e  FROM geopos_product_serials LEFT JOIN geopos_products  ON geopos_products.pid=geopos_product_serials.product_id $join WHERE " . $qw . "(UPPER(geopos_product_serials.serial) LIKE '" . strtoupper($name) . "%') GROUP By(geopos_products.pid)  LIMIT 6");
+            } else {
+                $sql = "SELECT count(tbl_warehouse_serials.id) as qty,geopos_products.pid,geopos_products.product_name,geopos_products.sale_price,geopos_products.product_price,geopos_products.zobulk_sale_price,geopos_products.hsn_code,geopos_products.taxrate,geopos_products.disrate,geopos_products.product_des,geopos_products.qty as pqty,geopos_products.unit $e  FROM geopos_product_serials $join WHERE " . $qw . "(UPPER(geopos_product_serials.serial) = '". strtoupper($name) . "') LIMIT 1";
+               $query = $this->db->query($sql);
+               //$query = $this->db->query("SELECT count(tbl_warehouse_serials.id) as qty,geopos_products.pid,geopos_products.product_name,geopos_products.product_price,geopos_products.hsn_code,geopos_products.taxrate,geopos_products.disrate,geopos_products.product_des,geopos_products.qty as pqty,geopos_products.unit $e  FROM geopos_products $join WHERE " . $qw . "(UPPER(geopos_products.product_name) LIKE '%" . strtoupper($name) . "%') OR (UPPER(geopos_products.hsn_code) LIKE '" . strtoupper($name) . "%') GROUP By(geopos_products.pid) LIMIT 6");
+            }
+            
+            //echo $sql;
+    
+            if($query->num_rows()==1)
+            {
+            $result = $query->result_array();
+            foreach ($result as $row) {
+				$purchase_record = $this->products->getPurchasePriceByPID($row['purchase_id'],$row['purchase_pid']);
+				$purchase_price = $purchase_record[0]['price'];
+                $name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
+                array_push($out, $name);
+            } 
+        }               
+            echo json_encode($name);
         }
     }
     
