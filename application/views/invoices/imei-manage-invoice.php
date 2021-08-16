@@ -97,6 +97,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         draw_data();
@@ -110,7 +111,7 @@
                 responsive: true,
                 'order': [],
                 'ajax': {
-                    'url': "<?php echo site_url('invoices/ajax_list')?>",
+                    'url': "<?php echo site_url('invoices/imei_ajax_list')?>",
                     'type': 'POST',
                     'data': {
                         '<?=$this->security->get_csrf_token_name()?>': crsf_hash,

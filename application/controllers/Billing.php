@@ -223,6 +223,8 @@ class Billing extends CI_Controller
 			$type = $invoice_record[0]['type']; 
 			if($type==6 || $type==7){
 				$data['invoice'] = $this->invocies->invoice_detailsB2B($tid);
+			}if($type==8){
+				$data['invoice'] = $this->invocies->invoice_details_lrp($tid, $this->limited);
 			}else{		
 				 $data['invoice'] = $this->invocies->invoice_details($tid);			
 			}
@@ -256,6 +258,8 @@ class Billing extends CI_Controller
 					$html = $this->load->view('print_files/invoice-a4_v1-b2b', $data, true);
 				}else if($type==7){					
 					$html = $this->load->view('print_files/invoice-a4_v1-str', $data, true);
+				}else if($type==8){					
+					$html = $this->load->view('print_files/invoice-a4_v1-lrp', $data, true);
 				}else{
 					$html = $this->load->view('print_files/invoice-a4_v' . INVV, $data, true);
 				}
@@ -276,6 +280,10 @@ class Billing extends CI_Controller
 					$pdf = $this->pdf->load_split(array('margin_top' => 50));
 					$pdf->SetHTMLHeader($header);
 				}else if($type==7){
+					$header = $this->load->view('print_files/invoice-header_v1', $data, true);
+					$pdf = $this->pdf->load_split(array('margin_top' => 50));
+					$pdf->SetHTMLHeader($header);
+				}else if($type==8){
 					$header = $this->load->view('print_files/invoice-header_v1', $data, true);
 					$pdf = $this->pdf->load_split(array('margin_top' => 50));
 					$pdf->SetHTMLHeader($header);

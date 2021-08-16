@@ -18,16 +18,19 @@
                     <label class="col-sm-2 col-form-label"
                            for="product_catname"><?php echo $this->lang->line('Name') ?></label>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                         <input type="text" placeholder="TRC Name"
-                               class="form-control margin-bottom  required" name="name">
+                               class="form-control margin-bottom b_input required" name="name">
                     </div>
                 </div>
+								
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label"
                    for="phone"><?php echo $this->lang->line('Phone') ?></label>
                      <div class="col-sm-8">
-                       <input type="text" placeholder="<?php echo $this->lang->line('Phone') ?>" class="form-control margin-bottom required b_input" name="phone" value="<?php echo $phone; ?>" id="mcustomer_phone">
+                       <input type="text" placeholder="<?php echo $this->lang->line('Phone') ?>"
+					   class="form-control margin-bottom required b_input" name="phone" value="<?php echo $phone; ?>" 
+					   id="phone">
                       </div>
                 </div>
 
@@ -35,79 +38,91 @@
                     <label class="col-sm-2 col-form-label"
                    for="phone">Email</label>
                      <div class="col-sm-8">
-                        <input type="text" placeholder="Email" class="form-control margin-bottom required b_input" name="email" value="<?php echo $email; ?>" id="mcustomer_email">
+                        <input type="text" placeholder="Email" class="form-control margin-bottom required b_input" 
+						name="email" value="<?php echo $email; ?>" id="email">
                       </div>
                 </div>
 
-                 <div class="form-group row">
+				<div class="form-group row">
 
-                                        <label class="col-sm-2 col-form-label"
-                                               for="address"><?php echo $this->lang->line('Address') ?></label>
+					<label class="col-sm-2 col-form-label"
+						   for="address"><?php echo $this->lang->line('Address') ?></label>
 
-                                        <div class="col-sm-8">
-                                            <input type="text" placeholder="<?php echo $this->lang->line('Address') ?>"
-                                                   class="form-control margin-bottom b_input" name="address" value="<?php echo $address; ?>"
-                                                   id="mcustomer_address1">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
+					<div class="col-sm-8">
+						<input type="text" placeholder="<?php echo $this->lang->line('Address') ?>"
+							   class="form-control margin-bottom b_input" name="address" value="<?php echo $address; ?>"
+							   id="address">
+					</div>
+				</div>
+				
+				<div class="form-group row">
 
-                                        <label class="col-sm-2 col-form-label"
-                                               for="city"><?php echo $this->lang->line('City') ?></label>
+					<label class="col-sm-2 col-form-label"
+						   for="city"><?php echo $this->lang->line('City') ?></label>
 
-                                        <div class="col-sm-8">
-                                            <input type="text" placeholder="<?php echo $this->lang->line('City') ?>"
-                                                   class="form-control margin-bottom b_input" name="city" value="<?php echo $city; ?>"
-                                                   id="mcustomer_city">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
+					<div class="col-sm-8">
+						<input type="text" placeholder="<?php echo $this->lang->line('City') ?>"
+							   class="form-control margin-bottom b_input" name="city" value="<?php echo $city; ?>"
+							   id="city">
+					</div>
+				</div>
+				
+				<div class="form-group row">
+				
+					<label class="col-sm-2 col-form-label"
+						   for="region"><?php echo $this->lang->line('Region') ?></label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="<?php echo $this->lang->line('Region') ?>"
+							   class="form-control margin-bottom b_input" name="region" value="<?php echo $region; ?>"
+							   id="region">
+					</div>
+				</div>
+				
+				<div class="form-group row">
 
-                                        <label class="col-sm-2 col-form-label"
-                                               for="region"><?php echo $this->lang->line('Region') ?></label>
+					<label class="col-sm-2 col-form-label"
+						   for="postbox"><?php echo $this->lang->line('PostBox') ?></label>
 
-                                        <div class="col-sm-8">
-                                            <input type="text" placeholder="<?php echo $this->lang->line('Region') ?>"
-                                                   class="form-control margin-bottom b_input" name="region" value="<?php echo $region; ?>"
-                                                   id="region">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group row">
+					<div class="col-sm-8">
+						<input type="text" placeholder="<?php echo $this->lang->line('PostBox') ?>"
+							   class="form-control margin-bottom b_input" name="postbox" value="<?php echo $postbox; ?>"
+							   id="postbox">
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label"
+						   for="postbox"><?php echo $this->lang->line('GST') ?></label>
+					<div class="col-sm-8">
+						<input type="text" placeholder="<?php echo $this->lang->line('GST') ?>"
+							   class="form-control margin-bottom b_input" name="gst_number" value="<?php echo $gst_number; ?>"
+							   id="gst_number">
+					</div>
+				</div>
 
-                                        <label class="col-sm-2 col-form-label"
-                                               for="postbox"><?php echo $this->lang->line('PostBox') ?></label>
+				 <div class="form-group row">
 
-                                        <div class="col-sm-8">
-                                            <input type="text" placeholder="<?php echo $this->lang->line('PostBox') ?>"
-                                                   class="form-control margin-bottom b_input" name="postbox" value="<?php echo $postbox; ?>"
-                                                   id="postbox">
-                                        </div>
-                                    </div>
+					<label class="col-sm-2 col-form-label"
+						   for="postbox">Password</label>
 
-                                     <div class="form-group row">
+					<div class="col-sm-8">
+						<input type="password" placeholder="Password"
+							   class="form-control margin-bottom b_input" name="password" value="<?php echo $password; ?>"
+							   id="password">
+					</div>
+				</div>
 
-                                        <label class="col-sm-2 col-form-label"
-                                               for="postbox">Password</label>
+				 <div class="form-group row">
 
-                                        <div class="col-sm-8">
-                                            <input type="password" placeholder="Password"
-                                                   class="form-control margin-bottom b_input" name="password" value="<?php echo $password; ?>"
-                                                   id="password">
-                                        </div>
-                                    </div>
+					<label class="col-sm-2 col-form-label"
+						   for="postbox">Confirm Password</label>
 
-                                     <div class="form-group row">
-
-                                        <label class="col-sm-2 col-form-label"
-                                               for="postbox">Confirm Password</label>
-
-                                        <div class="col-sm-8">
-                                            <input type="password" placeholder="password"
-                                                   class="form-control margin-bottom b_input" name="c_password" value="<?php echo $password; ?>"
-                                                   id="password">
-                                        </div>
-                                    </div>
+					<div class="col-sm-8">
+						<input type="password" placeholder="password"
+							   class="form-control margin-bottom b_input" name="c_password" value="<?php echo $password; ?>"
+							   id="password">
+					</div>
+				</div>
                 <input type="hidden" value="0" name="cat_type">
                 <div class="form-group row">
 

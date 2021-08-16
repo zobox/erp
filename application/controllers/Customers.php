@@ -1190,13 +1190,18 @@ class Customers extends CI_Controller
 
     public function add_trc_lrp()
     {
-        $username = $this->input->post('username', true);
+		/* echo "<pre>";
+		print_r($_REQUEST);
+		echo "</pre>"; exit; */
+		
         $name       = $this->input->post('name');
+        $phone       = $this->input->post('phone');
         $email      = $this->input->post('email');
         $address    = $this->input->post('address');
         $city       = $this->input->post('city');
         $region     = $this->input->post('region');
         $pincode    = $this->input->post('postbox');
+        $gst_number    = $this->input->post('gst_number');
         $password   = $this->input->post('password');
         $c_password = $this->input->post('c_password');
         $name_arr = explode(' ',$name);
@@ -1215,60 +1220,58 @@ class Customers extends CI_Controller
         }
         else
         {
+			if($password!=$c_password)
+			{
+				echo json_encode(array('status' => 'Error', 'message' => 'Password Not Matched!'));
+			}else{
+				$hasspassword = password_hash($password, PASSWORD_BCRYPT);
+				$data = array(				
+				 
+				 'name'        	=> $name,
+				 'email'       	=> $email,
+				 'address'     	=> $address,
+				 'city'        	=> $city,
+				 'region'     	=> $region,
+				 'pincode'     	=> $pincode,
+				 'gst_number'  	=> $gst_number,
+				 'phone'  		=> $phone,				 
+				 'password'    	=> $hasspassword,
+				 'hass_p'      	=> $password,
+				 'status'      	=> 1,
+				 'date_created'=> date('Y-m-d h:i:s')
+				);
+				$this->db->insert("users_lrp",$data);
+				//echo $this->db->last_query(); exit;
+				if($this->db->insert("users_lrp",$data))
+				{
+					$user_id = $this->db->insert_id();
+					
+					$data2['title']          = 'Trc_'.$city.'-'.$name; 
+					$data2['cid']            = 0;               
+					$data2['franchise_id']   = $user_id;                 
+					$data2['extra']          = $city.'-'.$name;
+					$data2['loc']            = 0;
+					$data2['warehouse_type'] = 2; 
+					$this->db->insert('geopos_warehouse', $data2);              
+					
+					$wid = $this->db->insert_id();              
+					
+					$data3 = array();               
+					$data3['warehouse_code'] = 'Trc_'.$state_code.'_'.$city.'_W'.$user_id.'-'.$name_arr[0]; 
+					$this->db->where('id', $wid);
+					$this->db->update('geopos_warehouse',$data3);
 
-        if($password!=$c_password)
-        {
-            echo json_encode(array('status' => 'Error', 'message' => 'Password Not Matched!'));
-        }
-        else
-        {
-            $hasspassword = password_hash($password, PASSWORD_BCRYPT);
-            $data = array(
-             'agency_id'   => $username,
-             'name'        => $name,
-             'email'       => $email,
-             'address'     => $address,
-             'city'        => $city,
-             'region'      => $region,
-             'pincode'     => $pincode,
-             'password'    => $hasspassword,
-             'hass_p'      => $password,
-             'date_created'=> date('Y-m-d h:i:s')
-            );
+					$this->aauth->applog("[Add TRC] $name ID " . $user_id, $this->aauth->get_user()->username);
 
-            if($this->db->insert("users_lrp",$data))
-            {
-                $user_id = $this->db->insert_id();
-
-                
-                $data2['title']          = 'Trc_'.$city.'-'.$name; 
-                $data2['cid']            = 0;               
-                $data2['franchise_id']   = $user_id;                 
-                $data2['extra']          = $city.'-'.$name;
-                $data2['loc']            = 0;
-                $data2['warehouse_type'] = 2; 
-                $this->db->insert('geopos_warehouse', $data2);              
-                
-                $wid = $this->db->insert_id();              
-                
-                $data3 = array();               
-                $data3['warehouse_code'] = 'Trc_'.$state_code.'_'.$city.'_W'.$user_id.'-'.$name_arr[0]; 
-                $this->db->where('id', $wid);
-                $this->db->update('geopos_warehouse',$data3);
-
-                $this->aauth->applog("[Add TRC] $name ID " . $user_id, $this->aauth->get_user()->username);
-
-                echo json_encode(array('status' => 'Success', 'message' => 'TRC details Added Successfully!')); 
+					echo json_encode(array('status' => 'Success', 'message' => 'TRC details Added Successfully!')); 
 
 
 
-            }
-            else 
-            {
-                echo json_encode(array('status' => 'Error', 'message' =>
-                'There has been an error, please try again.'));
-            }
-        }
+				}else{
+					echo json_encode(array('status' => 'Error', 'message' =>
+					'There has been an error, please try again.'));
+				}
+			}
         }
     }
 

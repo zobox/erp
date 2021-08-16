@@ -472,7 +472,6 @@ class Invoices extends CI_Controller
 
     }
 
-
     public function ajax_list()
     {
         $list = $this->invocies->get_datatables($this->limited);
@@ -514,12 +513,17 @@ class Invoices extends CI_Controller
 	
 
     public function view()
-    {
-		
+    {		
         $this->load->model('accounts_model');
         $data['acclist'] = $this->accounts_model->accountslist((integer)$this->aauth->get_user()->loc);
         $tid = $this->input->get('id');
-        $data['invoice'] = $this->invocies->invoice_details($tid, $this->limited);
+		$invoice_dtl = $this->invocies->getInvoiceDetailsByID($tid);
+		if($invoice_dtl[0]['type']==8){
+			$data['invoice'] = $this->invocies->invoice_details_lrp($tid, $this->limited);
+		}else{
+			$data['invoice'] = $this->invocies->invoice_details($tid, $this->limited);
+		}		
+        
         $data['attach'] = $this->invocies->attach($tid);
         $data['c_custom_fields'] = $this->custom->view_fields_data($data['invoice']['cid'], 1);
         $head['usernm'] = $this->aauth->get_user()->username;
@@ -546,7 +550,9 @@ class Invoices extends CI_Controller
         $type = $invoice_record[0]['type']; 
         if($type==6 || $type==7){
             $data['invoice'] = $this->invocies->invoice_detailsB2B($tid, $this->limited);
-        }else{      
+        }else if($type==8){
+			$data['invoice'] = $this->invocies->invoice_details_lrp($tid, $this->limited);
+		}else{      
             $data['invoice'] = $this->invocies->invoice_details($tid, $this->limited);              
         }
 		
@@ -569,6 +575,8 @@ class Invoices extends CI_Controller
 				$html = $this->load->view('print_files/invoice-a4_v1-b2b', $data, true);
 			}else if($type==7){					
 				$html = $this->load->view('print_files/invoice-a4_v1-str', $data, true);
+			}else if($type==8){					
+				$html = $this->load->view('print_files/invoice-a4_v1-lrp', $data, true);
 			}else{
 				$html = $this->load->view('print_files/invoice-a4_v' . INVV, $data, true);
 			}
@@ -587,6 +595,10 @@ class Invoices extends CI_Controller
 				$pdf = $this->pdf->load_split(array('margin_top' => 50));
 				$pdf->SetHTMLHeader($header);
 			}else if($type==7){
+				$header = $this->load->view('print_files/invoice-header_v1', $data, true);
+				$pdf = $this->pdf->load_split(array('margin_top' => 50));
+				$pdf->SetHTMLHeader($header);
+			}else if($type==8){
 				$header = $this->load->view('print_files/invoice-header_v1', $data, true);
 				$pdf = $this->pdf->load_split(array('margin_top' => 50));
 				$pdf->SetHTMLHeader($header);
@@ -2992,16 +3004,8 @@ class Invoices extends CI_Controller
         $this->load->view('fixed/header', $head);
         $this->load->view('invoices/imei-invoice', $data);
         $this->load->view('fixed/footer');
-    }
-
-    public function imei_manage_invoice()
-    {
-        $head['title'] = "IMEI Manage Invoice";
-        $head['usernm'] = $this->aauth->get_user()->username;
-        $this->load->view('fixed/header', $head);
-        $this->load->view('invoices/imei-manage-invoice');
-        $this->load->view('fixed/footer');
-    }
+    }	
+	
     public function sparepart_invoice()
     {
         $data['emp'] = $this->plugins->universal_api(69);
@@ -3060,6 +3064,7 @@ class Invoices extends CI_Controller
         $serial_no = $this->input->post('serial_no');
         $pid = $this->input->post('pid');
         $fwid = $this->input->post('s_warehouses');
+        $twid = $this->input->post('to_warehouses');
         $product_qty = $this->input->post('product_qty');
         $product_name2 = $this->input->post('product_name', true);
         
@@ -3132,7 +3137,7 @@ class Invoices extends CI_Controller
         'csd' => $franchise_id,
         //'csd2' => $customer_id,
         'fwid' => $fwid,
-        //'twid' => $twid,
+        'twid' => $twid,
         'eid' => $emp,
         'taxstatus' => $tax,
         'discstatus' => $discstatus,
@@ -3140,7 +3145,7 @@ class Invoices extends CI_Controller
         'refer' => $refer,
         'term' => $pterms,
         'multi' => $currency,
-        'type' => 7,
+        'type' => 8,
         'loc' => $this->aauth->get_user()->loc);
         $invocieno2 = $invocieno;       
         
@@ -3270,9 +3275,11 @@ class Invoices extends CI_Controller
 							
 							
 							$wdata = array();
-							$wdata['status'] = 9;
+							$wdata['status'] = 6;
 							$wdata['invoice_id'] = $invocieno;
-							//$wdata['is_present'] = 0;
+							$wdata['is_present'] = 0;
+							$wdata['fwid'] = $fwid;
+							$wdata['twid'] = $twid;
 							$wdata['date_modified'] = date('Y-m-d h:i:s');
 							$wdata['logged_user_id'] = $this->session->userdata('id');                              
 							$this->db->where('id',$id);
@@ -3295,11 +3302,11 @@ class Invoices extends CI_Controller
                     'qty' => numberClean($product_qty[$key]),
                     'price' => rev_amountExchange_s($product_price[$key], $currency, $this->aauth->get_user()->loc),
                     'net_price' => $netSubTotal,
-                    'fcp' => $fcp,
-                    'franchise_commision' => $franchise_commision,
-                    'tds_percentage' => $tds_percentage,
-                    'tds' => $tds_val,
-                    'bank_charge_type' => $bank_charges[0]['charges_type'], 
+                    //'fcp' => $fcp,
+                    //'franchise_commision' => $franchise_commision,
+                    //'tds_percentage' => $tds_percentage,
+                    //'tds' => $tds_val,
+                    //'bank_charge_type' => $bank_charges[0]['charges_type'], 
                     //'bank_p_f'  => $bank_charge,                   
                    // 'bank_charges' => $product_bank_charge,
                     'tax' => numberClean($product_tax[$key]),
@@ -3362,6 +3369,61 @@ class Invoices extends CI_Controller
         }
         
     }
+	
+	
+	public function imei_manage_invoice()
+    {
+        $head['title'] = "IMEI Manage Invoice";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('invoices/imei-manage-invoice');
+        $this->load->view('fixed/footer');
+    }
+	
+	
+	public function imei_ajax_list()
+    {
+        $list = $this->invocies->get_datatables($this->limited,8);
+        $data = array();
+        $no = $this->input->post('start');
+        foreach ($list as $invoices) {
+			switch($invoices->type){
+				case 1: $prefix = 'STFO#';
+				break;
+				case 2: if($invoices->pmethod_id==1){ $prefix = 'PCS#'; }else{ $prefix = 'POS#'; }
+				break;
+				case 3: $prefix = 'STF#';
+				break;
+				case 4: $prefix = 'PO#';
+				break;
+				case 6: $prefix = 'B2B#';
+				break;
+				case 7: $prefix = 'STR#';
+				break;
+				case 8: $prefix = 'LRP#';
+				break;
+			}
+			
+            $no++;
+            $row = array();
+            $row[] = $no;
 
+            $row[] = '<a href="' . base_url("invoices/view?id=$invoices->id") . '">&nbsp; ' . $prefix.$invoices->tid . '</a>';
+            $row[] = $invoices->name;
+            $row[] = dateformat($invoices->invoicedate);
+            $row[] = amountExchange($invoices->total, 0, $this->aauth->get_user()->loc);
+            $row[] = '<span class="st-' . $invoices->status . '">' . $this->lang->line(ucwords($invoices->status)) . '</span>';
+            $row[] = '<a href="' . base_url("invoices/view?id=$invoices->id") . '" class="btn btn-success btn-sm" title="View"><i class="fa fa-eye"></i></a>&nbsp;<a href="' . base_url("invoices/printinvoice?id=$invoices->id") . '&d=1" class="btn btn-info btn-sm"  title="Download"><span class="fa fa-download"></span></a>';
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $this->input->post('draw'),
+            "recordsTotal" => $this->invocies->count_all($this->limited),
+            "recordsFiltered" => $this->invocies->count_filtered($this->limited),
+            "data" => $data,
+        );
+        //output to json format
+        echo json_encode($output);
+    }
 
 }

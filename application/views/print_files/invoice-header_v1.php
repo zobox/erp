@@ -1,3 +1,22 @@
+<?php
+	switch($invoice['type']){
+		case 1: $prefix = 'STFO#';
+		break;
+		case 2: if($invoice['pmethod_id']==1){ $prefix = 'PCS#'; }else{ $prefix = 'POS#'; }
+		break;
+		case 3: $prefix = 'STF#';
+		break;
+		case 4: $prefix = 'PO#';
+		break;
+		case 6: $prefix = 'B2B#';
+		break;
+		case 7: $prefix = 'STR#';
+		break;
+		case 8: $prefix = 'LRP#';
+		break;						
+	}
+?>
+
 <table style="margin-left:18px;">
     <tr>
         <td class="myco">
@@ -19,7 +38,8 @@
                 </tr>
                 <tr>
                     <td><?= $general['title'] ?></td>
-                    <td><?= $general['prefix'] . ' ' . $invoice['tid'] ?></td>
+                    <!--<td><?= $general['prefix'] . ' ' . $invoice['tid'] ?></td>-->
+                    <td><?= $prefix . ' ' . $invoice['tid'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $general['title'] . ' ' . $this->lang->line('Date') ?></td>

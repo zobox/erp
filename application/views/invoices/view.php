@@ -197,15 +197,21 @@
                     </div>	
 					<?php
 						switch($invoice['type']){
-						case 1: $prefix = 'STFO#';
-						break;
-						case 2: if($invoice['pmethod_id']==1){ $prefix = 'PCS#'; }else{ $prefix = 'POS#'; }
-						break;
-						case 3: $prefix = 'STF#';
-						break;
-						case 4: $prefix = 'PO#';
-						break;
-					}
+							case 1: $prefix = 'STFO#';
+							break;
+							case 2: if($invoice['pmethod_id']==1){ $prefix = 'PCS#'; }else{ $prefix = 'POS#'; }
+							break;
+							case 3: $prefix = 'STF#';
+							break;
+							case 4: $prefix = 'PO#';
+							break;
+							case 6: $prefix = 'B2B#';
+							break;
+							case 7: $prefix = 'STR#';
+							break;
+							case 8: $prefix = 'LRP#';
+							break;						
+						}
 					?>
                     <div class="col-md-6 col-sm-12 text-xs-center text-md-right">
                         <h2><?php echo $this->lang->line('INVOICE') ?></h2>
@@ -228,20 +234,35 @@
                     <div class="col-md-6 col-sm-12 text-xs-center text-md-left">
                         <ul class="px-0 list-unstyled">
 
-
-                            <li class="text-bold-800"><a
+							<?php if($invoice['type']==8){ ?>
+								 <li class="text-bold-800"><a
                                         href="<?php echo base_url('customers/view?id=' . $invoice['cid']) ?>"><strong
                                             class="invoice_a">
-											<?php echo $invoice['name'] . '</strong></a></li><li>' . $invoice['company'] . '</li>
-											<li>' . $this->lang->line('Phone') . ': ' . $invoice['phone'] . '</li><li>' . $this->lang->line('Email') . ': ' . $invoice['email'] . '</li>';
-											if ($invoice['taxid']) echo '<br>' . $this->lang->line('Tax') . ' ID: ' . $invoice['taxid'];
-                               /*  foreach ($c_custom_fields
+											<?php echo $invoice['name'] . '</strong></a></li>
+											<li>' . $invoice['address'] . '</li>
+											<li>' . $invoice['city'] . '</li>
+											<li>' . $invoice['region'] . '</li>
+											<li>' . $this->lang->line('Phone') . ': ' . $invoice['phone'] . '</li>
+											<li>' . $this->lang->line('Email') . ': ' . $invoice['email'] . '</li>';
+											if ($invoice['gst_number']) echo  $this->lang->line('Tax') . ' ID: ' . $invoice['gst_number'];
+                             
+						     }else{ ?>
+								<li class="text-bold-800"><a
+											href="<?php echo base_url('customers/view?id=' . $invoice['cid']) ?>"><strong
+												class="invoice_a">
+												<?php echo $invoice['name'] . '</strong></a></li>
+												<li>' . $invoice['company'] . '</li>
+												<li>' . $this->lang->line('Phone') . ': ' . $invoice['phone'] . '</li>
+												<li>' . $this->lang->line('Email') . ': ' . $invoice['email'] . '</li>';
+												if ($invoice['taxid']) echo  $this->lang->line('Tax') . ' ID: ' . $invoice['taxid'];
+								   /*  foreach ($c_custom_fields
 
-                                as $row) {
-                                echo '  <li>' . $row['name'] . ': ' . $row['data'] */ ?></li>
+									as $row) {
+									echo '  <li>' . $row['name'] . ': ' . $row['data'] */ ?></li>
 
                             <?php //} ?>
 
+							<?php } ?>
 
                         </ul>
 
@@ -287,7 +308,7 @@
                                     $rate = $row['tax'] / 2;
                                        if($row['serial']) $row['product_des'].=' - '.$row['serial'];
                                     echo '<tr>
-<th scope="row">' . $c . '</th>
+							<th scope="row">' . $c . '</th>
                             <td>' . $row['product'] . '</td> 
                             <td>' . $row['code'] . '</td>                          
                             <td>' . amountExchange($row['price'], 0, $this->aauth->get_user()->loc) . '</td>

@@ -56,8 +56,6 @@ class Invoices_model extends CI_Model
             $this->db->where('geopos_invoices.eid', $eid);
         }
         if($p) {
-
-
             if ($this->aauth->get_user()->loc) {
                 $this->db->where('geopos_invoices.loc', $this->aauth->get_user()->loc);
             } elseif (!BDATA) {
@@ -68,6 +66,7 @@ class Invoices_model extends CI_Model
         $this->db->join('geopos_terms', 'geopos_terms.id = geopos_invoices.term', 'left');
 		$this->db->join('tbl_ewaybill', 'tbl_ewaybill.invoice_number = geopos_invoices.tid', 'left');
         $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
         return $query->row_array();
     }
 
@@ -511,6 +510,7 @@ class Invoices_model extends CI_Model
         $this->db->where('id',$id);
         $this->db->from('geopos_invoices');
         $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
         return $query->result_array();
     }
 
@@ -539,6 +539,40 @@ class Invoices_model extends CI_Model
         //echo $this->db->last_query();  exit;
         return $query->row_array();
     }   
+	
+	public function invoice_details_lrp($id, $eid = '',$p=true)
+    {
+        $this->db->select('a.*,SUM(a.shipping + a.ship_tax) AS shipping,a.loc as loc,a.id AS iid,
+		c.name,
+		c.address,
+		c.city,
+		c.region,
+		c.country,
+		c.phone,
+		c.gst_number,
+		c.pincode,
+		d.id AS termid,d.title AS termtit,
+		d.terms AS terms,e.ewayBillNo');
+        $this->db->from('geopos_invoices as a');
+        $this->db->where('a.id', $id);
+        if ($eid) {
+            $this->db->where('a.eid', $eid);
+        }
+        if($p) {
+            if ($this->aauth->get_user()->loc) {
+                $this->db->where('a.loc', $this->aauth->get_user()->loc);
+            } elseif (!BDATA) {
+                $this->db->where('a.loc', 0);
+            }
+        }
+        $this->db->join('geopos_warehouse as b', 'a.twid = b.id', 'left');
+        $this->db->join('users_lrp as c', 'b.franchise_id = c.users_id', 'left');
+        $this->db->join('geopos_terms as d', 'd.id = a.term', 'left');
+		$this->db->join('tbl_ewaybill as e', 'e.invoice_number = a.tid', 'left');
+        $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+        return $query->row_array();
+    }
     
 	
 }
