@@ -10,67 +10,10 @@
           <h3 class="box-title"><?php echo "Pending Receives"; ?></h3>
           <div class="row" style="padding: 5px;">
 		 
-            <!-- <div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $new;?></h4></span></div>
-			<div align="center" class="text-secondary">New</div>
-			</div>
-            <div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $contacted;?></h4></span></div>
-			<div align="center" class="text-secondary">Contacted</div>
-			</div>
-            <div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $qualified;?></h4></span></div>
-			<div align="center" class="text-secondary">Qualified</div>
-			</div>
-            <div class="col-md-2">
-			<div align="center"><h4><span id="Newcnt"><?php echo $proposal_sent;?></h4></span></div>
-			<div align="center" class="text-secondary">Proposal Sent</div>
-			</div>
-            <div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $converted_to_franchhise;?></h4></span></div>
-			<div align="center" class="text-secondary">Franchise</div>
-			</div>
-            <div class="col-md-3">
-			<div align="center"><h4><span id="Newcnt"><?php echo $not_converted_to_franchhise;?></h4></span></div>
-            <div align="center" class="text-secondary">Unable to Convert Franchise</div>
-			</div>
-			<div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $total;?></h4></span></div>
-			<div align="center" class="text-secondary">Total</div>
-			</div>
-            <div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $junk;?></h4></span></div>
-			<div align="center" class="text-secondary">Junk</div>
-			</div>
-            <div class="col-md-1">
-			<div align="center"><h4><span id="Newcnt"><?php echo $test;?></h4></span></div>
-			<div align="center" class="text-secondary">Test</div>
-			</div> -->
+            
           </div>
 		  <form class="row" action="" method="post" style="margin: 5px; padding:5px;">
-		  	<!-- <div class="form-group col-md-6">
-				<select class="form-control" name="status">
-					<option value="" selected="selected" disabled="disabled">Select Status</option>
-					<option value="1">New</option>
-					<option value="2">Contacted</option>
-					<option value="3">Qualified</option>							 							
-					<option value="4">Proposal Sent</option>							
-					<option value="5">Coverted to Franchise</option>							
-					<option value="6">Not Coverted to Franchise</option>
-					<option value="7">Junk</option>
-					<option value="8">Test</option>
-				</select>
-			</div>
-			<div class="form-group col-md-6">
-			<?php //print_r($_REQUEST);?>
-				<select class="form-control source" name="source">
-					<option value="" selected="selected" disabled="disabled">Select Source</option>
-					<option value="1"<?php if($_REQUEST['source'] == 1){echo "selected=''";}?>>Direct</option>
-					<option value="2"<?php if($_REQUEST['source'] == 2){echo "selected=''";}?>>Ownself</option>
-				</select>
-			</div> -->
-			<!--<div class="form-group col-md-2"><button class="btn btn-success" style="left:25%; right:25%; position: absolute; background:#293381;color:#fff;">Submit</button></div>
-			<div class="form-group col-md-2"><button class="btn btn-warning" style="left:25%; right:25%; position: absolute; background:#293381;color:#fff;">Export</button></div>-->
+		  	
 			
 		  </form>
 		  <?php //echo "<pre>";print_r($lead);?>
@@ -88,26 +31,37 @@
 				</tr>
             </thead>
             <tbody>
+			<?php
+			foreach($list as $key=>$row){ 
+				$i=1;
+				switch($row->type){
+					case 1: $prefix = 'STFO#';
+					break;
+					case 2: if($row->pmethod_id==1){ $prefix = 'PCS#'; }else{ $prefix = 'POS#'; }
+					break;
+					case 3: $prefix = 'STF#';
+					break;
+					case 4: $prefix = 'PO#';
+					break;
+					case 6: $prefix = 'B2B#';
+					break;
+					case 7: $prefix = 'STR#';
+					break;
+					case 8: $prefix = 'LRP#';
+					break;
+				}			
+			?>
               <tr>
-                <td>1</td>
-                <td>02-08-2021</td>
-                <td>524565152552</td>
-                <td>Screen</td>
-                <td>50</td>
-				<td>20</td>
-				<td>30</td>
-                <td><a href="receive_view" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $row->invoicedate; ?></td>
+                <td><?php echo $prefix.$row->tid; ?></td>
+                <td><?php echo $row->category; ?></td>
+                <td><?php echo $row->qty; ?></td>
+				<td><?php echo $row->pending_qty; ?></td>
+				<td><?php echo $row->recieved_qty; ?></td>
+                <td><a href="<?php  echo base_url(); ?>pending/receive_view" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>01-08-2021</td>
-                <td>748515255220</td>
-                <td>USB</td>
-                <td>10</td>
-				<td>2</td>
-				<td>8</td>
-                <td><a href="receive_view" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
-              </tr>
+            <?php $i++; } ?> 
             </tbody>
 			<tfoot>
 				<tr>

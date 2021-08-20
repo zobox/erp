@@ -75,7 +75,7 @@ class Workhousejob extends CI_Controller{
 		//echo $data['product_info']->product_detail->pid; exit;
 		$data['varients'] = $this->jobwork->getProductVarients($data['product_info']->product_detail->pid);
 		//$data['component_list'] = $this->jobwork->JobWorkComponent($data['product_info']->serial);
-
+		
         $data['jobwork_id'] = $id;
         $data['product_category_array'] = array_reverse(explode("-",substr($this->products_cat->getParentcategory($data['product_info']->product_detail->pcat),1)));
         $data['product_category_array_title'] = $this->products_cat->getCategoryNames($data['product_category_array']);

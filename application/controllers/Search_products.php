@@ -1584,7 +1584,7 @@ class Search_products extends CI_Controller
         //$wid = 1;
         $qw = '';
         if ($wid > 0) {
-            $qw = "(tbl_warehouse_serials.twid='$wid') AND";
+            $qw = "(tbl_warehouse_serials.twid='$wid' OR tbl_warehouse_serials.twid='0') AND";
         }
         if ($billing_settings['key2']) $qw .= "(geopos_products.expiry IS NULL OR DATE (geopos_products.expiry)<" . date('Y-m-d') . ") AND ";
         $join = '';

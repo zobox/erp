@@ -3786,5 +3786,22 @@ FROM geopos_products $whr");
 			}
 			return false;
 		}
+		
+		public function getPurchaseById($id=''){		
+		$this->db->select('a.*,b.pid,b.product,b.code,b.qty,b.price,b.tax,b.discount,b.subtotal,b.totaltax,b.totaldiscount,b.product_des,b.unit');		
+		$this->db->from("geopos_purchase as a");		
+		$this->db->join('geopos_purchase_items as b', 'a.id = b.tid', 'LEFT');
+		$this->db->where('a.id',$id);		
+		$query = $this->db->get();	
+		//return $this->db->last_query();die;	
+        $data = array();
+		if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {				
+					$data[] = $row;				
+            }
+            return $data;
+        }
+        return false;
+	}
 
 }

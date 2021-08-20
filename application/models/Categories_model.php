@@ -32,7 +32,6 @@ class Categories_model extends CI_Model
     {
         $query = $this->db->query("SELECT id,title
 		FROM geopos_product_cat WHERE c_type='$type' AND rel_id='$rel'
-
 		ORDER BY id DESC");
         return $query->result_array();
     }
@@ -1647,6 +1646,7 @@ class Categories_model extends CI_Model
 		$serial_id = $res['0']->id; 
 		
 		$this->db->set('status',1, FALSE);
+		$this->db->set('is_present',1, FALSE);
 		$this->db->set('fwid',0, FALSE);
 		$this->db->set('twid',1, FALSE);
 		$this->db->set('pid',$final_condition, FALSE);

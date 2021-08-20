@@ -50,8 +50,7 @@ class Productcategory extends CI_Controller
     }
 
     public function warehouse()
-    {
-		 
+    {		 
 		$eid = $this->session->userdata('id'); 
 		$s_role = $this->session->userdata('s_role'); 		
 		if($s_role=='r_2'){

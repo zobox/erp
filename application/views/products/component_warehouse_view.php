@@ -23,7 +23,7 @@
                 <div class="message"></div>
             </div>
             <div class="card-body">
-                <table id="" class="table table-striped table-bordered zero-configuration">
+                <table id="catgtable" class="table table-striped table-bordered zero-configuration">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -79,9 +79,78 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+    
+    <div id="delete_model" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
 
-        var table;
+                    <h4 class="modal-title"><?php echo $this->lang->line('Delete') ?></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p><?php echo $this->lang->line('delete this product') ?></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="object-id" value="">
+                    <input type="hidden" id="action-url" value="products/component_delete_i">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary"
+                            id="delete-confirm"><?php echo $this->lang->line('Delete') ?></button>
+                    <button type="button" data-dismiss="modal"
+                            class="btn"><?php echo $this->lang->line('Cancel') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="view_model" class="modal  fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content ">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"><?php echo $this->lang->line('View') ?></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="view_object">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="view-object-id" value="">
+                    <input type="hidden" id="view-action-url" value="products/component_view_over">
+
+                    <button type="button" data-dismiss="modal"
+                            class="btn"><?php echo $this->lang->line('Close') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	
+	 <script type="text/javascript">
+        $(document).ready(function () {
+
+            //datatables
+            $('#catgtable').DataTable({
+                responsive: true, <?php datatable_lang();?> dom: 'Blfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        footer: true,
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    }
+                ],
+            });
+
+        });
+    </script>
+	
+	
+	<script type="text/javascript">
+
+       /*  var table;
 
         $(document).ready(function () {
 
@@ -140,50 +209,5 @@
                 });
 
             });
-        });
+        }); */
     </script>
-    <div id="delete_model" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h4 class="modal-title"><?php echo $this->lang->line('Delete') ?></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p><?php echo $this->lang->line('delete this product') ?></p>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" id="object-id" value="">
-                    <input type="hidden" id="action-url" value="products/component_delete_i">
-                    <button type="button" data-dismiss="modal" class="btn btn-primary"
-                            id="delete-confirm"><?php echo $this->lang->line('Delete') ?></button>
-                    <button type="button" data-dismiss="modal"
-                            class="btn"><?php echo $this->lang->line('Cancel') ?></button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="view_model" class="modal  fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content ">
-                <div class="modal-header">
-
-                    <h4 class="modal-title"><?php echo $this->lang->line('View') ?></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body" id="view_object">
-                    <p></p>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" id="view-object-id" value="">
-                    <input type="hidden" id="view-action-url" value="products/component_view_over">
-
-                    <button type="button" data-dismiss="modal"
-                            class="btn"><?php echo $this->lang->line('Close') ?></button>
-                </div>
-            </div>
-        </div>
-    </div>

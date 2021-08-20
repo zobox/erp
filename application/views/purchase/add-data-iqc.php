@@ -233,8 +233,7 @@
                                                 <!--<input type="text" class="form-control margin-bottom" name="items" id="items"  style="height: 55px;">-->
 												<select id="conditionsdp1" name="items[]" class="form-control required 	select-box"
 												multiple="multiple" onfocus="getconditions();">
-												
-											 </select>		
+												</select>		
 											</div>
                                         </div>	
 										                                        

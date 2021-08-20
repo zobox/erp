@@ -4,7 +4,7 @@
             <h4 class="card-title"><?php echo $this->lang->line('Receive Goods') ?> <a  href="<?php echo base_url('purchase/receive_good_add') ?>" class="btn btn-info small-button">
                     Add Data               </a></h4>
             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-            <div class="heading-elements">
+             <div class="heading-elements">
                 <ul class="list-inline mb-0">
                     <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                     <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
@@ -22,59 +22,67 @@
                 
                 <hr>
 
-                <table id="cgrtable" class="table table-striped table-bordered zero-configuration">
+                <table id="catgtable" class="table table-striped table-bordered zero-configuration">
                     <thead>
                     <tr>
-                        <th><?php echo $this->lang->line('No') ?></th>
+                        <th><?php echo $this->lang->line('#') ?></th>
                         <th>PO#</th>
                         <th><?php echo $this->lang->line('Supplier') ?></th>
-                        <th><?php echo $this->lang->line('Date') ?></th>
-                        <th>Pending Quantity</th>
-                        <th>Receive Quantity</th>
-                        <th><?php echo "Item"; ?></th>
+                        <th>Product Type</th>
+                        <th>Job Work Required</th>
+                        <th>Product Name</th>
+                        <th>Variant </th>
+                        <th>Color </th>
+                        <th>ZUPC Code</th>
+                        <th>Serial NO</th>
+                        <th>Action </th>
                     </tr>
                     </thead>
+                   
                     <tbody>
-                        <?php
-                        $i=0;
-                        foreach($product_list as $po_list)
-                        {
-                            $pending_qty = number_format((float)($po_list->total_qty-$po_list->receive_qty), 2, '.', '');
-                            switch($po_list->type)
-                              {
-                                case 2: $prefix = 'MRG_';
-                                
-                                break;
-                                case 3: $prefix = 'SP_';
-                                
-                                break;
-                                default : $prefix = '';
-                                
-                              } 
-                              $purchas_id = $prefix.'#'.$po_list->tid;
-                           $i++;
-                         ?>
+						 <?php
+                        $i=1;
+                        foreach($list as $key=>$row){
+							
+						//product_serial_status   0-Inactive, 1-Active,2-Jobwork,3-stock transfer, 4-Jobwork Request, 5-Jobwokr Issue, 6- jobcard Assign,7-jobwork-completed, 8-Not In Use(Duplicate Date), 9-Stock Return							
+							
+						//warehouse_serial_status  0-Inactive,1-Active,2-Sold, 3-misplaced, 4-Zobox Sales,5-Bundle Product, 8-Not In Use(Duplicate Date),9-Stock Return
+						if($row->product_serial_status == 2){
+							$jobwork_required = 'Yes';
+						}else if($row->product_serial_status == 7){
+							$jobwork_required = 'No';
+						}
+							
+						?>
                         <tr>
-                            <td><?=$i?></td>
-                            <td><?=$purchas_id?></td>
-                            <td><?=$po_list->name?></td>
-                            <td><?=date('d-m-Y',strtotime($po_list->date_created))?></td>
-                            <td><?=$pending_qty?></td>
-                            <td><?=$po_list->receive_qty?></td>
-                            <td><?=$po_list->product?></td>
+                            <td><?php echo $i; ?></td>
+                            <td>STFO#<?php echo $row->purchase_id; ?></td>
+                            <td><?php echo $row->supplier_name; ?></td>
+                            <td><?php echo $row->cat_name; ?></td>
+                            <td><?php echo $jobwork_required; ?></td>
+                            <td><?php echo $row->product_name; ?></td>
+                            <td><?php echo $row->varient; ?></td>
+                            <td><?php echo $row->color; ?></td>
+                            <td><?php echo $row->warehouse_product_code; ?></td>
+                            <td><?php echo $row->serial; ?></td>
+                            <td><a href="#" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View</a></td>
                         </tr>
-                    <?php } ?>
+						<?php $i++; } ?>
                     </tbody>
-
+						
                     <tfoot>
                     <tr>
-                        <th><?php echo $this->lang->line('No') ?></th>
+                        <th><?php echo $this->lang->line('#') ?></th>
                         <th>PO#</th>
                         <th><?php echo $this->lang->line('Supplier') ?></th>
-                        <th><?php echo $this->lang->line('Date') ?></th>
-                        <th>Pending Quantity</th>
-                        <th>Receive Quantity</th>
-                        <th><?php echo "Item"; ?></th>
+                        <th>Product Type</th>
+                        <th> Job Work Required</th>
+                        <th>Product Name</th>
+                        <th>Variant </th>
+                        <th>Color </th>
+                        <th>ZUPC Code</th>
+                        <th>Serial NO</th>
+                        <th>Action </th>
                     </tr>
                     </tfoot>
                 </table>
@@ -106,10 +114,25 @@
         </div>
     </div>
 	
+	
+	
 	<script type="text/javascript">
         $(document).ready(function () {
+
             //datatables
-            $('#cgrtable').DataTable({responsive: true});
+            $('#catgtable').DataTable({
+                responsive: true, <?php datatable_lang();?> dom: 'Blfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        footer: true,
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        }
+                    }
+                ],
+            });
+
         });
     </script>
     

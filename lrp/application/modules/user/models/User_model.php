@@ -19,7 +19,7 @@ class User_model extends CI_Model
         $result = $this->db->get('users_lrp')->result();
         if (!empty($result)) {
             if (password_verify($password, $result[0]->password)) {
-                if ($result[0]->status != 'active') {
+                if ($result[0]->status != 1) {
                     return 'not_varified';
                 }
                 return $result;

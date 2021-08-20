@@ -1579,9 +1579,9 @@ class Purchase_model extends CI_Model
 		$this->db->where('pid', $product_id);
 		$this->db->update('geopos_products');	
 
-     //redirect('purchase/park_goods');       
-        
+     //redirect('purchase/park_goods');           
     }
+	
 
     public function goods_product_send_warehouse_new()
     {
@@ -1751,7 +1751,7 @@ class Purchase_model extends CI_Model
         }
 	}
 	
-	 public function getConditionNamebyID($id){
+	public function getConditionNamebyID($id){
 		$this->db->where('id',$id);
 		$query = $this->db->get('geopos_conditions');
 		$data = array();
@@ -2038,8 +2038,270 @@ class Purchase_model extends CI_Model
 		$this->db->where('pid', $product_id);
 		$this->db->update('geopos_products');	
 
-     //redirect('purchase/park_goods');       
+     //redirect('purchase/park_goods');        
+    }
+	
+	public function add_recieve_goods()
+    {		
+		/*[product_type1] => 1
+		[jobwork_required] => 1
+		[purchase_id] => 13
+		[varient_id] => 1715-640-14-641
+		[serial_no1] => 3532501178092631
+		[supplier_id] => 5
+		[purchase_item_id] => 1715-640
+		[color_id] => 28-
+		[serial_no2] => 3532501178092632 */
+		
+		$data_type = $this->input->post('product_type1');
+		$jobwork_required = $this->input->post('jobwork_required');
+		$supplier_id = $this->input->post('supplier_id');
+		$purchase_id = $this->input->post('purchase_id');
+		$purchase_item_ids = $this->input->post('purchase_item_id');
+		$id_array = explode('-',$purchase_item_ids);
+		$purchase_item_id = $id_array[0];
+		
+		//$zupc_code = $this->input->post('zupc_code');
+		$varient_ids = $this->input->post('varient_id');
+		//$sticker_no = $this->input->post('sticker_no');
+		$serial_no1 = $this->input->post('serial_no1');
+		//$current_grade = $this->input->post('current_grade');
+		//$qc_engineer = $this->input->post('qc_engineer');
+		$color_id = $this->input->post('color_id');
+		$imei_2 = $this->input->post('serial_no2');
+		//$final_grade = $this->input->post('final_grade');
+		//$items_array = $this->input->post('items');
+		//$items = implode(',',$items_array);
+		
+		if($varient_ids!=""){
+			$varient_array = explode('-',$varient_ids);
+			$product_id = $varient_array[1];
+			$varient_id = $varient_array[2];
+			$varient_pid = $varient_array[3];	
+		}else{
+			$product_id = $id_array[1];
+		}
+		$product_details = $this->products->getproductById($product_id);
+				
+		$jobwork_product_name = $product_details->product_name;
+		
+		$product_info = $this->getProductInfo($purchase_item_id,$product_id,$varient_id,$current_grade='',$color_id);
+		$jobwork_brand_name = $product_info[0]->brand_name;
+		$jobwork_varient_type = $product_info[0]->unit_name;
+		$jobwork_color_name = $product_info[0]->colour_name;
+		//$current_condition = $product_info[0]->condition_type;		
+		
+		/* $condition_record = $this->getConditionNamebyID($current_grade);
+		$current_condition = $condition_record->name; */
+		
+		$get_current_receive_status = $this->current_receve_goods_qc_qty($purchase_id,$supplier_id,$product_id);
+
+		if($get_current_receive_status['rows']==0)
+		{
+			$this->receve_goods_qc_qty($purchase_id,$supplier_id,$product_id,1);
+		}
+		else
+		{
+			 $total_qty = $get_current_receive_status['qty']+1;
+			 $this->update_receve_goods_qc_qty($purchase_id,$supplier_id,$product_id,$total_qty);
+		}		
+
+		$insert_data = array(
+		 'purchase_id'        => $purchase_id,
+		 //'sticker_no'         => $sticker_no,
+		 'product_label_name' => $jobwork_product_name,
+		 'brand'              => $jobwork_brand_name,
+		 'varient'            => $jobwork_varient_type,
+		 'colour'             => $jobwork_color_name, 
+		 //'product_condition'  => $current_condition,
+		 'imei1'              => $serial_no1,
+		 'imei2'              => $imei_2,
+		 //'item_replaced'      => $items,
+		 //'qc_engineer'        => $qc_engineer,
+		 'date_created'       => date("Y-m-d H:i:s"),
+		 'status'             => 1,
+		 'logged_user_id'     => $_SESSION['loggedin'] 
+		 );
+		$this->db->insert("tbl_qc_data",$insert_data);
+		//echo $this->db->last_query(); exit;
+		
+		$insert_data1 = array(
+		 'product_id'        => $product_id,
+		 'purchase_pid'      => $product_id,
+		 'purchase_id'       => $purchase_id,
+		 'serial'            => $serial_no1,
+		 'imei2'             => $imei_2,
+		 'status'            => 2,
+		 //'sticker'           => $sticker_no,
+		 //'current_condition' => $current_grade,
+		 //'convert_to'        => $final_grade
+		);
+		$this->db->insert("geopos_product_serials",$insert_data1);		
+		$serial_id = $this->db->insert_id();
+
+		$warehouse = array(
+		 'pid'            => $product_id,
+		 'serial_id'      => $serial_id,
+		 'invoice_id'     => $purchase_id,
+		 'fwid'           => 0,
+		 'twid'           => 0,
+		 'logged_user_id' => $_SESSION['loggedin'],
+		 'date_created'   => date('Y-m-d H:i:s'),
+		 'status'         => 1
+		 );
+		$this->db->insert("tbl_warehouse_serials",$warehouse);
+
+		$this->db->where('id',$purchase_id);
+		$this->db->set('pending_qty', "pending_qty+1", FALSE);
+		$this->db->update('geopos_purchase');
+
+		$this->db->where('tid',$purchase_id);
+		$this->db->where('pid',$product_id);
+		$this->db->set('pending_qty', "pending_qty+1", FALSE);
+		$this->db->update('geopos_purchase_items');
+
+		$this->db->set('qty', "qty+1", FALSE);
+		$this->db->where('pid', $product_id);
+		$this->db->update('geopos_products');	
+
+     //redirect('purchase/park_goods'); 
+    }
+	
+	
+	public function add_recieve_goods_warehouse()
+    {		
+		/*[product_type1] => 1
+		[jobwork_required] => 1
+		[purchase_id] => 13
+		[varient_id] => 1715-640-14-641
+		[serial_no1] => 3532501178092631
+		[supplier_id] => 5
+		[purchase_item_id] => 1715-640
+		[color_id] => 28-
+		[serial_no2] => 3532501178092632 */
+		
+		
+		$data_type = $this->input->post('product_type1');		
+		$jobwork_required = $this->input->post('jobwork_required');
+		$supplier_id = $this->input->post('supplier_id');
+		$purchase_id = $this->input->post('purchase_id');
+		$purchase_item_id = $this->input->post('purchase_item_id');
+		//$zupc_code = $this->input->post('zupc_code');
+		$varient_ids = $this->input->post('varient_id');
+		//$sticker_no = $this->input->post('sticker_no');
+		$serial_no1 = $this->input->post('serial_no1');
+		//$current_grade = $this->input->post('current_grade');
+		//$qc_engineer = $this->input->post('qc_engineer');
+		$color_id = $this->input->post('color_id');
+		$imei_2 = $this->input->post('serial_no2');
+		
+		
+		$purchase_item_id_array = explode('-',$purchase_item_id);
+		$product_id = $purchase_item_id_array[1]; 
+		//echo $varient_ids; exit;
+		if($varient_ids!=''){
+			$varient_array = explode('-',$varient_ids);
+			$product_id = $varient_array[1];
+			$varient_id = $varient_array[2];
+			$varient_pid = $varient_array[3];
+		}
+		
+		$get_current_receive_status = $this->current_receve_goods_qc_qty($purchase_id,$supplier_id,$product_id);
+
+		if($get_current_receive_status['rows']==0)
+		{
+			$this->receve_goods_qc_qty($purchase_id,$supplier_id,$product_id,count($sticker_no));
+		}
+		else
+		{
+			$total_qty = $get_current_receive_status['qty']+count($sticker_no);
+			$this->update_receve_goods_qc_qty($purchase_id,$supplier_id,$product_id,$total_qty);
+		}
+
+		
+			$insert_data1 = array(
+			'product_id'        => $product_id,
+			'purchase_pid'      => $product_id,
+			'purchase_id'       => $purchase_id,
+			'serial'            => $serial_no1,
+			'imei2'             => $imei_2,
+			'status'            => 7
+			//'sticker'           => $sticker_no,
+			//'current_condition' => $current_grade			
+			);
+			
+		$this->db->insert("geopos_product_serials",$insert_data1);		
+		$serial_id = $this->db->insert_id();
+
+		$warehouse = array(
+			'pid'            => $product_id,
+			'serial_id'      => $serial_id,
+			'invoice_id'     => $purchase_id,
+			'fwid'           => 0,
+			'twid'           => 1,
+			'logged_user_id' => $_SESSION['loggedin'],
+			'date_created'   => date('Y-m-d H:i:s'),
+			'status'         => 1
+			);
+		$this->db->insert("tbl_warehouse_serials",$warehouse);
+				
+		$this->db->where('id',$purchase_id);
+		$this->db->set('pending_qty', "pending_qty+1", FALSE);
+		$this->db->update('geopos_purchase');
+
+		$this->db->where('tid',$purchase_id);
+		$this->db->where('pid',$product_id);
+		$this->db->set('pending_qty', "pending_qty+1", FALSE);
+		$this->db->update('geopos_purchase_items');
+
+		$this->db->set('qty', "qty+1", FALSE);
+		$this->db->where('pid', $product_id);
+		$this->db->update('geopos_products');
+		//redirect('purchase/park_goods');
+    }
+	
+	public function receive_goods()
+    {
+		$data = array(); 
+        $this->db->select("a.status as warehouse_serial_status,
+		b.status as product_serial_status,
+		b.serial,
+		c.tid as purchase_id,
+		e.pid,
+		e.product_name,
+		e.warehouse_product_code,
+		f.name as varient,
+		g.name as color,
+		s.name as supplier_name,
+		cat.title as cat_name");
+        $this->db->from("tbl_warehouse_serials as a");
+        $this->db->join("geopos_product_serials as b","b.id=a.serial_id",'left');
+        $this->db->join("geopos_purchase as c","c.id=b.purchase_id",'left');
+        $this->db->join("geopos_purchase_items as d","d.tid=c.id",'left');
+        $this->db->join("geopos_products as e","e.pid=d.pid",'left');
+        $this->db->join("geopos_units as f","f.id=e.vb",'left');
+        $this->db->join("geopos_colours as g","g.id=e.vc",'left');       
+        $this->db->join("geopos_product_cat as cat","e.pcat=cat.id",'left');
+        $this->db->join("geopos_supplier as s","c.csd=s.id",'left');
         
+		$status_val = array('0'=>2,'1'=>7); 
+		$this->db->where_in('b.status',$status_val);
+		$this->db->where('b.status !=',8);
+		$this->db->where('b.serial !=','');
+		
+		$this->db->group_by('b.serial');
+		$this->db->order_by('a.id','DESC');
+		//$this->db->limit(500);
+        $query = $this->db->get();
+		//echo $this->db->last_query();
+        if($query->num_rows()>0)
+        {
+            foreach($query->result() as $key=>$row)
+            {
+                $data[] = $row;
+            }
+            return $data;
+        }
     }
 
 }

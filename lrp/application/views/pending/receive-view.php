@@ -9,14 +9,17 @@
         <div class="col-md-12">
           <h3 class="box-title bhead"><?php echo "Pending Receives View"; ?></h3>
           
-		  <form class="row" action="" method="post">
+			<form class="row" name="searchfrm" id="searchfrm" action="<?php echo base_url(); ?>pending/receive_view" method="post">
 			<div class="form-group col-md-6">
-			<input type="text" placeholder="Search IMEI" class="form-control margin-bottom required">
+				<input name="serial" id="serial" type="text" placeholder="Search IMEI" class="form-control margin-bottom" required>
 			</div>
 			<div class="form-group col-md-6">
-			<a href="#" class="btn btn-success btn-md">Search</a>
+				<input type="submit" class="btn btn-success btn-md" name="search" id="search" value="Search">
 	  		</div>
-			  <table class="table table-striped table-bordered zero-configuration dataTable dtr-inline text-center">
+			</form>
+			
+			<form method="post" enctype="multipart/form-data" id="data_form" action="<?=base_url()?>pending/save_receive_view">
+			<table class="table table-striped table-bordered zero-configuration dataTable dtr-inline text-center">
             <thead>
 				<tr>
 					<th class="text-center">#</th>
@@ -24,18 +27,18 @@
 					<th class="text-center">IMEI</th>
 				</tr>
             </thead>
-            <tbody>
+			<tbody>
+				<?php
+				foreach($list as $key=>$row){ 
+					$i=1;	
+				?>
 				<tr>
-					<td>1</td>
-					<td>Samsung A30</td>
-					<td>4585522525220</td>
-	  			</tr>
-				<tr>
-					<td>2</td>
-					<td>Xiaomi Mi 10</td>
-					<td>6865435465454</td>
-	  			</tr>
-            </tbody>
+					<td><?php echo $i; ?></td>
+					<td><?php echo $row->product_name; ?></td>
+					<td><?php echo $row->serial; ?></td>
+				</tr>
+				<?php } ?>
+			</tbody>
 			<tfoot>
 				<tr>
 					<th class="text-center">#</th>
@@ -46,9 +49,12 @@
             
           </table>
 		  <div class="form-group row mt-2">
+				<?php if($list[0]->pid){ ?>
 				<div class="col-sm-12 text-center">
-					<a href="#" class="btn btn-success btn-md">Submit</a>
+					<input class="btn btn-success btn-md" type="submit" name="submit" id="submit" value="Submit">
 				</div>
+				<?php } ?>
+				<input type="hidden" name="serial" id="serial" value="<?php echo $list[0]->serial; ?>">				
 		  </div>
 		  </form>
           

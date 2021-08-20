@@ -32,30 +32,51 @@
 				</tr>
             </thead>
             <tbody>
+				<?php 
+				/* echo "<pre>";
+				print_r($list);
+				echo "</pre>"; */
+				
+				foreach($list as $key=>$row){ 
+				$component_array = explode(',',$row->item_replaced);
+				$component_count = count($component_array);
+				$i=1;	
+				
+				switch($row->jobwork_change_status){
+					case 1: $jobwork_change_status_name = 'Pending'; $style='style="background-color:blue;"';
+					break;
+					case 2: $jobwork_change_status_name = 'In Progress - TRC'; $style='style="background-color:yellow;color:#000;"';
+					break;
+					case 3: $jobwork_change_status_name = 'Proceed For QC'; $style='style="background-color:#5ed45e;"';
+					break;
+				}
+				
+				switch($row->jobwork_final_qc_status){
+					case 1: $jobwork_final_qc_status_name = 'Pending'; $style1='style="background-color:blue;"';
+					break;
+					case 2: $jobwork_final_qc_status_name = 'QC PASS'; $style1='style="background-color:#5ed45e;"';
+					break;
+					case 3: $jobwork_final_qc_status_name = 'QC FAIL'; $style1='style="background-color:yellow;color:#000;"';
+					break;
+				}
+				
+				
+				
+				?>			
               <tr>
-              	<td>1</td>
-              	<td>SR-JOBWORK12</td>
-              	<td>Vivo Y17--(4GB / 128GB)-Excellant-Mystic Purple</td>
-              	<td>860398041129633</td>
+              	<td><?php echo $i; ?></td>
+              	<td>JOBWORK<?php echo $row->jobcard_id; ?></td>
+              	<td><?php echo $row->product_name; ?></td>
+              	<td><?php echo $row->serial; ?></td>
               	<td>Battery Cover-Vivo Y17 ⇒ 9800000026245</td>
-              	<td>trmteamleader</td>
-              	<td>Ravi</td>
-              	<td><span class="badge  st-paid app" style="background-color:#5ed45e;">Proceed For QC</span></td>
-              	<td><span class="badge  st-paid app">QC PASS</span></td>
-              	<td><a href="open_view" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>  View</a></td>
+              	<td><?php echo $row->teamlead; ?></td>
+              	<td><?php echo $row->jobwork_assign_engineer; ?></td>
+              	<td><span class="badge  st-paid app" <?php echo $style; ?>><?php echo $jobwork_change_status_name; ?></span></td>
+              	<td><span class="badge  st-paid app" <?php echo $style1; ?>><?php echo $jobwork_final_qc_status_name; ?></span></td>
+              	<td><a href="<?php echo  base_url(); ?>jobwork/open_view?id=<?php echo $row->jobcard_id; ?>" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>  View</a></td>
               </tr>
-              <tr>
-              	<td>2</td>
-              	<td>SR-JOBWORK388</td>
-              	<td>Samsung Galaxy M30S--(6GB / 128GB)-Excellant-Black</td>
-              	<td>3515071169192661</td>
-              	<td>Back Housing-Samsung Galaxy A30 ⇒ 9800000026211</td>
-              	<td>trmteamleader</td>
-              	<td>Ravi</td>
-              	<td><span class="badge  st-paid app" style="background-color:blue;">Pending</span></td>
-              	<td></td>
-              	<td><a href="open_view" class="btn btn-success btn-sm"><i class="fa fa-eye"></i>  View</a></td>
-              </tr>
+			  <?php } ?>
+              
             </tbody>
 			<tfoot>
 				<tr>

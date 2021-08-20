@@ -3149,7 +3149,7 @@ class Invoices extends CI_Controller
         'loc' => $this->aauth->get_user()->loc);
         $invocieno2 = $invocieno;       
         
-       /*  $this->db->insert('geopos_invoices', $data);
+       /* $this->db->insert('geopos_invoices', $data);
 		echo $this->db->last_query(); exit; */
 		
 		
@@ -3216,7 +3216,7 @@ class Invoices extends CI_Controller
 					echo json_encode(array('status' => 'Error', 'message' => 'Product - <strong>' . $product_name1[$key] . "</strong> - Low quantity. Available stock is  " . $avlqty));
 					$transok = false;
 					$st_c = 1;
-				}else{ 
+				}else{ 					
 					//Marginal Variable
 					$product_price_margin = "0.00";
 					$gst_with_margin = "0.00";
@@ -3226,13 +3226,15 @@ class Invoices extends CI_Controller
 					for($j=0; $j<$qty; $j++){ 
 							
 							$this->db->select('a.id');
-							$this->db->select('a.serial_id');
+							$this->db->select('a.serial_id');							
 							$this->db->select('b.purchase_id');
 							$this->db->select('b.purchase_pid');
 							$this->db->from('tbl_warehouse_serials as a');
 							$this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
 							$this->db->where('b.product_id',$product_id[$key]);
-							$this->db->where('a.twid',$fwid);
+							$where = '(a.twid="'.$fwid.'" or a.twid = "0")';
+							$this->db->where($where);
+							//$this->db->where('a.twid',$fwid);
 							if($serial_no[$key]){
 							$this->db->where('b.serial',$serial_no[$key]);
 							}

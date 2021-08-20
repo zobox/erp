@@ -39,8 +39,8 @@ class Purchase extends CI_Controller
 
         }
         $this->li_a = 'stock';
-
-    }
+	}
+	
 
     //create invoice
     public function create()
@@ -150,9 +150,9 @@ class Purchase extends CI_Controller
 
     public function receive_good()
     {
-        $head['title'] = "Receive Goods";
+		$head['title'] = "Receive Goods";
         $head['usernm'] = $this->aauth->get_user()->username;
-        $data['product_list'] = $this->purchase->recive_good_po_list();
+        $data['list'] = $this->purchase->receive_goods();
 
         $this->load->view('fixed/header', $head);
         $this->load->view('purchase/receive_good',$data);
@@ -1635,6 +1635,137 @@ class Purchase extends CI_Controller
 			echo 'false';
 		}else{
 			echo 'true';
+		}
+	}
+	
+	public function add_recieve_goods(){
+		/* echo "<pre>"; 
+		print_r($_REQUEST);
+		echo "</pre>";
+		exit;	 */
+		
+		/* [product_type1] => 1
+		[jobwork_required] => 1
+		[purchase_id] => 13
+		[varient_id] => 1715-640-14-641
+		[serial_no1] => 3532501178092631
+		[supplier_id] => 5
+		[purchase_item_id] => 1715-640
+		[color_id] => 28-
+		[serial_no2] => 3532501178092632 */
+		
+		$serial_no1 = $this->input->post('serial_no1');
+		$query = $this->db->query("select * from geopos_product_serials where serial='".$serial_no1."'");
+		if($query->num_rows()==0)
+		{
+		   $data_type = $this->input->post('product_type1');
+		   $jobwork_required = $this->input->post('jobwork_required'); 	  
+		   
+		   if($data_type==1){
+			   if($jobwork_required==1)
+			   {
+					$this->purchase->add_recieve_goods();
+			   }
+			   else if($jobwork_required==2)
+			   {
+					$this->purchase->add_recieve_goods_warehouse();
+			   }
+		   }else if($data_type==3){
+			   $this->purchase->goods_product_send_saparepat_warehouse();
+		   }
+		   
+		   if($this->input->post()) {			   
+				$data_type = $this->input->post('product_type1');
+				$jobwork_required = $this->input->post('jobwork_required');
+				$supplier_id = $this->input->post('supplier_id');
+				$purchase_id = $this->input->post('purchase_id');
+				$purchase_item_id = $this->input->post('purchase_item_id');
+				//$zupc_code = $this->input->post('zupc_code');
+				$varient_ids = $this->input->post('varient_id');
+				//$sticker_no = $this->input->post('sticker_no');
+				$serial_no1 = $this->input->post('serial_no1');
+				//$current_grade = $this->input->post('current_grade');
+				//$qc_engineer = $this->input->post('qc_engineer');
+				$color_id = $this->input->post('color_id');
+				$imei_2 = $this->input->post('imei_2');
+				//$final_grade = $this->input->post('final_grade');
+				$items_array = $this->input->post('items');
+				
+				$purchase_item_id_array = explode('-',$purchase_item_id);
+				$product_id = $purchase_item_id_array[1]; 
+				
+				if($varient_ids!=''){
+					$varient_array = explode('-',$varient_ids);
+					$product_id = $varient_array[1];
+					$varient_id = $varient_array[2];
+					$varient_pid = $varient_array[3];	
+				}
+
+				$product_details = $this->products->getproductById($product_id);
+				$product_name = $product_details->product_name;
+				
+				$product_info = $this->purchase->getProductInfo($purchase_item_id,$product_id,$varient_id,$current_grade,$color_id);
+				$jobwork_brand_name = $product_info[0]->brand_name;
+				$varient = $product_info[0]->unit_name;
+				$colour = $product_info[0]->colour_name;
+				$current_condition = $product_info[0]->condition_type;
+				
+				$purchase_details = $this->purchase->getPurchaseById($purchase_id);
+				
+				switch($purchase_details[0]->type)
+				{
+					case 2: $prefix = 'MRG_';
+
+					break;
+					case 3: $prefix = 'SP_';
+
+					break;
+					default : $prefix = '';
+				}             
+				$purchase_order = $prefix.'#'.$purchase_details[0]->tid;
+				
+				
+				$data['product_name'] = $product_name;
+				$data['sticker_no'] = $sticker_no;
+				$data['varient'] = $varient;
+				$data['colour'] = $colour;
+				$data['purchase_order'] = $purchase_order;
+				$data['qc_engineer'] = $qc_engineer;
+				$items = implode(',',$items_array);
+				$data['items'] = $items;
+				$data['zupc_code'] = $zupc_code;
+				$data['serial_no1'] = $serial_no1;			
+				$conditions1 = $this->purchase->getConditionNamebyID($current_grade);
+				$conditions2 = $this->purchase->getConditionNamebyID($final_grade);
+				$data['current_grade'] = $conditions1->name; 
+				$data['final_grade'] = $conditions2->name;
+				
+				if($data_type==1){
+					if($jobwork_required==1)
+					{
+						$html = $this->load->view('barcode/generate_label_jobwork_required', $data, true); 
+					}else{
+						$html = $this->load->view('barcode/generate_label_jobwork_not_required', $data, true);
+					}
+				}else{
+					$data['qty'] = $this->input->post('qty');
+					$component_id = $this->input->post('purchase_item_id'); 
+					$data['component_details'] = $this->purchase->getComponentById($component_id);
+					$html = $this->load->view('barcode/generate_label_sparepart', $data, true);
+				}
+				
+				
+				ini_set('memory_limit', '64M');
+
+				//PDF Rendering
+				$this->load->library('pdf');
+				$pdf = $this->pdf->load();
+				$pdf->WriteHTML($html);
+				$pdf->Output($data['name'] . '_barcode.pdf', 'I');
+				//redirect('purchase/park_goods');
+			}   
+		}else{
+			echo json_encode(array('status' => 'Error', 'message' => $serial_no1.'- Allready Exist !' ));
 		}
 	}
     

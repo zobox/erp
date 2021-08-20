@@ -1,22 +1,24 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Dashboard extends CI_Controller{
-	 public function __construct()
+	public function __construct()
     {
         parent::__construct();
-       // $this->load->model('invoices_model', 'invocies');
+        
         if (!is_login()) {
             redirect(base_url() . 'user/profile', 'refresh');
         }
 		$this->load->model('Dashboard_model','dashboard');
+		$this->load->model('invoices_model', 'invocies');
     }
 
     //invoices list
     public function index()
     {
-        $head['title'] = "Dashboard";
-		$data['leads_count'] = $this->dashboard->lead_count();
-        
+        $head['title'] = "Dashboard";	
+		
+		$data['list'] = $this->invocies->invoice_details($invoice_id='');
+	     
         $this->load->view('includes/header',$head);
         $this->load->view('dashboard/index',$data);
         $this->load->view('includes/footer');

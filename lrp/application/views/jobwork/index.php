@@ -21,6 +21,7 @@
 				<tr>
 					<th>#</th>
 					<th>Date</th>
+					<th>Job Work ID</th>
 					<th>IMEI</th>
 					<th>Product Name</th>
 					<th>Component Qty</th>
@@ -30,31 +31,34 @@
 				</tr>
             </thead>
             <tbody>
+				<?php 
+				/* echo "<pre>";
+				print_r($list);
+				echo "</pre>"; */
+				
+				foreach($list as $key=>$row){ 
+				$component_array = explode(',',$row->item_replaced);
+				$component_count = count($component_array);
+				$i=1;	
+				?>
               <tr>
-                <td>1</td>
-                <td>02-08-2021</td>
-                <td>524565152552</td>
-				<td>Apple Iphone X</td>
-				<td>2</td>
-				<td>Screen</td>
-                <td>Device Only</td>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $row->invoicedate; ?></td>
+                <td>JOBWORK<?php echo $row->jobcard_id; ?></td>
+                <td><?php echo $row->serial; ?></td>
+				<td><?php echo $row->product_name; ?></td>
+				<td><?php echo  $component_count; ?></td>
+				<td><?php echo $row->item_replaced; ?></td>
+                <td><?php echo $row->convert_condition_name; ?></td>
                 <td><a href="#" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span>  Edit</a> <a href="#" class="btn btn-primary btn-sm"><span class="fa fa-download"></span> Label</a> <a href="#assigntl" data-toggle="modal" data-remote="false" data-type="reminder" class="btn btn-info btn-sm"><span class="fa fa-plus"></span>  Assign TL</a></td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>01-08-2021</td>
-                <td>857452220201</td>
-				<td>Samsung Galaxy S20</td>
-				<td>5</td>
-				<td>USB</td>
-                <td>Zo-Retail</td>
-                <td><a href="#" class="btn btn-warning btn-sm"><span class="fa fa-pencil"></span>  Edit</a> <a href="#" class="btn btn-primary btn-sm"><span class="fa fa-download"></span> Label</a> <a href="#assigntl" data-toggle="modal" data-remote="false" data-type="reminder" class="btn btn-info btn-sm"><span class="fa fa-plus"></span>  Assign TL</a></td>
-              </tr>
+				<?php } ?>
             </tbody>
 			<tfoot>
 				<tr>
 					<th>#</th>
 					<th>Date</th>
+					<th>Job Work ID</th>
 					<th>IMEI</th>
 					<th>Product Name</th>
 					<th>Component Qty</th>
@@ -70,36 +74,39 @@
     </div>
   </div>
 </div>
+
 <div id="assigntl" class="modal fade">
-			<div class="modal-dialog">
-				<div class="modal-content mdcontent">
-					<div class="modal-header">
-						<h4 class="modal-title">Assign TL</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<div class="modal-dialog">
+		<div class="modal-content mdcontent">
+			<div class="modal-header">
+				<h4 class="modal-title">Assign TL</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form class="payment" method="post" action="<?php echo base_url()?>jobwork/assigntl">
+					<div class="row">
+						<div class="col">
+							<div class="input-group modinput">
+								<input type="text" class="form-control" placeholder="Assign TL" name="teamlead" id="teamlead" required value="<?=$product_info->assign_engineer;?>">
+								<input type="hidden" name="serial" value="<?php echo $row->serial; ?>" id="serial"> </div>
+								<input type="hidden" name="jobwork_id" value="<?php echo $row->jobcard_id; ?>" id="jobwork_id"> </div>
+						</div>
 					</div>
-					<div class="modal-body">
-						<form class="payment" method="post" action="<?php echo base_url()?>workhousejob/assign_engineer">
-							<div class="row">
-								<div class="col">
-									<div class="input-group modinput">
-										<input type="text" class="form-control" placeholder="Assign TL" name="engineer_name" id="engineer_name" required value="<?=$product_info->assign_engineer;?>">
-										<input type="hidden" name="jobwork_id" value="<?=$jobwork_id?>" id="jobwork_id"> </div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<input type="hidden" class="form-control required" name="type" id="type" value="1">
-								<button type="button" class="btn btn-default" data-dismiss="modal">
-									<?php echo $this->lang->line('Close') ?>
-								</button>
-								<button type="submit" class="btn btn-primary" id="assign_engineer_submit">
-									<?php echo $this->lang->line('Submit') ?>
-								</button>
-							</div>
-						</form>
+					<div class="modal-footer">
+						<input type="hidden" class="form-control required" name="type" id="type" value="1">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							<?php echo $this->lang->line('Close') ?>
+						</button>
+						<button type="submit" class="btn btn-primary" id="assign_engineer_submit">
+							<?php echo $this->lang->line('Submit') ?>
+						</button>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
+	</div>
+</div>
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(event){

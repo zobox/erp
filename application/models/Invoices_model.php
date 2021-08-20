@@ -572,7 +572,6 @@ class Invoices_model extends CI_Model
         $query = $this->db->get();
 		//echo $this->db->last_query(); exit;
         return $query->row_array();
-    }
-    
+    } 
 	
 }

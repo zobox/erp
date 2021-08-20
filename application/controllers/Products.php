@@ -700,7 +700,7 @@ class Products extends CI_Controller
             $row[] = $no;
             $pid   =  $prd->pid;
 			
-			if($prd->condition=='Ok'){
+			if($prd->condition=='Ok' || $prd->condition=='Good'){
 				$zo_retail_price = 0;
 				$zo_bulk_price = $prd->zobulk_sale_price;
 			}else{

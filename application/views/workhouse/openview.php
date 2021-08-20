@@ -186,6 +186,7 @@ echo $_SESSION['s_role'];  exit; */
 				</div>
 			</div>
 		</div>
+		
         <div class="form-group row">
 			<div class="col-md-4">
 				<div class="row">
@@ -223,9 +224,9 @@ echo $_SESSION['s_role'];  exit; */
 					<div class="col-md-5">Sub Sub Category</div>
 					<div class="col-md-7">
 						<select id="sub_sub_cat1" name="product_cat[]" class="form-control select-box" disabled>
-              <option value="" disabled="disabled"> --- Select ---</option>
-			  <option value='<?php echo $product_category_array_title[1]['id']?>' selected="selected"><?php echo $product_category_array_title[1]['title']?></option>
-            </select>
+						  <option value="" disabled="disabled"> --- Select ---</option>
+						  <option value='<?php echo $product_category_array_title[1]['id']?>' selected="selected"><?php echo $product_category_array_title[1]['title']?></option>
+						</select>
 					</div>
 				</div>
 			</div>
@@ -284,9 +285,7 @@ echo $_SESSION['s_role'];  exit; */
 					<td><input type="number" name="quantity" id="qty-3" class="form-control" value="1" readonly></td>
 					<td><?=$component->serial?></td>
 				</tr>
-				<?php 
-				}
-				?>
+				<?php } ?>
 			</tfoot>
 		</table> 
 		
@@ -773,6 +772,8 @@ function getActualCost(qty,id){
         </div>
     </div>
 </div>
+
+
 <script type="text/javascript">
 function getcomponent(){
 		var product_id = $('#product_id').val(); 
@@ -923,4 +924,4 @@ $('#sub_cat').on('change',function(event){
       
      }
        // });
-    </script>
+</script>

@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 /*$config['base_url'] = 'http://13.233.62.90/zobox/agent/';*/
-$config['base_url'] = 'http://localhost/zobox/lrp/';
+$config['base_url'] = 'http://localhost/erp/lrp/';
 
 
 /*

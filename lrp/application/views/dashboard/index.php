@@ -102,22 +102,43 @@
 									</tr>
 								</thead>
 								<tbody>
+								
+									<?php 
+									/* echo "<pre>";
+									print_r($list);
+									echo "</pre>";  */
+									?>
+									
+									<?php foreach($list as $key=>$row){ 
+									$i=1;
+									switch($row->type){
+										case 1: $prefix = 'STFO#';
+										break;
+										case 2: if($row->pmethod_id==1){ $prefix = 'PCS#'; }else{ $prefix = 'POS#'; }
+										break;
+										case 3: $prefix = 'STF#';
+										break;
+										case 4: $prefix = 'PO#';
+										break;
+										case 6: $prefix = 'B2B#';
+										break;
+										case 7: $prefix = 'STR#';
+										break;
+										case 8: $prefix = 'LRP#';
+										break;
+									}
+									
+									?>
 									<tr>
-										<td>1</td>
-										<td>02-08-2021</td>
-										<td>524565152552</td>
-										<td>Screen</td>
-										<td>50</td>
+										<td><?php echo $i; ?></td>
+										<td><?php echo $row->invoicedate; ?></td>
+										<td><?php echo $prefix.$row->tid; ?></td>
+										<td><?php echo $row->category; ?></td>
+										<td><?php echo $row->qty; ?></td>
 										<td><a href="#" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
 									</tr>
-									<tr>
-										<td>2</td>
-										<td>01-08-2021</td>
-										<td>748515255220</td>
-										<td>USB</td>
-										<td>10</td>
-										<td><a href="#" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
-									</tr>
+									<?php $i++; } ?>
+									
 								</tbody>
 								<tfoot>
 									<tr>
