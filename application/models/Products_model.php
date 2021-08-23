@@ -2261,10 +2261,12 @@ FROM geopos_products $whr");
         if($wid){
         $this->db->where("a.twid",$wid);
         }        
-        $this->db->where("a.status",0);
+		$this->db->where("c.type",1);
+		//$this->db->where("a.status",0);
+		$this->db->where("a.is_present",0);
         $this->db->order_by('c.id',"desc");             
         $query = $this->db->get();
-        //echo $this->db->last_query();
+        //echo $this->db->last_query(); die;
         $data = array(); 
         
         if ($query->num_rows() > 0) {
@@ -2291,7 +2293,8 @@ FROM geopos_products $whr");
     
         $this->db->where("c.id",$invoice_id);
 		$this->db->where("f.status !=",8); 
-        $this->db->where("a.status",0); 
+        //$this->db->where("a.status",0); 
+		$this->db->where("a.is_present",0);
         $query = $this->db->get();
         //echo $this->db->last_query();
         $data = array();
@@ -2306,7 +2309,7 @@ FROM geopos_products $whr");
     
     public function recieve_serial(){
         $id = $this->input->post('id');
-        $this->db->set('status',1);
+        $this->db->set('is_present',1);
         $this->db->set('date_modified',date('Y-m-d h:i:s'));
         $this->db->where('id',$id);             
         $this->db->update('tbl_warehouse_serials');

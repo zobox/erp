@@ -21,7 +21,7 @@
                                 <div id="customer">
                                     <div id="customer_pass"></div><?php echo $this->lang->line('To Warehouse') ?> <select
                                             id="to_warehouses" name="to_warehouses"
-                                            class="form-control round required">
+                                            class="form-control round required" required>
                                             <option value="">Select Warehouse</option>
                                         <?php //echo $this->common->default_warehouse();
                                           foreach ($lrc_warehouse as $row) {

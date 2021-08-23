@@ -2718,7 +2718,7 @@ class Products extends CI_Controller
         $this->products->add_custom_label($pid,$varient_id,$color_id,$mrp,$zupc_code,$qty,$imei_1,$imei_2,$label_size,$product_type);
     }
 
-     public function new_custom_label() 
+    public function new_custom_label() 
     { 
         $id = $this->input->get('id');
         $type='';
@@ -2758,6 +2758,11 @@ class Products extends CI_Controller
                 
                 $pdf = $this->pdf->custom_prexo_label(array('margin_top' => 0.5));
             }
+            if($type=='' && $data['product_detail'][0]->label_size==6)
+            {
+                
+                $pdf = $this->pdf->prexo_with_grade(array('margin_top' => 0.5));
+            }
             $pdf->SetHTMLHeader($header);
            
         $pdf->SetHTMLFooter('<div style="text-align: center;font-family: serif; font-size: 8pt; color: #5C5C5C; font-style: italic;margin-top:-6pt;"></div>');
@@ -2765,7 +2770,7 @@ class Products extends CI_Controller
     
             $pdf->WriteHTML($html);
             $pdf->Output($data['product_detail'][0]->product_name . '_label.pdf', 'I');
-        //$this->load->view('products/new_custom_label', $data);
+        $this->load->view('products/new_custom_label', $data);
     }
 
 

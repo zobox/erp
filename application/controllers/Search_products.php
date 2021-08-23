@@ -1606,7 +1606,7 @@ class Search_products extends CI_Controller
         }
         $qw.= 'tbl_warehouse_serials.status!=0 && tbl_warehouse_serials.status!=2 &&
                 tbl_warehouse_serials.status!=3 && tbl_warehouse_serials.status!=8 && tbl_warehouse_serials.is_present=1 && geopos_product_serials.status!=8
-                && geopos_product_serials.status!=0 && ';
+                && geopos_product_serials.status!=0 && geopos_product_serials.status=2 &&';
 
         if ($name) {
 
@@ -1629,6 +1629,7 @@ class Search_products extends CI_Controller
             foreach ($result as $row) {
 				$purchase_record = $this->products->getPurchasePriceByPID($row['purchase_id'],$row['purchase_pid']);
 				$purchase_price = $purchase_record[0]['price'];
+                //$name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
                 $name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
                 array_push($out, $name);
             } 

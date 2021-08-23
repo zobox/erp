@@ -308,7 +308,7 @@ $('#serial_no1').on('keyup',function(event){
 });
 
 
-$('#product_cat').on('change',function(event){
+	$('#product_cat').on('change',function(event){
         var productcat = $(this).val();
 		var data_type = $('#data_type').val();
         $('#sub_cat').html("<option value='' disabled='' selected=''> --- Select --- </option>");
@@ -342,132 +342,133 @@ $('#product_cat').on('change',function(event){
 		});
 	}); 
   
-  $('#sub_sub_cat').on('change',function(event){
-        var productcat = $(this).val();
+	$('#sub_sub_cat').on('change',function(event){
+		var productcat = $(this).val();
 		var data_type = $('#data_type').val();
 		
 		$.ajax({
-            type : 'POST',
-            url : baseurl+'purchase/getproductinfo',
-            data : {id : productcat,data_type:data_type},
-            cache : false,
-            success : function(result){
-                //console.log(result);
-                if(result != 0){
+			type : 'POST',
+			url : baseurl+'purchase/getproductinfo',
+			data : {id : productcat,data_type:data_type},
+			cache : false,
+			success : function(result){
+				//console.log(result);
+				if(result != 0){
 					var res = result.split("#");
 					
-                    $('#zupc').val(res[0]);
-                    $('#varient').html(res[1]);
-                }
-            }
-        });
-    });
-
-$('.multi-field-wrapper').each(function() {
-    var $wrapper = $('.multi-fields', this);
-    $(".add-field", $(this)).click(function(e) {
-        $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('input').val('').focus();
-    });
-    $('.multi-field .remove-field', $wrapper).click(function() {
-        if($('.multi-field', $wrapper).length > 1) $(this).parent('.multi-field').remove();
-    });
-});
-</script>
-<script>
-$('#data_type').on('change', function() {      
-      if(this.value == '1')
-      {
-		$("#jobwork_required").attr("required", "true");
-		$("#product_cat").attr("required", "true");
-		$("#sub_cat").attr("required", "true");
-		$("#sub_sub_cat").attr("required", "true");
-		//$("#varient").attr("required", "true");
-		//$("#color").attr("required", "true");
-		$("#sticker_no").attr("required", "true");
-		$("#serial_no1").attr("required", "true");
-		$("#imei_2").attr("required", "true");
-		//$("#final_grade").attr("required", "true");
-		$("#current_grade").attr("required", "true");
-		//$("#items").attr("required", "true");
-		$("#qc_engineer").attr("required", "true");
-		$("label[for='imei']").text("Add IMEI / Serial No 1");  
-		
-        $('#serial_no_type').show();
-        $('.zupcno').show();        
-		$('#submit_zupc').hide();
-		$('.zupcno_y').hide();
-      }
-      if(this.value == '2')
-      {
-		$("#product_cat").attr("required", "true");
-		$("#sub_cat").attr("required", "true");
-		$("#sub_sub_cat").attr("required", "true");
-		$("#qty").attr("required", "true");
-		$("#serial_no1").attr("required", "true");  
-		$("label[for='imei']").text("ZUPC");  
-        $('.zupcno').hide();
-        $('#serial_no_type').hide();
-        $('#submit_zupc').show();
-        $('.zupcno_y').show();
-      }
-})
-
-$('#jobwork_required').on('change', function() {
-  //  alert( this.value ); // or $(this).val()
-  if(this.value == "1") {
-	$("#final_grade").attr("required", "true");
-	$("#items").attr("required", "true");
-    $('.JobworkYes').show();
-    //$('.JobworkNo').hide();
-
-    $('#jobwork').val('1');
-    $('#jobwork_not_required').val('');
-    
-
-  }else if(this.value == "2"){
-    $('#jobwork_not_required').val('2');
-    $('#jobwork').val('');
-    $('.JobworkYes').hide();
-    //$('.JobworkNo').show();
-  }else if(this.value == "3"){
-	$("#final_grade").attr("required", "true");
-	$("#items").attr("required", "true");
-    $('.JobworkYes').show();
-	$('#jobwork_not_required').val('3');
-	$('#jobwork').val('3');
-	$('.PraxoYes').hide();
-  }
-});
-
-
-function valid()
-{
-    if(document.getElementById('test').value=='')
-    {
-        document.getElementById('notify').style.display='block';
-        document.getElementById('msg').innerHTML='Please Select Job Work Type';
-        document.getElementById('notify').focus();
-        document.getElementById('test').focus();
-        return false;
-    }
-}
-
-
-$('#varient').change(function(){
-	var id = $(this).val();
-	$.ajax({
-		type : 'POST',
-		url : baseurl+'purchase/getvarientcolor',
-		data : {id : id},
-		cache : false,
-		success : function(result){
-			//console.log(result);
-			if(result != 0){							
-				$('#color').html(result);
+					$('#zupc').val(res[0]);
+					$('#varient').html(res[1]);
+				}
 			}
-		}
+		});
 	});
-});
+
+	$('.multi-field-wrapper').each(function() {
+		var $wrapper = $('.multi-fields', this);
+		$(".add-field", $(this)).click(function(e) {
+			$('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper).find('input').val('').focus();
+		});
+		$('.multi-field .remove-field', $wrapper).click(function() {
+			if($('.multi-field', $wrapper).length > 1) $(this).parent('.multi-field').remove();
+		});
+	});
+</script>
+
+<script>
+	$('#data_type').on('change', function() {      
+		  if(this.value == '1')
+		  {
+			$("#jobwork_required").attr("required", "true");
+			$("#product_cat").attr("required", "true");
+			$("#sub_cat").attr("required", "true");
+			$("#sub_sub_cat").attr("required", "true");
+			//$("#varient").attr("required", "true");
+			//$("#color").attr("required", "true");
+			$("#sticker_no").attr("required", "true");
+			$("#serial_no1").attr("required", "true");
+			$("#imei_2").attr("required", "true");
+			//$("#final_grade").attr("required", "true");
+			$("#current_grade").attr("required", "true");
+			//$("#items").attr("required", "true");
+			$("#qc_engineer").attr("required", "true");
+			$("label[for='imei']").text("Add IMEI / Serial No 1");  
+			
+			$('#serial_no_type').show();
+			$('.zupcno').show();        
+			$('#submit_zupc').hide();
+			$('.zupcno_y').hide();
+		  }
+		  if(this.value == '2')
+		  {
+			$("#product_cat").attr("required", "true");
+			$("#sub_cat").attr("required", "true");
+			$("#sub_sub_cat").attr("required", "true");
+			$("#qty").attr("required", "true");
+			$("#serial_no1").attr("required", "true");  
+			$("label[for='imei']").text("ZUPC");  
+			$('.zupcno').hide();
+			$('#serial_no_type').hide();
+			$('#submit_zupc').show();
+			$('.zupcno_y').show();
+		  }
+	})
+
+	$('#jobwork_required').on('change', function() {
+	  //  alert( this.value ); // or $(this).val()
+	  if(this.value == "1") {
+		$("#final_grade").attr("required", "true");
+		$("#items").attr("required", "true");
+		$('.JobworkYes').show();
+		//$('.JobworkNo').hide();
+
+		$('#jobwork').val('1');
+		$('#jobwork_not_required').val('');
+		
+
+	  }else if(this.value == "2"){
+		$('#jobwork_not_required').val('2');
+		$('#jobwork').val('');
+		$('.JobworkYes').hide();
+		//$('.JobworkNo').show();
+	  }else if(this.value == "3"){
+		$("#final_grade").attr("required", "true");
+		$("#items").attr("required", "true");
+		$('.JobworkYes').show();
+		$('#jobwork_not_required').val('3');
+		$('#jobwork').val('3');
+		$('.PraxoYes').hide();
+	  }
+	});
+
+
+	function valid()
+	{
+		if(document.getElementById('test').value=='')
+		{
+			document.getElementById('notify').style.display='block';
+			document.getElementById('msg').innerHTML='Please Select Job Work Type';
+			document.getElementById('notify').focus();
+			document.getElementById('test').focus();
+			return false;
+		}
+	}
+
+
+	$('#varient').change(function(){
+		var id = $(this).val();
+		$.ajax({
+			type : 'POST',
+			url : baseurl+'purchase/getvarientcolor',
+			data : {id : id},
+			cache : false,
+			success : function(result){
+				//console.log(result);
+				if(result != 0){							
+					$('#color').html(result);
+				}
+			}
+		});
+	});
 
 </script>
 

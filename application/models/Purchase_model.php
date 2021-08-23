@@ -1389,7 +1389,7 @@ class Purchase_model extends CI_Model
 	}
 	
 	public function getvarient($purchase_item_id)
-   {  
+	{  
         //$data = array();
         $this->db->select("a.qty,a.id,b.warehouse_product_code,b.pid as product_id,c.name as colour_name,d.name as condition_type,u.name as unit_name, bb.pid as varient_pid,bb.product_name,bb.vb as varient_id,brand.title as brand_name");
         $this->db->from("geopos_purchase_items as a");
@@ -2288,6 +2288,7 @@ class Purchase_model extends CI_Model
 		$this->db->where_in('b.status',$status_val);
 		$this->db->where('b.status !=',8);
 		$this->db->where('b.serial !=','');
+		$this->db->where('a.status',1);
 		
 		$this->db->group_by('b.serial');
 		$this->db->order_by('a.id','DESC');

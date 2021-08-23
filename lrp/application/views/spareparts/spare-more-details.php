@@ -20,44 +20,39 @@
                           <th>#</th>
                           <th>WarehouseID</th>
                           <th>Name</th>
-                          <th>Serial Type</th>
                           <th>ZUPC Code</th>
                           <th>Serial Number</th>
                           <th>Settings</th>
                         </tr>
                       </thead>
                       <tbody>
+                        <?php
+                        $i=1;
+
+                        foreach($serial_list as $serial)
+                        {
+                                
+                        
+                        ?>
                         <tr>
-                          <td>1</td>
-                          <td>New Spareparts</td>
-                          <td> Mobile Glass-Vivo Z1 Pro </td>
-                          <td>93928</td>
-                          <td>9800000020055</td>
-                          <td>9800000020055</td>
+                          <td><?=$i++?></td>
+                          <td><?=$warehouse['title']?></td>
+                          <td><?=$serial->component_name?> </td>
+                          <td><?=$serial->warehouse_product_code?></td>
+                          <td><?=$serial->serial?></td>
                           <td>
                             <a class="btn btn-success btn-sm  view-object text-white"><span class="fa fa-eye"></span> View</a> 
                             
                           </td>
                         </tr>
-                        <tr>
-                          <td>1</td>
-                          <td>New Spareparts</td>
-                          <td> Mobile Glass-Vivo Z1 Pro </td>
-                          <td>93928</td>
-                          <td>9800000020055</td>
-                          <td>9800000020055</td>
-                          <td>
-                            <a class="btn btn-success btn-sm  view-object text-white"><span class="fa fa-eye"></span> View</a> 
-                            
-                          </td>
-                        </tr>
+                      <?php } ?>
+                        
                       </tbody>
                       <tfoot>
                         <tr>
                             <th>#</th>
                             <th>WarehouseID</th>
                             <th>Name</th>
-                            <th>Serial Type</th>
                             <th>ZUPC Code</th>
                             <th>Serial Number</th>
                             <th>Settings</th>

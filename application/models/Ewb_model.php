@@ -751,7 +751,8 @@ class Ewb_model extends CI_Model
 				$this->db->set('fwid',$fwid);
 				$this->db->set('twid',$twid);
 				$this->db->set('invoice_id',$invoice_id);
-				$this->db->set('status',6);
+				$this->db->set('status',4); //Stock Transfer to Franchise
+				$this->db->set('is_present',0); // Franchise Pending Inventory
 				$this->db->set('date_modified',date('Y-m-d h:i:s'));
 				$this->db->where('id',$id);
 				$this->db->where('serial_id',$s_id);

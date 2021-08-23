@@ -377,15 +377,15 @@
                                     foreach ($products as $row) {
                                         $sub_t += $row['price'] * $row['qty'];
                                         echo '<tr>
-<th scope="row">' . $c . '</th>
-                            <td>' . $row['product'] . '</td>                           
-                            <td>' . $row['code'] . '</td>                           
-                            <td>' . amountExchange($row['price'], $invoice['multi'], $invoice['loc']) . '</td>
-                             <td>' . amountFormat_general($row['qty']) . $row['unit'] . '</td>
-                            <td>' . amountExchange($row['totaltax'], $invoice['multi'], $invoice['loc']) . ' (' . amountFormat_s($row['tax']) . '%)</td>
-                            <td>' . amountExchange($row['totaldiscount'], $invoice['multi'], $invoice['loc']) . ' (' . amountFormat_s($row['discount']) . $this->lang->line($invoice['format_discount']) . ')</td>
-                            <td>' . amountExchange($row['subtotal'], $invoice['multi'], $invoice['loc']) . '</td>
-                        </tr>';
+												<th scope="row">' . $c . '</th>
+												<td>' . $row['product'] . '</td>                           
+												<td>' . $row['code'] . '</td>                           
+												<td>' . amountExchange($row['price'], $invoice['multi'], $invoice['loc']) . '</td>
+												 <td>' . amountFormat_general($row['qty']) . $row['unit'] . '</td>
+												<td>' . amountExchange($row['totaltax'], $invoice['multi'], $invoice['loc']) . ' (' . amountFormat_s($row['tax']) . '%)</td>
+												<td>' . amountExchange($row['totaldiscount'], $invoice['multi'], $invoice['loc']) . ' (' . amountFormat_s($row['discount']) . $this->lang->line($invoice['format_discount']) . ')</td>
+												<td>' . amountExchange($row['subtotal'], $invoice['multi'], $invoice['loc']) . '</td>
+											</tr>';
 
                                         echo '<tr><td colspan=7>' . $row['product_des'] . '</td></tr>';
                                         if (CUSTOM) {

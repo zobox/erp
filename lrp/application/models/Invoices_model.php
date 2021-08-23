@@ -897,4 +897,168 @@ class Invoices_model extends CI_Model
 	}
 	
 	
+	public function getCustomList($id='')
+	{
+
+		$this->db->select("a.*,b.name as unit_name,c.name as colour_name,d.title as brand_name");
+		$this->db->from("tbl_custom_label as a");
+		$this->db->join("geopos_units as b","a.varient_id=b.id",'left');
+		$this->db->join("geopos_colours as c","a.color_id=c.id",'left');
+		$this->db->join("geopos_products as e","a.pid=e.pid",'left');
+		$this->db->join("geopos_brand as d","e.b_id=d.id",'left');
+		if($id!='')
+		{
+			$this->db->where('a.id',$id);   
+		}
+		$this->db->order_by('a.id','desc');
+
+		$query = $this->db->get();
+		$data = array();
+		if($query->num_rows()>0)
+		{
+			foreach($query->result() as $key=>$row)
+			{
+				$data[] = $row;
+			}
+			return $data;
+		}
+		return false;
+	}
+	
+	
+	public function getProductDetailsByID($serial){
+		$this->db->select('b.*,a.serial,a.imei2');
+		$this->db->where('a.serial',$serial);
+		$this->db->from("geopos_product_serials as a");
+		$this->db->join("geopos_products as b","a.product_id=b.pid",'left');
+		$query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		return $query->result_array();
+	}
+	
+	
+	public function getWarehouse()
+	{
+		$this->db->select("*");
+		$this->db->from("geopos_warehouse");
+		$this->db->where("franchise_id",$this->session->userdata('user_details')[0]->users_id);
+		$query = $this->db->get();
+		
+		return $query->result_array();
+	}
+	
+	public function getSerialComponent($pid,$twid)
+    {
+        $this->db->select("p.component_name,s.serial_in_type,p.hsn_code,s.serial,s.id,s.component_id,p.warehouse_product_code");
+        $this->db->from("tbl_component_serials as s");
+        $this->db->join("tbl_component as p","s.component_id=p.id",'LEFT');
+        $this->db->where('s.component_id',$pid);
+        $this->db->where('s.twid',$twid);
+        $this->db->where('s.status',4);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        $data = array();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                    $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
+    }
+	
+	public function getSupplier($supplier_id='')
+   {
+   	$this->db->select("e.company,c.purchase_id,e.id,c.invoice_id,b.tid");
+   	$this->db->from("geopos_warehouse as a");
+   	$this->db->join("geopos_invoices as b","a.id=b.twid","left");
+   	$this->db->join("tbl_component_serials as c","b.id=c.invoice_id","left");
+   	$this->db->join("geopos_purchase as d","c.purchase_id=d.id","left");
+   	$this->db->join("geopos_supplier as e","d.csd=e.id","left");
+   	$this->db->where("b.type",5);
+   	if($supplier_id!='')
+   	{
+   	$this->db->where("a.franchise_id",$this->session->userdata('user_details')[0]->users_id);	
+    $this->db->where("e.id",$supplier_id);
+    $this->db->group_by("b.id");
+   	}
+   	else
+   	{
+   	$this->db->where("a.franchise_id",$this->session->userdata('user_details')[0]->users_id);
+   	$this->db->group_by("e.company");
+    }
+    $query = $this->db->get();
+    $data = array();
+    if($query->num_rows()>0)
+    {
+      foreach ($query->result() as $key => $value) {
+      	$data[] = $value;
+      }
+      return $data;
+    }
+    return false;
+   }
+   
+   public function getItemByInvoice($invoice_id)
+    {
+        $data=array();
+        $this->db->select("*");
+        $this->db->from("geopos_invoice_items");
+        $this->db->where("geopos_invoice_items.tid",$invoice_id);
+        $query = $this->db->get();
+        if($query->num_rows()>0)
+        {
+            foreach($query->result() as $key=>$row)
+            {
+                $total_received_good = $this->getReveiveGoods($invoice_id,$row->id);
+                if($row->qty>$total_received_good)
+                {
+                $data[] = $row;
+                }
+            }
+            return $data;
+        }
+    }
+    public function getReveiveGoods($invoice_id='',$pid)
+    {
+        $total = 0;
+        $this->db->select("count(id) as received_qty");
+        $this->db->from("tbl_component_serials");
+        if($purchase_id!='')
+        {
+        $this->db->where("invoice_id",$purchase_id);
+        }
+        $this->db->where("id",$pid);
+        $this->db->where("lrp_status",2);
+        $query = $this->db->get();
+        if($query->num_rows()>0)
+        {
+            $result = $query->result_array();
+            $total = $result[0]['received_qty'];
+        }
+        return $total;
+    }
+	
+	public function getvarient($component_id,$invoice_id)
+	{
+		//$data = array();
+		$this->db->select("a.warehouse_product_code,b.qty");
+		$this->db->from("geopos_invoice_items as b");
+		$this->db->join("tbl_component as a","b.pid=a.id","left");
+		$this->db->where("a.id",$component_id);
+		$this->db->where("b.tid",$invoice_id);
+		$query = $this->db->get();
+		//echo $this->db->last_query(); die;
+		$data = array();
+		if($query->num_rows()>0)
+		{
+			foreach($query->result() as $key=>$row)
+			{
+				$data[] = $row;
+			}
+			return $data;
+		}
+	}
+
+	
 }

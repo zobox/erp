@@ -123,12 +123,93 @@ class Pending extends CI_Controller{
 		echo json_encode($result);
 	}
 	
-	public function save_iqc_work(){	
+	public function save_iqc_work(){
+		/* echo "<pre>";
+		print_r($_REQUEST);
+		echo "</pre>"; exit;	 */	
+		
 		$jobwork_required = $this->input->post('jobwork_required');	
 		if($jobwork_required==1){
-			$res = $this->invocies->send_to_jobwork();
-			if($res){
-				redirect('pending/manage_iqc_work');
+			//$res = $this->invocies->send_to_jobwork();
+			if($res=1){
+				//redirect('pending/manage_iqc_work');
+				
+				
+				//$type = "mini";
+				//$data['product_detail'] = $this->invocies->getCustomList($id);
+				/* echo "<pre>";
+				print_r($data['product_detail']);
+				echo "</pre>"; exit; */
+				$current_grade = $this->input->post('current_grade');
+				$final_grade = $this->input->post('final_grade');
+				$jobwork_required = $this->input->post('jobwork_required');
+				
+				$items = $this->input->post('items');
+				$component_request = $this->input->post('component_request');
+				$serial = $this->input->post('serial');
+				$pid = $this->input->post('pid');
+				
+				/* [current_grade] => 4
+				[final_grade] => 1
+				[jobwork_required] => 1
+				[items] => Array
+					(
+						[0] => Back Camera-Vivo Z1 Pro
+						[1] => Battery-Vivo Z1 Pro
+					)
+
+				[component_request] => Glass
+				[submit] => Submit
+				[serial] => 3532501178092633
+				[pid] => 640 */
+				$data['items'] = $items;
+				$product_details = $this->invocies->getProductDetailsByID($serial);
+				/* echo "<pre>";
+				print_r($product_details);
+				echo "</pre>"; exit; */
+				
+				$product_detail[0] = array(
+					'id' => 1136,
+					'pid' => 1766,
+					'varient_id' => 14,
+					'color_id' => 45,
+					'product_name' => $product_details[0]['product_name'],
+					'price' => 0.00,
+					'zupc_code' => $product_details[0]['warehouse_product_code'],
+					'qty' => '',
+					'imei_1' => $serial,
+					'imei_2' => $product_details[0]['imei2'],
+					'product_type' => 1,
+					'label_size' => 6,
+					'prexo_grade' => 3,
+					'date_created' => date('Y-m-d h:i:s'),
+					'date_modified' => '',
+					'unit_name' => '4GB / 64GB',
+					'colour_name' => 'Grey',
+					'brand_name' => 'Samsung'
+				);
+				$data['product_detail'] = json_decode(json_encode($product_detail));
+				/* echo "<pre>";
+				print_r($data['product_detail']);
+				echo "</pre>"; exit; */
+				
+				$data['label_type'] = $type;
+				ini_set('memory_limit', '64M');
+
+				$html = $this->load->view('pending/new_custom_label', $data, true);
+				
+				$this->load->library('pdf'); 
+
+				$header = "";
+				$pdf = $this->pdf->prexo_with_grade(array('margin_top' => 0.5));
+				$pdf->SetHTMLHeader($header);
+			   
+				$pdf->SetHTMLFooter('<div style="text-align: center;font-family: serif; font-size: 8pt; color: #5C5C5C; font-style: italic;margin-top:-6pt;"></div>');
+			
+				
+				$pdf->WriteHTML($html);			
+				$pdf->Output($data['product_detail'][0]->product_name . '_label.pdf', 'I');
+			
 			}
 		}else if($jobwork_required==3){
 			
@@ -144,6 +225,68 @@ class Pending extends CI_Controller{
 			}
 		}
 	}
+	
+	
+	public function new_custom_label() 
+    { 
+        $id = $this->input->get('id');
+        $type='';
+        if($this->input->get('type'))
+        {
+            $type = "mini";
+        }
+        $data['product_detail'] = $this->invocies->getCustomList($id);
+		/* echo "<pre>";
+		print_r($data['product_detail']);
+		echo "</pre>"; exit; */
+		
+        $data['label_type'] = $type;
+        ini_set('memory_limit', '64M');
+
+        $html = $this->load->view('pending/new_custom_label', $data, true);
+        
+        $this->load->library('pdf'); 
+
+            $header = "";
+            
+			/* if($type!='' || $data['product_detail'][0]->label_size==3)
+            {
+				$pdf = $this->pdf->custom_mini_label(array('margin_top' => 0.5)); 
+            }
+            if($type=='' && $data['product_detail'][0]->label_size==1)
+            {
+            $pdf = $this->pdf->custom_small_label(array('margin_top' => 0.5));
+            }
+            if($type=='' && $data['product_detail'][0]->label_size==2)
+            {
+                
+                $pdf = $this->pdf->custom_big_label(array('margin_top' => 0.5));
+            }
+            if($type=='' && $data['product_detail'][0]->label_size==4)
+            {
+                
+                $pdf = $this->pdf->custom_xl_label(array('margin_top' => 0.5));
+            }
+            if($type=='' && $data['product_detail'][0]->label_size==5)
+            {                
+                $pdf = $this->pdf->custom_prexo_label(array('margin_top' => 0.5));
+            } 			
+            if($type=='' && $data['product_detail'][0]->label_size==6)
+            {                
+                $pdf = $this->pdf->prexo_with_grade(array('margin_top' => 0.5));
+            }*/
+			
+			$pdf = $this->pdf->prexo_with_grade(array('margin_top' => 0.5));
+            $pdf->SetHTMLHeader($header);
+           
+			$pdf->SetHTMLFooter('<div style="text-align: center;font-family: serif; font-size: 8pt; color: #5C5C5C; font-style: italic;margin-top:-6pt;"></div>');
+        
+			
+            $pdf->WriteHTML($html);			
+            $pdf->Output($data['product_detail'][0]->product_name . '_label.pdf', 'I');
+			//echo "TTTTTTTTTTTTTTTTTTTTTTTTT"; exit;
+        //$this->load->view('products/new_custom_label', $data);
+    }
 
 	
 }

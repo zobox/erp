@@ -19,13 +19,15 @@ class Jobwork extends CI_Controller{
 		$data['list'] = $this->invocies->invoice_details($invoice_id='',$product_serial_status=4);
         $this->load->view('jobwork/index',$data);
         $this->load->view('includes/footer');
-    }
+	}
+	
     public function manage_job_work()
     {
         $this->load->view('includes/header',$head);
         $this->load->view('jobwork/manage-job-work',$data);
         $this->load->view('includes/footer');
     }
+	
 	public function create()
     {
 		$head['title'] = "Create New Lead";
@@ -33,6 +35,7 @@ class Jobwork extends CI_Controller{
         $this->load->view('lead/create');
         $this->load->view('includes/footer');
     }
+	
 	public function open()
     {
         $this->load->view('includes/header',$head);
@@ -40,6 +43,7 @@ class Jobwork extends CI_Controller{
         $this->load->view('jobwork/open-job',$data);
         $this->load->view('includes/footer');
     }
+	
     public function open_view()
     {
 		$id = $this->input->get('id');		
@@ -54,10 +58,7 @@ class Jobwork extends CI_Controller{
         $this->load->view('jobwork/open-view',$data);
         $this->load->view('includes/footer');
 		
-		
-		
-		
-		
+			
 		/* $id= $this->input->get('id');		 
 		$data['product_info'] = $this->jobwork->getJobWorkDetail($id);
 		//echo $data['product_info']->product_detail->pid; exit;
@@ -82,8 +83,7 @@ class Jobwork extends CI_Controller{
 
 		$data['item_component'] = $this->jobwork->getComponentItemMaster($data['product_info']->product_detail->pid);		
 		$this->load->view('workhouse/openview',$data);
-		$this->load->view('fixed/footer'); */
-		
+		$this->load->view('fixed/footer'); */		
     }
 	
 	
@@ -93,12 +93,14 @@ class Jobwork extends CI_Controller{
         $this->load->view('jobwork/failed-qc',$data);
         $this->load->view('includes/footer');
     }
+	
 	public function managejob()
     {
         $this->load->view('includes/header',$head);
         $this->load->view('jobwork/manage-work',$data);
         $this->load->view('includes/footer');
     }
+	
 	public function apicall(){
 		$pincode = $this->input->post('pincode',true);
 		$data = json_decode(file_get_contents("https://api.postalpincode.in/pincode/".$pincode),true);
@@ -221,6 +223,137 @@ class Jobwork extends CI_Controller{
 		$result = $this->jobwork->getComponentByPid1($product_id);
         
 		echo json_encode($result);
+	}
+	
+	public function assign_engineer()
+	{
+		$serial = $this->input->post('serial');
+		$type = $this->input->post('type');
+		$jobwork_id = $this->input->post('jobwork_id');
+		$engineer  = $this->input->post('engineer_name');
+		
+		$this->db->where('id',$jobwork_id);		
+		$query = $this->db->get('tbl_jobcard');
+		if ($query->num_rows() > 0) {			
+			foreach ($query->result() as $key=>$row) {					
+				if($row->assign_engineer!=''){
+					$data1 = array('jobcard_id' =>$jobwork_id, 
+					'teamlead_id' => $row->teamlead_id,
+					'serial' => $row->serial,
+					'assign_engineer' => $row->assign_engineer,
+					'status' => $row->status,
+					'change_status' => $row->change_status,
+					'final_qc_status' => $row->final_qc_status,
+					'final_qc_remarks' => $row->final_qc_remarks,
+					'final_condition' => $row->final_condition,
+					'sub_cat' => $row->sub_cat,
+					'date_created' => date('Y-m-d h:i:s')				
+					);
+					
+					$this->db->insert('tbl_jobcard_history',$data1);
+				}else{
+					$date = date('Y-m-d');
+					$data2 = array('batch_number' =>$date);
+					$this->db->set($data2);
+					$this->db->where('id', $jobwork_id);
+					$this->db->update('tbl_jobcard');
+					//echo $this->db->last_query(); exit;
+				}				
+			}			
+		}	
+		
+        $data = array('assign_engineer' =>$engineer, 'change_status' => 2);
+		if($type==2){
+			$data['final_qc_status'] = 1;
+		}
+		
+		$this->db->set($data);
+        $this->db->where('id', $jobwork_id);
+        $this->db->update('tbl_jobcard');	
+		//echo $this->db->last_query(); exit;
+        redirect('jobwork/open', 'refresh');        
+	}
+	
+	
+	public function change_status()
+	{
+		$jobwork_id = $this->input->post('jobwork_id');
+		$change_status  = $this->input->post('change_status');
+        $data = array('change_status' => $change_status);
+		
+		$this->db->where('id',$jobwork_id);		
+		$query = $this->db->get('tbl_jobcard');
+		if ($query->num_rows() > 0) {			
+			foreach ($query->result() as $key=>$row) {					
+				if($row->assign_engineer!=''){
+					$data1 = array('jobcard_id' =>$jobwork_id, 
+					'teamlead_id' => $row->teamlead_id,
+					'serial' => $row->serial,
+					'assign_engineer' => $row->assign_engineer,
+					'status' => $row->status,
+					'change_status' => $row->change_status,
+					'final_qc_status' => $row->final_qc_status,
+					'final_qc_remarks' => $row->final_qc_remarks,
+					'final_condition' => $row->final_condition,
+					'sub_cat' => $row->sub_cat,
+					'date_created' => date('Y-m-d h:i:s')				
+					);
+					
+					$this->db->insert('tbl_jobcard_history',$data1);
+				}
+			}			
+		}
+
+		$this->db->set($data);
+        $this->db->where('id', $jobwork_id);
+        $this->db->update('tbl_jobcard');
+        //echo $this->db->last_query(); die;
+
+        redirect('jobwork/open', 'refresh');
+	}
+	
+	
+	public function final_qc_status()
+	{
+		$jobwork_id = $this->input->post('jobwork_id');
+		$final_qc_status  = $this->input->post('final_qc_status');
+		$remark = $this->input->post('remark');
+        $data = array('final_qc_status' => $final_qc_status,'final_qc_remarks' => $remark);
+        
+		$this->db->where('id',$jobwork_id);		
+		$query = $this->db->get('tbl_jobcard');
+		if ($query->num_rows() > 0) {			
+			foreach ($query->result() as $key=>$row) {					
+				if($row->assign_engineer!=''){
+					$data1 = array('jobcard_id' =>$jobwork_id, 
+					'teamlead_id' => $row->teamlead_id,
+					'serial' => $row->serial,
+					'assign_engineer' => $row->assign_engineer,
+					'status' => $row->status,
+					'change_status' => $row->change_status,
+					'final_qc_status' => $row->final_qc_status,
+					'final_qc_remarks' => $row->final_qc_remarks,
+					'final_condition' => $row->final_condition,
+					'sub_cat' => $row->sub_cat,
+					'date_created' => date('Y-m-d h:i:s')				
+					);
+					
+					$this->db->insert('tbl_jobcard_history',$data1);
+				}
+			}			
+		}
+		
+		$this->db->set($data);
+        $this->db->where('id', $jobwork_id);
+        $this->db->update('tbl_jobcard');
+        if($final_qc_status==3)
+        {
+        	redirect('jobwork/open','refresh');
+        }
+        else
+        {
+        redirect('jobwork/open_view?id='.$jobwork_id, 'refresh');
+        }         
 	}
 	
 }

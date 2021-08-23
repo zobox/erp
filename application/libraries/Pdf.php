@@ -141,6 +141,24 @@ class Pdf
   
     }
 
+    function prexo_with_grade($param = array('margin_top'=>0.5))
+    {
+
+
+        require_once APPPATH . 'third_party/vendor/autoload.php';
+
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => $this->temppath,'default_font' => 'bangla','mode' => 'utf-8', 'format' => [74, 49], 'margin_left' => 0.5, 'margin_right' => 0.2, 'margin_top' =>$param['margin_top'], 'margin_bottom' => 0.5]);
+
+        //$mpdf->SetDirectionality('RTL');
+        $mpdf->autoScriptToLang = true;
+        $mpdf->autoLangToFont = true;
+        $mpdf->use_kwt = true;
+
+        return $mpdf;
+
+  
+    }
+
     function custom_xl_label($param = array('margin_top'=>0.5))
     {
 
@@ -159,7 +177,7 @@ class Pdf
 
     } 
 
-        function load_thermal($param = NULL)
+    function load_thermal($param = NULL)
     {
 
 

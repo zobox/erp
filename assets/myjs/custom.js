@@ -3171,7 +3171,8 @@ $('#sale_lrp').autocomplete({
         //$('#price-0').val(ui.item.data[1]);
         $('#price-0').val(purchase_price);
         $('#pid-0').val(ui.item.data[2]);
-        $('#vat-0').val(t_r);
+        //$('#vat-0').val(t_r);
+        $('#vat-0').val(0);
         $('#discount-0').val(discount);
         $('#dpid-0').val(ui.item.data[5]);
         $('#unit-0').val(ui.item.data[6]);
@@ -3216,7 +3217,8 @@ $("#serial_no_lrp").change(function()
 				//$('#price-0').val(data[1]);
 				$('#price-0').val(purchase_price);
 				$('#pid-0').val(data[2]);
-				$('#vat-0').val(t_r);
+				//$('#vat-0').val(t_r);
+				$('#vat-0').val(0);
 				$('#discount-0').val(discount);
 				$('#dpid-0').val(data[5]);
 				$('#unit-0').val(data[6]);
@@ -3286,7 +3288,8 @@ $("#serial_no_lrp").change(function()
         //$('#price-'+cvalue).val(data[1]);
         $('#price-'+cvalue).val(purchase_price);
         $('#pid-'+cvalue).val(data[2]);
-        $('#vat-'+cvalue).val(t_r);
+        //$('#vat-'+cvalue).val(t_r);
+        $('#vat-'+cvalue).val(0);
         $('#discount-'+cvalue).val(discount);
         $('#dpid-'+cvalue).val(data[5]);
         $('#unit-'+cvalue).val(data[6]);
@@ -3477,7 +3480,8 @@ $('#addproduct_sale_lrp').on('click', function () {
             $('#amount-' + id[1]).val(1);
             $('#price-' + id[1]).val(purchase_price);
             $('#pid-' + id[1]).val(ui.item.data[2]);
-            $('#vat-' + id[1]).val(t_r);
+            //$('#vat-' + id[1]).val(t_r);
+            $('#vat-' + id[1]).val(0);
             $('#discount-' + id[1]).val(discount);
             $('#dpid-' + id[1]).val(ui.item.data[5]);
             $('#unit-' + id[1]).val(ui.item.data[6]);
@@ -3545,7 +3549,8 @@ $('#sale_lrp-0').autocomplete({
         //$('#price-0').val(ui.item.data[1]);
         $('#price-0').val(purchase_price);
         $('#pid-0').val(ui.item.data[2]);
-        $('#vat-0').val(t_r);
+        //$('#vat-0').val(t_r);
+        $('#vat-0').val(0);
         $('#discount-0').val(discount);
         $('#dpid-0').val(ui.item.data[5]);
         $('#unit-0').val(ui.item.data[6]);

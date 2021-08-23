@@ -389,10 +389,13 @@
 									print_r($products);
 									echo "</pre>"; exit; */
 									
+									$total_marginal_gst_price = 0;
                                     foreach ($products as $row) {
-										if($row['marginal_gst_price'] > 0){
+										if($row['marginal_gst_price'] > 0 || $row['marginal_product_type']==2){
+											$gst_price = $row['marginal_gst_price'];
 											$total_marginal_gst_price += $row['marginal_gst_price'];
 										}else{
+											$gst_price = $row['totaltax'];
 											$total_gst += $row['totaltax'];
 										}
 										
@@ -404,7 +407,7 @@
 												<td>' . $row['product'] . '</td>                           
 												<td>' . amountExchange($row['price'], 0, $this->aauth->get_user()->loc) . '</td>
 												 <td>' . amountFormat_general($row['qty']) . $row['unit'] . '</td>
-												<td>' . amountExchange($row['totaltax'], 0, $this->aauth->get_user()->loc) . ' (' . amountFormat_s($row['tax']) . '%)</td>
+												<td>' . amountExchange($gst_price, 0, $this->aauth->get_user()->loc) . ' (' . amountFormat_s($row['tax']) . '%)</td>
 												<td>' . amountExchange($row['totaldiscount'], 0, $this->aauth->get_user()->loc) . ' (' . amountFormat_s($row['discount']) . $this->lang->line($invoice['format_discount']) . ')</td>
 												<td>' . amountExchange($row['subtotal'], 0, $this->aauth->get_user()->loc) . '</td>
 											</tr>';

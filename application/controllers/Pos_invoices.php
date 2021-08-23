@@ -505,6 +505,7 @@ class Pos_invoices extends CI_Controller
 								$this->db->from('tbl_warehouse_serials as a');
 								$this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
 								$this->db->where('b.product_id',$product_id[$key]);
+								$this->db->where('b.serial',$product_serial[$key]);
 								$this->db->where('a.twid',$wid);
 								//$this->db->where('a.status',1);
                                 $this->db->where('b.status!=',8);
@@ -827,8 +828,9 @@ class Pos_invoices extends CI_Controller
 								$this->db->from('tbl_warehouse_serials as a');
 								$this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
 								$this->db->where('b.product_id',$product_id[$key]);
+								$this->db->where('b.serial',$product_serial[$key]);
 								$this->db->where('a.twid',$wid);
-								$this->db->where('b.status!=',8);
+								$this->db->where('b.status!=',8);								
                                 $this->db->where('b.status!=',0);
                                 $this->db->where('a.status!=',0);
                                 $this->db->where('a.status!=',2);

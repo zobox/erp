@@ -181,8 +181,7 @@ class Purchase extends CI_Controller
         $data['product_detail'] = $this->purchase->getItemDetail($data['purchase_detail'][0]->pid);
 		$data['conditions'] = $this->purchase->getConditions();		
 		$data['franchise'] = $this->customers->GetFranchisedropdown1();
-		
-		
+				
 		switch($data['purchase_detail'][0]->type)
 		{
 			case 2: $prefix = 'MRG_';

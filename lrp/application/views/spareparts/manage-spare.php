@@ -29,9 +29,9 @@
                         <tr>
                           <td>1</td>
                           <td> New Spareparts</td>
-                          <td>W1</td>
-                          <td>212</td>
-                          <td>1921</td>
+                          <td><?=$warehouse['title']?></td>
+                          <td><?=$total_product?></td>
+                          <td><?=$total_qty?></td>
                           <td>
                             <a href="<?php echo base_url('spareparts/manage_spare_add') ?>" class="btn btn-success btn-sm"> <span class="fa fa-eye"></span>
                             View</a>

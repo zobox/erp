@@ -15,6 +15,7 @@
                 <div class="card-header">
                   <h4 class="card-title"> Received Spareparts </h4>
                   <hr>
+                  <form method="post" enctype="multipart/form-data" action="<?=base_url()?>/spareparts/receive_sparepart">
                   <div class="card-body px-0">
                     <div class="row">
                       <div class="col-sm-6">
@@ -22,27 +23,30 @@
                           <label> Supplier </label>
                           <select class="form-control" id="product_cat" name="supplier_id" required="required">
                             <option value="">Select Supplier</option>
-                            <option value="5">Manak Waste Management Pvt. Ltd.</option>
-                            <option value="20">Supplier_Test_Company</option>
-                            <option value="21">Onsite Phones Private Limited</option>
-                            <option value="22">Joltme Electrovision (India) Private Limited </option>
-                            <option value="23">GreenTek Reman Pvt. Ltd</option>
-                            <option value="57">AMAZON SELLER SERVICES PRIVATE LIMITED</option>
+                            <?php
+                            foreach($supplier_list as $data => $row)
+                            {
+                              ?>
+                              <option value="<?=$row->id?>"><?=$row->company?></option>
+                              <?php
+                            }
+                            ?>
+                            
                           </select>
                         </div>
                       </div>
                       <div class="col-sm-6">
                         <div class="form-group">
                           <label> Pending PO List </label>
-                          <select id="sub_cat"  class="form-control select-box" required="required">
+                          <select id="sub_cat"  class="form-control select-box" required="required" name="invoice_id">
                           <option value="" selected="selected"> --- Select ---</option>
                         </select>
                         </div>
                       </div>
                       <div class="col-sm-6">
                         <div class="form-group">
-                          <label> Product List </label>
-                          <select class="form-control" id="sub_sub_cat" name="purchase_item_id" required="required">
+                          <label> Sparepart List </label>
+                          <select class="form-control" id="sub_sub_cat" name="pid" required="required" >
                                        <option value="" selected="selected"> --- Select ---</option>
                                     </select>
                         </div>
@@ -50,7 +54,7 @@
                       <div class="col-sm-6">
                         <div class="form-group">
                           <label> ZUPC </label>
-                          <input type="text" class="form-control margin-bottom" name="serial_no1" id="serial_no1" required="required">
+                          <input type="text" class="form-control margin-bottom" name="zupc" id="zupc" required="required" readonly="">
                         </div>
                       </div>
                       <div class="col-sm-6">
@@ -69,6 +73,7 @@
                       </div>
                     </div>
                   </div>
+                  </form>
                 </div>
               </div>
           </div>
@@ -173,4 +178,61 @@ $('.statusChange').change(function(event) {
     }
   });
 });
+
+$('#product_cat').on('change',function(event){
+        var productcat = $(this).val();
+
+        $('#sub_cat').html("<option value='' disabled='' selected=''> --- Select --- </option>");
+        $.ajax({
+            type : 'POST',
+            url : baseurl+'spareparts/getListPo',
+            data : {id : productcat},
+            cache : false,
+            success : function(result){
+                console.log(result);
+                $('#sub_cat').append(result);
+            }
+        });
+    }); 
+
+ $('#sub_cat').on('change',function(event){
+    var productcat = $(this).val();
+    var data_type = $('#data_type').val();
+    
+    $('#sub_sub_cat').html("<option value='' selected=''> --- Select --- </option>");
+    $.ajax({
+      type : 'POST',
+      url : baseurl+'spareparts/getListPoItem',
+      data : {id : productcat,data_type:data_type},
+      cache : false,
+      success : function(result){
+        console.log(result);
+        if(result != 0){
+           $('#sub_sub_cat').append(result);                    
+        }                
+      }
+    });
+  }); 
+  
+  $('#sub_sub_cat').on('change',function(event){
+        var productcat = $(this).val();
+    
+    $.ajax({
+            type : 'POST',
+            url : baseurl+'spareparts/getproductinfo',
+            data : {id : productcat},
+            cache : false,
+            success : function(result){
+                console.log(result);
+                if(result != 0){
+          var res = result.split("#");
+          
+                    $('#zupc').val(res[0]);
+                    $('#qty').val(res[1]);
+                    $('#qty').attr("max",res[1]);
+                    
+                }
+            }
+        });
+    });
 </script>

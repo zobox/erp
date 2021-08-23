@@ -9,29 +9,90 @@ class Spareparts extends CI_Controller{
 		$this->load->model('Dashboard_model','dashboard');
 		$this->load->model('Lead_model','lead');
 		$this->load->model('Communication_model','communication');
+		$this->load->model('invoices_model', 'invocies');
     }
 
     //invoices list
     public function index()
     {
         $this->load->view('includes/header',$head);
+        $data['supplier_list'] = $this->invocies->getSupplier();
+       
         $this->load->view('spareparts/index',$data);
         $this->load->view('includes/footer');
     }
     public function manage_sparepart()
     {
+
+    	$twid = $this->invocies->getWarehouse()[0];
+    	
+    	$data['warehouse'] = $twid;
+    	
+    	$query = $this->db->query("select * from tbl_component_serials where twid='".$twid['id'] ."' and  status=4 group by component_id");
+        $count = $query->num_rows();
+
+        $qty = $this->db->query("select * from tbl_component_serials where twid='".$twid['id'] ."' and status=4");
+        $total_qty = $qty->num_rows();
+        $data['result'] = $query->result_array();
+        
+        $data['total_product']=$count;
+        $data['total_qty']=$total_qty;
+        $head['title'] = "View Component Warehouses";
         $this->load->view('includes/header',$head);
         $this->load->view('spareparts/manage-spare',$data);
         $this->load->view('includes/footer');
     }
     public function spare_more_details()
     {
+    	$pid = intval($this->input->get('pid'));
+    	$wid = intval($this->input->get('wid'));
+    	$twid = $this->invocies->getWarehouse()[0];
+    	
+    	$data['warehouse'] = $twid;	
+        $data['serial_list'] = $this->invocies->getSerialComponent($pid,$wid);
+
+        $head['usernm'] = '';
+        $head['title'] = 'Serial List';
+        $head['title'] = "View Product Warehouses";
         $this->load->view('includes/header',$head);
         $this->load->view('spareparts/spare-more-details',$data);
         $this->load->view('includes/footer');
     }
     public function manage_spare_add()
     {
+    	$twid = $this->invocies->getWarehouse()[0];
+    	$data['warehouse'] = $twid;
+    	$query = $this->db->query("select tbl_component_serials.component_id,tbl_component_serials.serial_in_type,tbl_component_serials.purchase_id, tbl_component.component_name as product, tbl_component.warehouse_product_code from tbl_component_serials LEFT JOIN tbl_component on tbl_component_serials.component_id=tbl_component.id where tbl_component_serials.twid='".$twid['id'] ."' and tbl_component_serials.status=4 group by tbl_component_serials.component_id");
+       $record = array();
+      $qty = array();
+      $by_po_qty = array();
+      $by_jobwork_qty = array();
+      
+        if ($query->num_rows() > 0) {
+
+            foreach ($query->result() as $key=>$row) {  
+              
+                $record[] = $row;
+
+
+                $qty_query = $this->db->query("select * from tbl_component_serials where status=4 and component_id='".$row->component_id."' and twid='".$twid['id'] ."'");
+                if($qty_query->num_rows() > 0)
+                {
+                    $qty[] = $qty_query->num_rows();
+                }else{
+                    $qty[] = 0;
+                }
+
+
+
+            }           
+            
+        }
+ 
+        $data['result']=$record;
+        
+        $data['qty']=$qty;
+        $head['title'] = "View Product Warehouses";
         $this->load->view('includes/header',$head);
         $this->load->view('spareparts/manage-spare-add',$data);
         $this->load->view('includes/footer');
@@ -139,10 +200,90 @@ class Spareparts extends CI_Controller{
 		
 	}
 	
-	public function franchise(){
-		
-		
-	}
+	public function getListPo($supplier_id=''){
+
+        if($supplier_id == ''){
+            $supplier_id = $this->input->post('id',true);
+        }
+
+       
+         $result = $this->invocies->getSupplier($supplier_id);
+         if($result != false){
+            //$html =  "<option value='' selected='' disabled=''> --- Select --- </option>";
+            foreach($result as $row){
+               $prefix = 'LRPSP';
+                $po_order = $row->company.' &rArr; '.$prefix.'#'.$row->tid;
+                $html .= "<option value='".$row->invoice_id."'>".$po_order."</option>";
+                //$html .=  $this->subCatDropdownHtml($row->id);
+            }
+            echo $html;
+        }
+        return 0;
+    }
+
+
+    public function getListPoItem($invoice_id=''){
+
+        if($invoice_id == ''){
+            $invoice_id = $this->input->post('id',true);
+        }
+       
+        
+        $result = $this->invocies->getItemByInvoice($invoice_id);
+        
+        
+            if($result != false){
+                foreach($result as $row){
+                    $html .= "<option value='".$row->pid.'-'.$row->tid."'>".$row->product."</option>";
+                }
+                echo $html;
+            }
+        
+        
+        
+        return 0;
+    }
+
+     public function getproductinfo(){
+        
+            $id = $this->input->post('id',true);
+            $product = explode('-',$id);
+            $component_id = $product[0];
+            $invoice_id   = $product[1];
+            $result = $this->invocies->getvarient($component_id,$invoice_id);
+                            
+            if(is_array($result)){
+                $html = $result[0]->warehouse_product_code.'#'.$result[0]->qty;
+                echo $html;
+            }else{
+                return false;
+            }
+        
+    }
+
+
+   public function receive_sparepart()
+   {
+   	 $exp        = explode('-',$this->input->post('pid'));
+     $invoice_id = $this->input->post('invoice_id');
+   	 $pid        = $exp[0];
+   	 $qty       = $this->input->post('qty');
+     
+     $data = array();   
+   	 
+      $this->db->set('lrp_status',2);
+      $this->db->where('component_id',$pid);
+      $this->db->where('invoice_id',$invoice_id);
+      $this->db->where('status',4);
+      $this->db->limit($qty);
+      $this->db->update('tbl_component_serials');
+
+
+   	 
+
+   	 redirect('spareparts/manage_sparepart','refresh');
+   	  
+   }
 	
 }
 ?>

@@ -247,14 +247,14 @@ class Invoices extends CI_Controller
                 
                 //$purchase_price = $this->products->getPurchasePriceByPID($product_id[$key]); 
                 //Marginal GST Start    
-                $this->db->select("c.*,b.type");
+                $this->db->select("c.*,b.type,a.purchase_id,a.purchase_pid");
                 $this->db->from('geopos_product_serials as a');
                 $this->db->join('geopos_purchase as b', 'b.id = a.purchase_id', 'left');
                 $this->db->join('geopos_purchase_items as c', 'c.tid = b.id', 'left');
                 
                 $this->db->where("a.serial",$serial_no[$key]);                          
                 $this->db->where("b.type",2);
-                $this->db->where("c.pid",$product_id[$key]);
+                //$this->db->where("c.pid",$product_id[$key]);
                 $pro_type = $this->db->get();
                 //echo $this->db->last_query(); die;                
                 
@@ -265,11 +265,11 @@ class Invoices extends CI_Controller
                         $purchase_details = $row;
                     }
                     
-                    $purchase_price = $purchase_details->price; 
-                    
+					$purchase_price = $this->products->getPurchasePriceByPID($purchase_details->purchase_id,$purchase_details->purchase_pid);
+                                        
                     $product_type = 2;
                     $price = rev_amountExchange_s($product_subtotal[$key], $currency, $this->aauth->get_user()->loc); 
-                    $product_price_margin = $price-($purchase_price+600); 
+                    $product_price_margin = $price-($purchase_price[0]['price']+600);
 
                     $gst_with_margin += amountFormat_general($product_price_margin-(($product_price_margin*100)/(100+$product_tax[$key]))); 
                 }
@@ -1833,7 +1833,8 @@ class Invoices extends CI_Controller
 									$this->db->set('fwid',$fwid);
 									$this->db->set('twid',$twid);
 									$this->db->set('invoice_id',$invoice_id);
-									$this->db->set('status',7);
+									$this->db->set('status',4); //Stock Transfer to Franchise
+									$this->db->set('is_present',0); // Franchise Pending Inventory
 									$this->db->set('date_modified',date('Y-m-d h:i:s'));
 									$this->db->where('id',$id);
 									$this->db->where('serial_id',$s_id);
@@ -2035,8 +2036,7 @@ class Invoices extends CI_Controller
     
 	public function actionb2b()
     {   
-            
-                
+	
         $serial_no = $this->input->post('serial_no');
         $pid = $this->input->post('pid');
         $fwid = $this->input->post('s_warehouses');
@@ -2265,9 +2265,9 @@ class Invoices extends CI_Controller
                             
                             
                             $wdata = array();
-                            $wdata['status'] = 2;
+                            $wdata['status'] = 2; // Sale b2b or Pos Sale
                             $wdata['invoice_id'] = $invocieno;
-                            $wdata['is_present'] = 0;
+                            $wdata['is_present'] = 0; //Not Available
                             $wdata['date_modified'] = date('Y-m-d h:i:s');
                             $wdata['logged_user_id'] = $this->session->userdata('id');                              
                             $this->db->where('id',$id);
@@ -2824,9 +2824,9 @@ class Invoices extends CI_Controller
 							
 							
 							$wdata = array();
-							$wdata['status'] = 9;
-							$wdata['invoice_id'] = $invocieno;
-							//$wdata['is_present'] = 0;
+							$wdata['status'] = 9;  // Stock Return to Master franchise
+							$wdata['is_present'] = 0; //stock Return Pending Inventory
+							$wdata['invoice_id'] = $invocieno;							
 							$wdata['date_modified'] = date('Y-m-d h:i:s');
 							$wdata['logged_user_id'] = $this->session->userdata('id');                              
 							$this->db->where('id',$id);
@@ -3273,8 +3273,7 @@ class Invoices extends CI_Controller
 
 								$gst_with_margin += amountFormat_general($product_price_margin-(($product_price_margin*100)/(100+$product_tax[$key])));
 							}
-							//Marginal GST End	
-							
+							//Marginal GST End								
 							
 							$wdata = array();
 							$wdata['status'] = 6;
@@ -3312,8 +3311,8 @@ class Invoices extends CI_Controller
                     //'bank_p_f'  => $bank_charge,                   
                    // 'bank_charges' => $product_bank_charge,
                     'tax' => numberClean($product_tax[$key]),
-					'marginal_gst_price' => $gst_with_margin,
-					'marginal_product_type' => $product_type,
+					'marginal_gst_price' => 0,   //$gst_with_margin,
+					'marginal_product_type' => 2, //$product_type,
                     'discount' => numberClean($product_discount[$key]),
                     'subtotal' => rev_amountExchange_s($product_subtotal[$key], $currency, $this->aauth->get_user()->loc),
                     'totaltax' => rev_amountExchange_s($ptotal_tax[$key], $currency, $this->aauth->get_user()->loc),

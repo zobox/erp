@@ -9,9 +9,9 @@
 				<?php } ?>
 				
 					<?php
-						echo "<pre>";
+						/* echo "<pre>";
 						print_r($list);
-						echo "</pre>";
+						echo "</pre>"; */
 					?>
 					<div class="card card-block">
 						<div class="col-md-12">
@@ -427,6 +427,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<div id="part_payment" class="modal fade">
 			<div class="modal-dialog">
 				<div class="modal-content mdcontent">
@@ -435,12 +436,12 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
-						<form class="payment" method="post" action="<?php echo base_url()?>workhousejob/assign_engineer">
+						<form class="payment" method="post" action="<?php echo base_url()?>jobwork/assign_engineer">
 							<div class="row">
 								<div class="col">
 									<div class="input-group modinput">
-										<input type="text" class="form-control" placeholder="Engineer Name" name="engineer_name" id="engineer_name" required value="<?=$product_info->assign_engineer;?>">
-										<input type="hidden" name="jobwork_id" value="<?=$jobwork_id?>" id="jobwork_id"> </div>
+										<input type="text" class="form-control" placeholder="Engineer Name" name="engineer_name" id="engineer_name" required value="<?=$list[0]->jobwork_assign_engineer;?>">
+										<input type="hidden" name="jobwork_id" value="<?=$list[0]->jobcard_id?>" id="jobwork_id"> </div>
 								</div>
 							</div>
 							<div class="modal-footer">
@@ -456,7 +457,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>		
+		
 		<div id="pop_model" class="modal fade">
 			<div class="modal-dialog">
 				<div class="modal-content mdcontent">
@@ -465,20 +467,20 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
-						<form id="form_model" method="post" action="<?php echo base_url() ?>workhousejob/change_status">
+						<form id="form_model" method="post" action="<?php echo base_url() ?>jobwork/change_status">
 							<div class="row">
 								<div class="col">
 									<div class="input-group modinput">
 										<select name="change_status" class="form-control">
-											<option value="1" <?php if($product_info->assign_engineer=='') echo 'selected'; ?> >Pending</option>
-											<option value="2" <?php if($product_info->assign_engineer!='' && $product_info->change_status==2) echo 'selected'; ?>>In Progress - TRC</option>
-											<option value="3" <?php if($product_info->assign_engineer!='' && $product_info->change_status==3) echo 'selected'; ?>>Proceed For QC</option>
+											<option value="1" <?php if($list[0]->jobwork_assign_engineer=='') echo 'selected'; ?> >Pending</option>
+											<option value="2" <?php if($list[0]->jobwork_assign_engineer!='' && $list[0]->jobwork_change_status==2) echo 'selected'; ?>>In Progress - TRC</option>
+											<option value="3" <?php if($list[0]->jobwork_assign_engineer!='' && $list[0]->jobwork_change_status==3) echo 'selected'; ?>>Proceed For QC</option>
 										</select>
 									</div>
 								</div>
 							</div>
 							<div class="modal-footer">
-								<input type="hidden" class="form-control" name="jobwork_id" value="<?php echo $jobwork_id ?>">
+								<input type="hidden" class="form-control" name="jobwork_id" value="<?php echo $list[0]->jobcard_id ?>">
 								<button type="button" class="btn btn-default" data-dismiss="modal">
 									<?php echo $this->lang->line('Close') ?>
 								</button>
@@ -499,14 +501,14 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
-						<form id="form_model" method="post" action="<?php echo base_url()?>workhousejob/final_qc_status">
+						<form id="form_model" method="post" action="<?php echo base_url()?>jobwork/final_qc_status">
 							<div class="row">
 								<div class="col">
 									<div class="input-group modinput">
 										<select name="final_qc_status" class="form-control">
-											<option value="1" <?php if($product_info->final_qc_status==1) echo 'selected'; ?> >PENDING</option>
-											<option value="2" <?php if($product_info->final_qc_status==2) echo 'selected'; ?>>QC PASS</option>
-											<option value="3" <?php if($product_info->final_qc_status==3) echo 'selected'; ?>>QC FAIL</option>
+											<option value="1" <?php if($list[0]->jobwork_final_qc_status==1) echo 'selected'; ?> >PENDING</option>
+											<option value="2" <?php if($list[0]->jobwork_final_qc_status==2) echo 'selected'; ?>>QC PASS</option>
+											<option value="3" <?php if($list[0]->jobwork_final_qc_status==3) echo 'selected'; ?>>QC FAIL</option>
 										</select>
 									</div>
 								</div>
@@ -515,13 +517,13 @@
 								<div class="col">
 									<div class="input-group modinput">
 										<textarea name="remark" placeholder="Remarks" class="form-control" rows="3" cols="60">
-											<?=$product_info->final_qc_remarks?>
+											<?=$list[0]->jobwork_final_qc_remarks?>
 										</textarea>
 									</div>
 								</div>
 							</div>
 							<div class="modal-footer">
-								<input type="hidden" class="form-control" name="jobwork_id" id="invoiceid" value="<?php echo $jobwork_id ?>">
+								<input type="hidden" class="form-control" name="jobwork_id" id="invoiceid" value="<?php echo $list[0]->jobcard_id ?>">
 								<button type="button" class="btn btn-default" data-dismiss="modal">
 									<?php echo $this->lang->line('Close') ?>
 								</button>
