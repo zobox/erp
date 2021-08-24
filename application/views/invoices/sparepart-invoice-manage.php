@@ -110,7 +110,7 @@
                 responsive: true,
                 'order': [],
                 'ajax': {
-                    'url': "<?php echo site_url('invoices/ajax_list')?>",
+                    'url': "<?php echo site_url('invoices/ajax_lrc_sp_sale')?>",
                     'type': 'POST',
                     'data': {
                         '<?=$this->security->get_csrf_token_name()?>': crsf_hash,

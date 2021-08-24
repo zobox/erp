@@ -1637,6 +1637,54 @@ class Search_products extends CI_Controller
             echo json_encode($name);
         }
     }
+	
+	public function sparepart_search_sale()
+    {
+        $result = array();
+        $out = array();
+        $row_num = $this->input->post('row_num', true);
+        $name = $this->input->post('name_startsWith', true);
+        //$name ='b';
+        //$wid = $this->input->post('wid', true);
+        $qw = 'tbl_component_serials.status=1 and ';
+        if ($wid > 0) {
+            //$qw = "(tbl_asset.warehouse='$wid' ) AND ";
+        }
+        $join = 'LEFT JOIN tbl_component on tbl_component_serials.component_id=tbl_component.id';
+              if ($name) {
+            $sql ="SELECT tbl_component.id,tbl_component_serials.purchase_id,tbl_component.component_name,tbl_component.product_code,tbl_component.fproduct_price,tbl_component.taxrate,tbl_component.disrate,tbl_component.product_des,tbl_component.unit FROM tbl_component_serials $join WHERE " . $qw . "UPPER(tbl_component.component_name) LIKE '%" . strtoupper($name) . "%' OR UPPER(tbl_component.product_code) LIKE '" . strtoupper($name) . "%' group by tbl_component.component_name LIMIT 150";
+            $query = $this->db->query($sql);
+            $result = $query->result_array();
+            foreach ($result as $row) {
+                $component_price = $this->getComponentPrice($row['purchase_id'],$row['id'])[0];
+                $name = array($row['component_name'], amountExchange_s($component_price['price']), $row['id'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['product_code'], $row_num);
+                array_push($out, $name);
+            }
+            echo json_encode($out);
+        }
+    }
+	
+	
+    public function getComponentPrice($purchase_id,$component_id)
+    {
+        $this->db->select('b.price');
+        $this->db->from("geopos_purchase as a");
+        $this->db->join("geopos_purchase_items as b","a.id=b.tid");
+        $this->db->where("a.id",$purchase_id);
+        $this->db->where("a.type",3);
+        $this->db->where("b.pid",$component_id);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die;
+        $data = array();
+        if($query->num_rows()>0)
+        {
+            $result = $query->result_array();
+            return $result;
+        }
+        return false;
+    }
+
     
 
 }

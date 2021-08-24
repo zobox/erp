@@ -968,36 +968,36 @@ class Invoices_model extends CI_Model
     }
 	
 	public function getSupplier($supplier_id='')
-   {
-   	$this->db->select("e.company,c.purchase_id,e.id,c.invoice_id,b.tid");
-   	$this->db->from("geopos_warehouse as a");
-   	$this->db->join("geopos_invoices as b","a.id=b.twid","left");
-   	$this->db->join("tbl_component_serials as c","b.id=c.invoice_id","left");
-   	$this->db->join("geopos_purchase as d","c.purchase_id=d.id","left");
-   	$this->db->join("geopos_supplier as e","d.csd=e.id","left");
-   	$this->db->where("b.type",5);
-   	if($supplier_id!='')
-   	{
-   	$this->db->where("a.franchise_id",$this->session->userdata('user_details')[0]->users_id);	
-    $this->db->where("e.id",$supplier_id);
-    $this->db->group_by("b.id");
-   	}
-   	else
-   	{
-   	$this->db->where("a.franchise_id",$this->session->userdata('user_details')[0]->users_id);
-   	$this->db->group_by("e.company");
-    }
-    $query = $this->db->get();
-    $data = array();
-    if($query->num_rows()>0)
-    {
-      foreach ($query->result() as $key => $value) {
-      	$data[] = $value;
-      }
-      return $data;
-    }
-    return false;
-   }
+	{
+		$this->db->select("e.company,c.purchase_id,e.id,c.invoice_id,b.tid");
+		$this->db->from("geopos_warehouse as a");
+		$this->db->join("geopos_invoices as b","a.id=b.twid","left");
+		$this->db->join("tbl_component_serials as c","b.id=c.invoice_id","left");
+		$this->db->join("geopos_purchase as d","c.purchase_id=d.id","left");
+		$this->db->join("geopos_supplier as e","d.csd=e.id","left");
+		$this->db->where("b.type",5);
+		if($supplier_id!='')
+		{
+		$this->db->where("a.franchise_id",$this->session->userdata('user_details')[0]->users_id);	
+		$this->db->where("e.id",$supplier_id);
+		$this->db->group_by("b.id");
+		}
+		else
+		{
+		$this->db->where("a.franchise_id",$this->session->userdata('user_details')[0]->users_id);
+		$this->db->group_by("e.company");
+		}
+		$query = $this->db->get();
+		$data = array();
+		if($query->num_rows()>0)
+		{
+		  foreach ($query->result() as $key => $value) {
+			$data[] = $value;
+		  }
+		  return $data;
+		}
+		return false;
+	}
    
    public function getItemByInvoice($invoice_id)
     {
@@ -1019,6 +1019,7 @@ class Invoices_model extends CI_Model
             return $data;
         }
     }
+	
     public function getReveiveGoods($invoice_id='',$pid)
     {
         $total = 0;
@@ -1049,6 +1050,21 @@ class Invoices_model extends CI_Model
 		$this->db->where("b.tid",$invoice_id);
 		$query = $this->db->get();
 		//echo $this->db->last_query(); die;
+		$data = array();
+		if($query->num_rows()>0)
+		{
+			foreach($query->result() as $key=>$row)
+			{
+				$data[] = $row;
+			}
+			return $data;
+		}
+	}
+	
+	public function get_qc_component_bySerial($serial){
+		$this->db->where("imei1",$serial);
+		$query = $this->db->get('tbl_qc_data');
+		echo $this->db->last_query(); die;
 		$data = array();
 		if($query->num_rows()>0)
 		{

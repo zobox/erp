@@ -574,4 +574,25 @@ class Invoices_model extends CI_Model
         return $query->row_array();
     } 
 	
+	public function LrcSpInvoice()
+    {
+        $this->db->select("a.*,concat(c.name,'-',b.title) as franchise_name");
+        $this->db->from("geopos_invoices as a");
+        $this->db->join("geopos_warehouse as b","a.twid=b.id","left");
+        $this->db->join("users_lrp as c","b.franchise_id=c.users_id","left");
+        $this->db->where("a.type",5);
+        $this->db->order_by("id","desc");
+        $query = $this->db->get();
+        $data = array();
+        if($query->num_rows()>0)
+        {
+            foreach($query->result() as $key=>$row)
+            {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
+    }
+	
 }

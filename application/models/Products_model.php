@@ -3740,11 +3740,9 @@ FROM geopos_products $whr");
 				return $data;
 			}
 			return false;	
-		}
+		}		
 		
-		
-		public function update_purchase_pid(){
-			
+		public function update_purchase_pid(){			
 			$this->db->select("a.serial,a.product_id,b.sub,a.purchase_id");
 			$this->db->from("geopos_product_serials as a");
 			$this->db->join("geopos_products as b","a.product_id = b.pid",'left');
@@ -3757,15 +3755,15 @@ FROM geopos_products $whr");
 				foreach($query->result() as $key=>$row)
 				{	
 					$row->pid = $this->getPurchasePid($row->purchase_id,$row->product_id);
-					if($row->pid==''){
+					if(!$row->pid){
 						$row->pid = $this->getPurchasePid($row->purchase_id,$row->sub);
 					}
-					
-					$this->db->SET('purchase_pid',$row->pid);								
-					$this->db->where('serial', $row->serial);								 
-					$this->db->where('status !=', 8);								 
-					$this->db->update('geopos_product_serials');
-					
+					if($row->pid>0){
+						$this->db->SET('purchase_pid',$row->pid);								
+						$this->db->where('serial', $row->serial);								 
+						$this->db->where('status !=', 8);								 
+						$this->db->update('geopos_product_serials');
+					}					
 					$data[] = $row;
 				}
 				return $data;

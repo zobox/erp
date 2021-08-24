@@ -2607,9 +2607,9 @@ class Invoices extends CI_Controller
 	
 	public function actionstr()
     {   
-        /* echo "<pre>";
+        echo "<pre>";
         print_r($_REQUEST);
-        echo "</pre>"; exit; */
+        echo "</pre>"; exit;
 		
         $serial_no = $this->input->post('serial_no');
         $pid = $this->input->post('pid');
@@ -3013,12 +3013,17 @@ class Invoices extends CI_Controller
             $this->load->model('employee_model', 'employee');
             $data['employee'] = $this->employee->list_employee();
         }
-        $eid = $this->session->userdata('id');
+        
+        $eid = $this->session->userdata('id');   
+        
         $data['swarehouse'] = $this->employee->getWarehouseByEmpID($eid);
-        $data['wid'] = $data['swarehouse']->id;
-        $data['franchise_id'] = $data['swarehouse']->franchise_id;
+        
+        $data['wid'] = $data['swarehouse']->id;     
+        $data['franchise_id'] = $data['swarehouse']->franchise_id;      
+        
         $this->load->library("Common");
         $data['custom_fields_c'] = $this->custom->add_fields(1);
+ 
         $this->load->model('customers_model', 'customers');
         $this->load->model('plugins_model', 'plugins');
         $data['exchange'] = $this->plugins->universal_api(5);
@@ -3035,12 +3040,14 @@ class Invoices extends CI_Controller
         $data['custom_fields'] = $this->custom->add_fields(2);
         $data['locations'] = $this->locations->locations_list();
         if($_SESSION['s_role']=='r_2')
-        {
-            $data['fwarehouse'] = $this->categories_model->getWarehouseByEmpID($eid);
-        }else{
-            $data['fwarehouse'] = json_decode(json_encode($this->invocies->warehouses()));
-        }
-        $data['twarehouse'] = $this->categories_model->warehouse_list();
+        {           
+            $data['fwarehouse'] = $this->categories_model->getWarehouseByEmpID($eid); 
+        }else{          
+            $data['fwarehouse'] = json_decode(json_encode($this->invocies->warehouses())); 
+        } 
+        
+        $data['twarehouse'] = $this->categories_model->trc_warehouse(); 
+        
         $this->load->view('fixed/header', $head);
         $this->load->view('invoices/sparepart-invoice', $data);
         $this->load->view('fixed/footer');
@@ -3421,6 +3428,299 @@ class Invoices extends CI_Controller
             "draw" => $this->input->post('draw'),
             "recordsTotal" => $this->invocies->count_all($this->limited),
             "recordsFiltered" => $this->invocies->count_filtered($this->limited),
+            "data" => $data,
+        );
+        //output to json format
+        echo json_encode($output);
+    }
+	
+	
+	public function actionsparepart_sale()
+    {   
+        echo "<pre>";
+        print_r($_REQUEST);
+        echo "</pre>"; exit;
+        
+        $serial_no = $this->input->post('serial_no');
+        $pid = $this->input->post('pid');
+        $twid = $this->input->post('s_warehouses');
+        $fwid = 1;
+        $product_qty = $this->input->post('product_qty');
+        $product_name2 = $this->input->post('product_name', true);
+        
+        
+        
+                        
+        $currency = $this->input->post('mcurrency');
+        //$customer_id = $this->input->post('customer_id');       
+        //$franchise_id = $this->input->post('franchise_id');
+        $invocieno = $this->input->post('invocieno');
+        $invoicedate = $this->input->post('invoicedate');
+        $invocieduedate = $this->input->post('invocieduedate');
+        $notes = $this->input->post('notes', true);
+        $tax = $this->input->post('tax_handle');
+        $ship_taxtype = $this->input->post('ship_taxtype');
+        $disc_val = numberClean($this->input->post('disc_val'));
+        $subtotal = rev_amountExchange_s($this->input->post('subtotal'), $currency, $this->aauth->get_user()->loc);
+        $shipping = rev_amountExchange_s($this->input->post('shipping'), $currency, $this->aauth->get_user()->loc);
+        $shipping_tax = rev_amountExchange_s($this->input->post('ship_tax'), $currency, $this->aauth->get_user()->loc);
+        if ($ship_taxtype == 'incl') $shipping = $shipping - $shipping_tax;
+        $refer = $this->input->post('refer', true);
+        $total = rev_amountExchange_s($this->input->post('total'), $currency, $this->aauth->get_user()->loc);
+        $project = $this->input->post('prjid');
+        $total_tax = 0;
+        $total_discount = rev_amountExchange_s($this->input->post('after_disc'), $currency, $this->aauth->get_user()->loc);
+        $discountFormat = $this->input->post('discountFormat');
+        //$pterms = $this->input->post('pterms', true);
+        $pterms = 2;
+        //$i = 0;
+        if ($discountFormat == '0') {
+            $discstatus = 0;
+        } else {
+            $discstatus = 1;
+        }
+        
+            
+        $emp = $this->aauth->get_user()->id; 
+
+        $transok = true;
+        $st_c = 0;
+        $this->load->library("Common");
+        $this->db->trans_start();
+        //Invoice Data
+        $bill_date = datefordatabase($invoicedate);
+        $bill_due_date = datefordatabase($invocieduedate);
+        
+        $warehouse_dtl = $this->categories_model->getwarehousebyid($fwid);
+        $franchise_id = $warehouse_dtl->cid;
+        /* $warehouse = $this->invocies->getWarehouseByCustomerId($customer_id); 
+        $twid = $warehouse->id;  */
+        
+        $data = array('tid' => $invocieno,
+        'invoicedate' => $bill_date,
+        'invoiceduedate' => $bill_due_date,
+        'subtotal' => $subtotal,
+        'shipping' => $shipping,
+        'ship_tax' => $shipping_tax,
+        'ship_tax_type' => $ship_taxtype,
+        'discount_rate' => $disc_val,
+        'total' => $total,
+        'notes' => $notes,
+        'csd' => $franchise_id,
+        //'csd2' => $customer_id,
+        'fwid' => $fwid,
+        'twid' => $twid,
+        'eid' => $emp,
+        'taxstatus' => $tax,
+        'discstatus' => $discstatus,
+        'format_discount' => $discountFormat,
+        'refer' => $refer,
+        'term' => $pterms,
+        'multi' => $currency,
+        'type' => 5,
+        'loc' => $this->aauth->get_user()->loc);
+        $invocieno2 = $invocieno;       
+        
+       
+        
+        
+        if ($this->db->insert('geopos_invoices', $data)) {
+            $invocieno = $this->db->insert_id();
+            //products
+            $pid = $this->input->post('pid');
+            $productlist = array();
+            $prodindex = 0;
+            $itc = 0;
+            $product_id = $this->input->post('pid');
+            $product_name1 = $this->input->post('product_name', true);
+            $product_qty = $this->input->post('product_qty');
+            $product_price = $this->input->post('product_price');
+            $product_tax = $this->input->post('product_tax');
+            $product_discount = $this->input->post('product_discount');
+            $product_subtotal = $this->input->post('product_subtotal');
+            $ptotal_tax = $this->input->post('taxa');
+            $ptotal_disc = $this->input->post('disca');
+            $product_des = $this->input->post('product_description', true);
+            $product_unit = $this->input->post('unit');
+            $product_hsn = $this->input->post('hsn', true);
+            $product_alert = $this->input->post('alert');
+            $serial_no = $this->input->post('serial_no');           
+            //$product_serial = $this->input->post('serial');
+              
+            $this->db->select('*');
+            $this->db->from('geopos_bank_charges');
+            $get_charge = $this->db->get();
+            $bank_charges = $get_charge->result_array();        
+            
+            foreach ($pid as $key => $value) {
+                
+                $total_discount += numberClean(@$ptotal_disc[$key]);
+                $total_tax += numberClean($ptotal_tax[$key]);
+                
+                $price = rev_amountExchange_s($product_price[$key], $currency, $this->aauth->get_user()->loc);
+                $qty = numberClean($product_qty[$key]);
+                $netSubTotal = $price*$qty;
+                $eid = $this->session->userdata('id');
+                
+                $franchise = $this->employee->getFranchiseByEmpID($eid); 
+                 
+                $fcp = $this->products->getFranchiseCommissionByProductID($franchise->module,$product_id[$key],$purpose='2',$franchise->franchise_id,$commissiontype='bulk_commision_percentage'); 
+                 
+                $franchise_commision =  (($netSubTotal*$fcp)/100);
+                $tdsdata = $this->settings->getTds(1);
+                $tds_type = $tdsdata->tds_type;
+                $tds = $tdsdata->tds;
+                
+                $tds_percentage='';     
+                if($tds_type==1){
+                    $tds_val = $tds;                            
+                }else if($tds_type==2){
+                    $tds_val = (($franchise_commision*$tds)/100);
+                    $tds_percentage=$tds;
+                }
+                
+                
+                $amt = numberClean($product_qty[$key]);
+                 $avlqty = $this->ewb->getAvailableComponent($product_id[$key],$fwid);                   
+                if((numberClean($avlqty) - $amt) < 0 and $st_c == 0){
+                    echo json_encode(array('status' => 'Error', 'message' => 'Product - <strong>' . $product_name1[$key] . "</strong> - Low quantity. Available stock is  " . $avlqty));
+                    $transok = false;
+                    $st_c = 1;
+                } 
+               
+                    $product_price_margin = "0.00";
+                    $gst_with_margin = "0.00";
+                    $product_type=0;
+                     
+                    for($j=0; $j<$qty; $j++){ 
+                            
+                            
+                            
+                        
+                                    
+                          
+                            
+                            $wdata = array();
+                            $wdata = array();
+                            $wdata['status'] = 4;
+                            $wdata['lrp_status'] = 1;
+                            $wdata['invoice_id'] = $invocieno;
+                            //$wdata['is_present'] = 0;
+                            $wdata['fwid'] = $fwid;
+                            $wdata['twid'] = $twid;
+                            $wdata['date_modified'] = date('Y-m-d h:i:s');
+                            $wdata['logged_user_id'] = $this->session->userdata('id');                              
+                            $this->db->where('component_id',$product_id[$key]);
+                            $this->db->limit($product_qty[$key]);
+                            //$this->db->where('serial_id',$s_id);
+                            $this->db->update('tbl_component_serials',$wdata);
+
+                           // echo $this->db->last_query(); exit;
+                            //$i++;
+                       
+                    }    
+                 
+                               
+                
+                $data = array(
+                    'tid' => $invocieno,
+                    'pid' => $product_id[$key],
+                    'product' => $product_name1[$key],
+                    'code' => $product_hsn[$key],
+                    'qty' => numberClean($product_qty[$key]),
+                    'price' => rev_amountExchange_s($product_price[$key], $currency, $this->aauth->get_user()->loc),
+                    'net_price' => $netSubTotal,
+                    //'fcp' => $fcp,
+                    //'franchise_commision' => $franchise_commision,
+                    //'tds_percentage' => $tds_percentage,
+                    //'tds' => $tds_val,
+                    //'bank_charge_type' => $bank_charges[0]['charges_type'], 
+                    //'bank_p_f'  => $bank_charge,                   
+                   // 'bank_charges' => $product_bank_charge,
+                    'tax' => numberClean($product_tax[$key]),
+                    'marginal_gst_price' => $gst_with_margin,
+                    'marginal_product_type' => $product_type,
+                    'discount' => numberClean($product_discount[$key]),
+                    'subtotal' => rev_amountExchange_s($product_subtotal[$key], $currency, $this->aauth->get_user()->loc),
+                    'totaltax' => rev_amountExchange_s($ptotal_tax[$key], $currency, $this->aauth->get_user()->loc),
+                    'totaldiscount' => rev_amountExchange_s($ptotal_disc[$key], $currency, $this->aauth->get_user()->loc),
+                    'product_des' => $product_des[$key],
+                    'i_class' => 1,
+                    'unit' => $product_unit[$key],
+                    'serial' => $serial_no[$key]
+                );
+                
+                
+                
+              
+
+                $productlist[$prodindex] = $data;
+                //$i++;
+                $prodindex++;
+                                   
+                //}               
+                $itc += $amt;
+            }
+                  
+
+            
+            
+            if ($prodindex > 0) {               
+                $this->db->insert_batch('geopos_invoice_items', $productlist);
+                //echo $this->db->last_query(); exit;               
+                
+                $this->db->set(array('discount' => rev_amountExchange_s(amountFormat_general($total_discount), $currency, $this->aauth->get_user()->loc), 'tax' => rev_amountExchange_s(amountFormat_general($total_tax), $currency, $this->aauth->get_user()->loc), 'items' => $itc));
+                $this->db->where('id', $invocieno);
+                $this->db->update('geopos_invoices');
+            } else {
+                echo json_encode(array('status' => 'Error', 'message' =>
+                    "Please choose product from product list. Go to Item manager section if you have not added the products."));
+                $transok = false;
+            }
+            
+                    
+            if ($transok) {
+                $this->custom->save_fields_data($invocieno, 2);
+                
+                $this->db->trans_complete();                
+                $validtoken = hash_hmac('ripemd160', $invocieno, $this->config->item('encryption_key'));
+                $link = base_url('billing/view?id=' . $invocieno . '&token=' . $validtoken);
+                echo json_encode(array('status' => 'Success', 'message' =>
+                    $this->lang->line('Invoice Success') . " <a href='view?id=$invocieno' class='btn btn-primary btn-lg'><span class='fa fa-eye' aria-hidden='true'></span> " . $this->lang->line('View') . "  </a> &nbsp; &nbsp;<a href='printinvoice?id=$invocieno' class='btn btn-blue btn-lg' target='_blank'><span class='fa fa-print' aria-hidden='true'></span> " . $this->lang->line('Print') . "  </a> &nbsp; &nbsp; <a href='$link' class='btn btn-purple btn-lg'><span class='fa fa-globe' aria-hidden='true'></span> " . $this->lang->line('Public View') . " </a> &nbsp; &nbsp; <a href='create' class='btn btn-warning btn-lg'><span class='fa fa-plus-circle' aria-hidden='true'></span></a>")); 
+            }else {
+                //$this->db->trans_rollback();
+            }
+
+            
+            
+        } else {
+            echo json_encode(array('status' => 'Error', 'message' =>
+                "Invalid Entry!"));
+            $transok = false;
+        }        
+    }
+
+    public function ajax_lrc_sp_sale()
+    {
+        $list = $this->invocies->LrcSpInvoice();
+        $data = array();
+        $prefix = "LRCSP#";
+        foreach ($list as $invoices) {
+             
+            
+            $no++;
+            $row = array();
+            $row[] = $no;
+
+            $row[] = '<a href="' . base_url("invoices/view?id=$invoices->id") . '">&nbsp; ' . $prefix.$invoices->tid . '</a>';
+            $row[] = $invoices->franchise_name;
+            $row[] = dateformat($invoices->invoicedate);
+            $row[] = amountExchange($invoices->total, 0, $this->aauth->get_user()->loc);
+            $row[] = '<span class="st-' . $invoices->status . '">' . $this->lang->line(ucwords($invoices->status)) . '</span>';
+            $row[] = '<a href="' . base_url("invoices/view?id=$invoices->id") . '" class="btn btn-success btn-sm" title="View"><i class="fa fa-eye"></i></a>&nbsp;<a href="' . base_url("invoices/printinvoice?id=$invoices->id") . '&d=1" class="btn btn-info btn-sm"  title="Download"><span class="fa fa-download"></span></a>';
+            $data[] = $row;
+        }
+        $output = array(
             "data" => $data,
         );
         //output to json format

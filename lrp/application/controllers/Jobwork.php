@@ -55,6 +55,9 @@ class Jobwork extends CI_Controller{
 		$data['product_category_array_title'] = $this->invocies->getCategoryNames($data['product_category_array']);
 		$data['cat'] = $this->invocies->category_list();
 		$data['components'] = $this->invocies->JobWorkComponent($data['list'][0]->serial);
+		$data['qc_components'] = $this->invocies->get_qc_component_bySerial($data['list'][0]->serial);
+		
+		
         $this->load->view('jobwork/open-view',$data);
         $this->load->view('includes/footer');
 		

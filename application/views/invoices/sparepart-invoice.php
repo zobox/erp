@@ -6,7 +6,7 @@
                 <div class="message"></div>
             </div>
             <div class="card-body">
-                <form method="post" id="data_form" method="post" action="<?php echo  base_url(); ?>invoices/actionstr">
+                <form method="post" id="data_form" method="post" action="<?php echo  base_url(); ?>invoices/actionsparepart_sale">
                     <div class="row">
 					
 						<div class="col-sm-6 cmp-pnl">
@@ -19,25 +19,16 @@
                                 </div>
                                
                                 <div id="customer">
-                                    <div id="customer_pass"></div><?php echo $this->lang->line('From Warehouse') ?> <select
+                                    <div id="customer_pass"></div><?php echo $this->lang->line('To Warehouse') ?><select
                                             id="s_warehouses" name="s_warehouses"
                                             class="form-control round">
                                         <?php //echo $this->common->default_warehouse();
-                                          foreach ($fwarehouse as $row) {
+                                          foreach ($twarehouse as $row) {
                                             echo '<option value="' . $row->id . '">' . $row->title . '</option>';
                                         } ?>
                                     </select>
                                 </div>
-                                <div class="col-sm-12 pt-4 pl-0 pb-2"><label for=""
-                                                                 class="caption"><?php echo $this->lang->line('Serial No'); ?></label>
-
-                                        <div class="input-group" style="width:572px;">
-                                            <div class="input-group-addon"><span class="icon-calendar4"
-                                                                                 aria-hidden="true"></span></div>
-                                            <input type="text" class="form-control" placeholder="Serial No" name="serial"                                                   
-                                                   autocomplete="false" id="serial_no_stock_return">
-                                        </div>
-                                    </div>
+                                
                                
                                 </div>
                         </div>
@@ -147,7 +138,7 @@
                             <tr>
                                 <td><input type="text" class="form-control text-center" name="product_name[]"
                                            placeholder="<?php echo $this->lang->line('Enter Product name') ?>"
-                                           id='stock_return-0'>
+                                           id='sparepart_sale-0'>
 										    <input type="hidden" value="" id="cnt">
                                 </td>
                                 <td><input type="text" class="form-control req amnt" name="product_qty[]" id="amount-0"
@@ -186,7 +177,7 @@
                             <tr class="last-item-row">
                                 <td class="add-row">
                                     <button type="button" class="btn btn-success" aria-label="Left Align"
-                                            id="addproduct_stock_return">
+                                            id="addproduct_sparepart_sale">
                                         <i class="fa fa-plus-square"></i> <?php echo $this->lang->line('Add Row') ?>
                                     </button>
                                 </td>
@@ -239,7 +230,7 @@
                             <tr class="sub_c" style="display: table-row;text-align: center;">                                
                                 <td align="right" colspan="3"><input type="submit" class="btn btn-success sub-btn"
                                                                      value="<?php echo $this->lang->line('Generate Order') ?>"
-                                                                     id="submit-data" data-loading-text="Creating...">
+                                                                     id="submit-data11" data-loading-text="Creating...">
 
                                 </td>
                             </tr>
@@ -254,9 +245,9 @@
                     <!--<input type="text" name="s_warehouses" value="<?php echo $wid; ?>" id="s_warehouses1">-->
                     <input type="hidden" name="franchise_id" value="<?php echo $franchise_id; ?>" id="franchise_id">
                     <input type="hidden" value="new_i" id="inv_page">
-                    <input type="hidden" value="invoices/actionstr" id="action-url">
+                    <input type="hidden" value="invoices/actionsparepart_sale" id="action-url">
                     <!--<input type="hidden" value="search_product_by_serialb2b" id="billtype">-->
-                    <input type="hidden" value="stock_return" id="billtype">
+                    <input type="hidden" value="sparepart_search_sale" id="billtype">
                     <input type="hidden" value="0" name="counter" id="ganak">
                     <input type="hidden" value="<?= currency($this->aauth->get_user()->loc); ?>" name="currency">
                     <input type="hidden" value="<?= $taxdetails['handle']; ?>" name="taxformat" id="tax_format">
