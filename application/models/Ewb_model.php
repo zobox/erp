@@ -899,6 +899,23 @@ class Ewb_model extends CI_Model
 		}
 		return false;
 	}
+	
+	
+	public function getAvailableComponent($product_id,$fwid){
+       
+         $this->db->select('count(id) as qty');
+         $this->db->from("tbl_component_serials");
+         $this->db->where("component_id",$product_id);
+         $this->db->where('status',1);
+         $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		if($query->num_rows() > 0){
+			foreach($query->result() as $rows){
+				return $rows->qty;
+			}			
+		}
+		return false;
+	}
 
 	
 }

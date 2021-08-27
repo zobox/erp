@@ -3,13 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Jobwork extends CI_Controller{
 	public function __construct()
     {
-        parent::__construct();
-        $this->load->library("Aauth");
-        $this->load->model("Jobwork_model",'jobwork');
-        $this->load->model("Categories_model",'products_cat');
-        if (!$this->aauth->is_loggedin()) {
-            redirect('/user/', 'refresh');
-        }
+        parent::__construct();       
+        $this->load->model("Jobwork_model",'jobwork');       
 	}
 	
 	public function index(){

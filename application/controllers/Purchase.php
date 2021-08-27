@@ -1730,8 +1730,10 @@ class Purchase extends CI_Controller
 				$data['colour'] = $colour;
 				$data['purchase_order'] = $purchase_order;
 				$data['qc_engineer'] = $qc_engineer;
-				$items = implode(',',$items_array);
-				$data['items'] = $items;
+				if(is_array($items_array)){
+					$items = implode(',',$items_array);
+					$data['items'] = $items;
+				}
 				$data['zupc_code'] = $zupc_code;
 				$data['serial_no1'] = $serial_no1;			
 				$conditions1 = $this->purchase->getConditionNamebyID($current_grade);

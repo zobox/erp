@@ -42,6 +42,8 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo assets_url(); ?>/agent-assets/css/style.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo assets_url(); ?>/agent-assets/css/custom.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 	<!-- END Custom CSS-->
 	<script src="<?php echo assets_url(); ?>agent-assets/js/core/libraries/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo assets_url(); ?>agent-assets/vendors/js/ui/tether.min.js" type="text/javascript"></script>
@@ -49,6 +51,15 @@
 	<script src="<?php echo assets_url(); ?>agent-assets/portjs/raphael.min.js" type="text/javascript"></script>
 	<script src="<?php echo assets_url(); ?>agent-assets/portjs/morris.min.js" type="text/javascript"></script>
 	<script src="<?php echo assets_url(); ?>agent-assets/js/summernote-bs4.min.js" type="text/javascript"></script>
+	
+	
+	
+	
+    <script type="text/javascript">var baseurl = '<?php echo base_url() ?>';
+        var crsf_token = '<?=$this->security->get_csrf_token_name()?>';
+        var crsf_hash = '<?=$this->security->get_csrf_hash(); ?>';
+    </script>
+	
 	<script type="text/javascript">
 	var baseurl = '<?php echo assets_url() ?>';
 	</script>
@@ -131,8 +142,8 @@
 					</a>
 					<ul class="dropdown-menu newpos">
 						<li data-menu="">
-							<a class="dropdown-item" href="<?= base_url(); ?>spareparts/" data-toggle="dropdown"><i class="icon-file-text"></i>
-								<?php echo $this->lang->line('Received Spareparts'); ?>
+							<a class="dropdown-item" href="<?= base_url(); ?>spareparts/panding_spareparts" data-toggle="dropdown"><i class="icon-file-text"></i>
+								<?php echo $this->lang->line('Pending Spareparts'); ?>
 							</a>
 						</li>
 						<li data-menu=""><a class="dropdown-item" href="<?php echo base_url(); ?>spareparts/manage_sparepart" data-toggle="dropdown"><i class="icon-file-text"></i> <?= $this->lang->line('Manage Spareparts'); ?></a> </li>
@@ -157,6 +168,30 @@
                 echo 'active';
             } ?>">
 					<a href="<?php echo base_url(); ?>jobwork/managejob"> <i class="icon-file-text"></i><span class="menu-title"> <?php echo $this->lang->line('manage job work'); ?> </span></a>
+				</li>
+				<li class="nav-item <?php if ($this->uri->segment(1) == " pending ") {
+                echo 'active';
+            } ?>">
+					<a href="<?php echo base_url(); ?>jobwork/lrp_warehouse"> <i class="icon-file-text"></i><span class="menu-title"> <?php echo $this->lang->line('LRP Warehouse'); ?> </span></a>
+				</li>
+				<li class="dropdown dropdown-submenu <?php if ($this->uri->segment(1) == " pending ") 
+	          { echo 'active'; } ?>" data-menu="dropdown-submenu">
+					<a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown"> <i class="icon-file-text"></i>
+						<?php echo $this->lang->line('LRC Sales') ?>
+					</a>
+					<ul class="dropdown-menu newpos">
+						<li data-menu="">
+							<a class="dropdown-item" href="<?= base_url(); ?>jobwork/lrc_new_invoice" data-toggle="dropdown"><i class="icon-file-text"></i>
+								<?php echo $this->lang->line('New Invoice'); ?>
+							</a>
+						</li>
+						<li data-menu=""><a class="dropdown-item" href="<?php echo base_url(); ?>jobwork/lrc_manage_invoice" data-toggle="dropdown"><i class="icon-file-text"></i> <?= $this->lang->line('Manage Invoice'); ?></a> </li>
+					</ul>
+				</li>
+				<li class="nav-item <?php if ($this->uri->segment(1) == " pending ") {
+                echo 'active';
+            } ?>">
+					<a href="<?php echo base_url(); ?>jobwork/not_available_component"> <i class="icon-file-text"></i><span class="menu-title"> <?php echo $this->lang->line('not available component detail'); ?> </span></a>
 				</li>
 				<!-- <li class="nav-item <?php if ($this->uri->segment(1) == " lead ") {
                 echo 'active';
@@ -205,3 +240,6 @@
 		<div id="rough"></div>
 	</div>
 	<!-- / main menu-->
+
+	
+	

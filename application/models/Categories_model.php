@@ -80,7 +80,7 @@ class Categories_model extends CI_Model
 			foreach ($query->result() as $key=>$row) {				
 				if($row->rel_id !=0){
 					$ptitle = $this->GetParentCatTitleById($row->rel_id);
-					$row->title = $ptitle.' &rArr; '.$row->title;
+					$row->title = $ptitle.' &rArr; '.$row->title;					
 				}					
 				$data[] = $row;
 			}			

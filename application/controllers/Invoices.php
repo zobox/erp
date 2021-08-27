@@ -3052,6 +3052,7 @@ class Invoices extends CI_Controller
         $this->load->view('invoices/sparepart-invoice', $data);
         $this->load->view('fixed/footer');
     }
+
     public function sparepart_invoice_manage()
     {
         $head['title'] = "IMEI Manage Invoice";
@@ -3437,9 +3438,9 @@ class Invoices extends CI_Controller
 	
 	public function actionsparepart_sale()
     {   
-        echo "<pre>";
+        /* echo "<pre>";
         print_r($_REQUEST);
-        echo "</pre>"; exit;
+        echo "</pre>"; exit; */
         
         $serial_no = $this->input->post('serial_no');
         $pid = $this->input->post('pid');
@@ -3519,11 +3520,9 @@ class Invoices extends CI_Controller
         'multi' => $currency,
         'type' => 5,
         'loc' => $this->aauth->get_user()->loc);
-        $invocieno2 = $invocieno;       
-        
+        $invocieno2 = $invocieno;        
        
-        
-        
+         
         if ($this->db->insert('geopos_invoices', $data)) {
             $invocieno = $this->db->insert_id();
             //products
@@ -3551,7 +3550,7 @@ class Invoices extends CI_Controller
             $this->db->from('geopos_bank_charges');
             $get_charge = $this->db->get();
             $bank_charges = $get_charge->result_array();        
-            
+           
             foreach ($pid as $key => $value) {
                 
                 $total_discount += numberClean(@$ptotal_disc[$key]);
@@ -3579,26 +3578,20 @@ class Invoices extends CI_Controller
                     $tds_percentage=$tds;
                 }
                 
-                
+                 
                 $amt = numberClean($product_qty[$key]);
-                 $avlqty = $this->ewb->getAvailableComponent($product_id[$key],$fwid);                   
+                $avlqty = $this->ewb->getAvailableComponent($product_id[$key],$fwid);                   
                 if((numberClean($avlqty) - $amt) < 0 and $st_c == 0){
                     echo json_encode(array('status' => 'Error', 'message' => 'Product - <strong>' . $product_name1[$key] . "</strong> - Low quantity. Available stock is  " . $avlqty));
                     $transok = false;
                     $st_c = 1;
                 } 
-               
+					
                     $product_price_margin = "0.00";
                     $gst_with_margin = "0.00";
                     $product_type=0;
                      
-                    for($j=0; $j<$qty; $j++){ 
-                            
-                            
-                            
-                        
-                                    
-                          
+                    for($j=0; $j<$qty; $j++){                           
                             
                             $wdata = array();
                             $wdata = array();
@@ -3615,7 +3608,7 @@ class Invoices extends CI_Controller
                             //$this->db->where('serial_id',$s_id);
                             $this->db->update('tbl_component_serials',$wdata);
 
-                           // echo $this->db->last_query(); exit;
+                           //echo $this->db->last_query(); exit;
                             //$i++;
                        
                     }    
@@ -3652,7 +3645,7 @@ class Invoices extends CI_Controller
                 
                 
                 
-              
+               
 
                 $productlist[$prodindex] = $data;
                 //$i++;
@@ -3668,10 +3661,12 @@ class Invoices extends CI_Controller
             if ($prodindex > 0) {               
                 $this->db->insert_batch('geopos_invoice_items', $productlist);
                 //echo $this->db->last_query(); exit;               
-                
+               
                 $this->db->set(array('discount' => rev_amountExchange_s(amountFormat_general($total_discount), $currency, $this->aauth->get_user()->loc), 'tax' => rev_amountExchange_s(amountFormat_general($total_tax), $currency, $this->aauth->get_user()->loc), 'items' => $itc));
                 $this->db->where('id', $invocieno);
                 $this->db->update('geopos_invoices');
+                 
+      
             } else {
                 echo json_encode(array('status' => 'Error', 'message' =>
                     "Please choose product from product list. Go to Item manager section if you have not added the products."));
@@ -3681,6 +3676,7 @@ class Invoices extends CI_Controller
                     
             if ($transok) {
                 $this->custom->save_fields_data($invocieno, 2);
+
                 
                 $this->db->trans_complete();                
                 $validtoken = hash_hmac('ripemd160', $invocieno, $this->config->item('encryption_key'));
@@ -3690,7 +3686,6 @@ class Invoices extends CI_Controller
             }else {
                 //$this->db->trans_rollback();
             }
-
             
             
         } else {
@@ -3699,6 +3694,7 @@ class Invoices extends CI_Controller
             $transok = false;
         }        
     }
+	
 
     public function ajax_lrc_sp_sale()
     {

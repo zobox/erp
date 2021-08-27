@@ -1,15 +1,14 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Jobwork extends CI_Controller{
-	 public function __construct()
+	public function __construct()
     {
         parent::__construct();
-       // $this->load->model('invoices_model', 'invocies');
-     
-		$this->load->model('Dashboard_model','dashboard');
-		$this->load->model('Lead_model','lead');
+		// $this->load->model('invoices_model', 'invocies');
+		$this->load->model('Dashboard_model','dashboard');		
 		$this->load->model('Communication_model','communication');
 		$this->load->model('invoices_model', 'invocies');
+		$this->load->model('jobwork_model', 'jobwork');
     }
 
     //invoices list
@@ -28,13 +27,6 @@ class Jobwork extends CI_Controller{
         $this->load->view('includes/footer');
     }
 	
-	public function create()
-    {
-		$head['title'] = "Create New Lead";
-		$this->load->view('includes/header',$head);
-        $this->load->view('lead/create');
-        $this->load->view('includes/footer');
-    }
 	
 	public function open()
     {
@@ -56,11 +48,10 @@ class Jobwork extends CI_Controller{
 		$data['cat'] = $this->invocies->category_list();
 		$data['components'] = $this->invocies->JobWorkComponent($data['list'][0]->serial);
 		$data['qc_components'] = $this->invocies->get_qc_component_bySerial($data['list'][0]->serial);
-		
+		$data['item_component'] = $this->invocies->getComponentItemMaster($data['list'][0]->pid);
 		
         $this->load->view('jobwork/open-view',$data);
-        $this->load->view('includes/footer');
-		
+        $this->load->view('includes/footer');		
 			
 		/* $id= $this->input->get('id');		 
 		$data['product_info'] = $this->jobwork->getJobWorkDetail($id);
@@ -92,7 +83,9 @@ class Jobwork extends CI_Controller{
 	
 	public function failedqc()
     {
-        $this->load->view('includes/header',$head);
+        $this->load->view('includes/header',$head);	
+		$head['title'] = 'Failed QC Work';
+        $data['list'] = $this->jobwork->failedJobwork();
         $this->load->view('jobwork/failed-qc',$data);
         $this->load->view('includes/footer');
     }
@@ -100,6 +93,8 @@ class Jobwork extends CI_Controller{
 	public function managejob()
     {
         $this->load->view('includes/header',$head);
+		$data['list'] = $this->jobwork->jobWorkManage();
+		$head['title'] = "Manage Job Work";
         $this->load->view('jobwork/manage-work',$data);
         $this->load->view('includes/footer');
     }
@@ -124,58 +119,11 @@ class Jobwork extends CI_Controller{
 	public function pending_work()
     {
         $head['title'] = "Pending Work";
-		$data['total'] = $this->lead->getCountByStatus();
-		$data['new'] = $this->lead->getCountByStatus(1);
-		$data['contacted'] = $this->lead->getCountByStatus(2);
-		$data['qualified'] = $this->lead->getCountByStatus(3);
-		$data['proposal_sent'] = $this->lead->getCountByStatus(4);
-		$data['converted_to_franchhise'] = $this->lead->getCountByStatus(5);
-		$data['not_converted_to_franchhise'] = $this->lead->getCountByStatus(6);
-		$data['junk'] = $this->lead->getCountByStatus(7);
-		$data['test'] = $this->lead->getCountByStatus(8);
-		$data['lead'] = $this->lead->getLeadList();
-		
         $this->load->view('includes/header',$head);
         $this->load->view('pending/pending-work',$data);
         $this->load->view('includes/footer');
     }
 	
-	public function save(){
-		$save = $this->lead->save();
-		if($save){
-			redirect('dashboard/');
-		}
-		else{
-			redirect('lead/create');
-		}
-	}
-	
-	public function changesource(){
-		$source = $this->input->post('source',true);
-		echo base_url().'lead?source='.$source;
-	}
-	
-	public function changeStatus(){
-		$lead_id = $this->input->post('leadid',true);
-		$status = $this->input->post('selectedStatus',true);
-		$data = array('lead_id'=>$lead_id,'status'=>$status);
-		
-		echo $this->lead->UpdateLeadStatus($data);
-	}
-	
-	public function getStatusHtml(){
-		$status = $this->lead->getStatusHtml();
-		$html = '';
-		$html .= '<option value="1"';if($status == 1){$html .= 'selected=""';}$html .='>New</option>';
-		$html .= '<option value="2"';if($status == 2){$html .= 'selected=""';}$html .='>Contacted</option>';
-		$html .= '<option value="3"';if($status == 3){$html .= 'selected=""';}$html .='>Qualified</option>';
-		$html .= '<option value="4"';if($status == 4){$html .= 'selected=""';}$html .='>Proposal Sent</option>';
-		$html .= '<option value="5"';if($status == 5){$html .= 'selected=""';}$html .='>Converted to Franchise</option>';
-		$html .= '<option value="6"';if($status == 6){$html .= 'selected=""';}$html .='>Not Coverted to Franchise</option>';
-		$html .= '<option value="7"';if($status == 7){$html .= 'selected=""';}$html .='>Junk</option>';
-		$html .= '<option value="8"';if($status == 8){$html .= 'selected=""';}$html .='>Test</option>';
-		echo $html;		
-	}
 	
 	public function assigntl(){
 		$teamlead = $this->input->post('teamlead');
@@ -358,6 +306,96 @@ class Jobwork extends CI_Controller{
         redirect('jobwork/open_view?id='.$jobwork_id, 'refresh');
         }         
 	}
+
+	public function addcomponentJobwork()
+	{
+		$pid        = $this->input->post('req_product_id');
+		$jobwork_id = $this->input->post('req_jobwork_id');
+		$component_id = $this->input->post('items');
+		$pro_serial = $this->input->post('pro_serial');
+		$warehouse_details = $this->invocies->getWarehouse();
+
+		for($i=0;$i<count($component_id);$i++)
+		{
+			$data = array(
+              'issue_id' => $jobwork_id,
+              'product_serial' => $pro_serial,
+              'status'        => 3   
+			);
+			$this->db->set($data);
+			$this->db->where("component_id",$component_id[$i]);
+			$this->db->where("status",4);
+			$this->db->where("twid",$warehouse_details[0][id]);
+			$this->db->limit(1);
+			$this->db->update("tbl_component_serials",$data);
+			//echo $this->db->last_query(); exit;
+        }
+        redirect('jobwork/open_view?id='.$jobwork_id, 'refresh');
+	}
+
+	public function addComponentMasterJobwork()
+	{
+        $pid        = $this->input->post('req_product_id_component');
+		$jobwork_id = $this->input->post('req_jobwork_id_component');
+		$item_component_id = $this->input->post('item_component_id');
+		$pro_component_serial = $this->input->post('pro_component_serial');
+		$component_zupc_code = $this->input->post('component_zupc_code');
+		$component_qty = $this->input->post('component_qty');
+
+
+        $data = array();
+		for($i=0;$i<$component_qty;$i++)
+		{
+			$data = array(
+             'component_id'   => $item_component_id,
+             'purchase_id'    => 0,
+             'serial'         => $component_zupc_code,
+             'issue_id'       => $jobwork_id,
+             'product_serial' => $pro_component_serial,
+             'qty'            => 1,
+             'serial_in_type' => 2,
+             'status'         => 1
+			);
+			$this->db->insert("tbl_component_serials",$data);		
+		}
+		redirect('jobwork/open_view?id='.$jobwork_id, 'refresh');
+	}
+	
+	public function save(){
+		$id = $this->input->post('id');
+		$res = $this->jobwork->savejobwork();
+		if($res){				
+			redirect('jobwork/open', 'refresh');
+		}else{
+			redirect('jobwork/open_view?id='.$id, 'refresh');
+		}
+	}
+	
+	public function manage_view(){
+		$id= $this->uri->segment(3); 
+		//$head['usernm'] = $this->aauth->get_user()->username;
+		$id= $this->input->get('id');
+		$data['records'] = $this->jobwork->getJobWorkDetail($id);
+        $head['title'] = 'Manage Job Work View';
+		$this->load->view('includes/header', $head);				
+		$this->load->view('jobwork/manage-work-view',$data);
+		$this->load->view('includes/footer');
+	}
+	
+	public function lrc_new_invoice()
+    {
+        $this->load->view('includes/header',$head);
+		$data['warehouse_list'] = $this->jobwork->getAllWarehouseExceptLoggedLRC();
+        $this->load->view('jobwork/lrc-new-invoice',$data);
+        $this->load->view('includes/footer');
+    }
+	
+	public function lrc_manage_invoice()
+    {
+		$this->load->view('includes/header',$head);		
+        $this->load->view('jobwork/lrc-manage-invoice',$data);
+        $this->load->view('includes/footer');
+    }
 	
 }
 ?>

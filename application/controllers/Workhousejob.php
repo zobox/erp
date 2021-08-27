@@ -379,9 +379,6 @@ class Workhousejob extends CI_Controller{
 
         }
             redirect('workhousejob/open_view?id='.$jobwork_id, 'refresh');
-         
-			
-		
 	}
 
 	public function getComponentZupcById()

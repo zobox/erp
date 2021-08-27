@@ -568,7 +568,6 @@ class Jobwork_model extends CI_Model
 				 $row->components = $this->JobWorkComponent($row->serial);
 				 $row->component_qty = $this->JobWorkComponentQty($row->serial);
 				 $data[] =$row;
-
 			}			
 			return $data;
 		}
@@ -667,6 +666,7 @@ class Jobwork_model extends CI_Model
 		
 		return $query->result_array();
 	}
+
 	public function getComponentItemMaster($pid)
 	{
 		 $getproduct = $this->db->query("select pid,sub,status from geopos_products where pid=$pid and status!=5");

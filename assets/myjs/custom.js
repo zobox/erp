@@ -673,6 +673,7 @@ var rowTotal = function (numb) {
     var vatVal = accounting.unformat($("#vat-" + numb).val(), accounting.settings.number.decimal);
     var taxo = 0;
     var disco = 0;
+	//alert(two_fixed);
     var totalPrice = amountVal.toFixed(two_fixed) * priceVal;   
     var tax_status = $("#taxformat option:selected").val();
     var disFormat = $("#discount_format").val();

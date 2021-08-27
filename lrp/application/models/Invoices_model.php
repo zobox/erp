@@ -182,7 +182,7 @@ class Invoices_model extends CI_Model
 	
 	
 	public function invoice_details($invoice_id='',$product_serial_status='')
-    {
+    {		
         $this->db->select('a.pid,b.serial,a.fwid,a.twid,a.status,a.is_present,a.hold_status,
 		b.status as product_serial_status,b.current_condition,b.convert_to,b.jobwork_req_id,
 		c.*,count(c.id) as qty,e.title,f.name as trc_name,f.email as trc_email,f.phone as trc_phone,
@@ -312,13 +312,20 @@ class Invoices_model extends CI_Model
 		}
 	}
 	
-	public function getComponentByPid($pid,$vid=''){
-		$this->db->select("a.*,b.component_id,b.purchase_id,b.serial,b.issue_id,b.product_serial,b.qty,b.status");
+	public function getComponentByPid($pid='',$vid='',$component_name=''){		
+		$warehouse_details = $this->getWarehouse();		
+		$this->db->select("a.*,b.id as component_serial_id,b.component_id,b.purchase_id,b.serial,b.issue_id,b.product_serial,b.qty,b.status");
         $this->db->from("tbl_component as a");       
         $this->db->join("tbl_component_serials as b","b.component_id=a.id",'left');
 		$this->db->group_by('a.component_name');
-		
+		if($pid){
         $this->db->where("a.product_id",$pid);
+		}
+		if($component_name){
+        $this->db->where("a.component_name",$component_name);
+		}
+        $this->db->where("b.twid",$warehouse_details[0][id]);
+        $this->db->where("b.status",4);
 		if($vid)
         $this->db->or_where("a.product_id",$vid);
         $query = $this->db->get();
@@ -471,8 +478,7 @@ class Invoices_model extends CI_Model
 			}
 		}		
 		
-		if($serial_id!=''){
-			
+		if($serial_id!=''){			
 			$data = array(            
 				'item_replaced'  => $items,				
 				'component_request'  => $component_request,				
@@ -527,6 +533,14 @@ class Invoices_model extends CI_Model
 					'type' => 0
 				);			
 				$this->db->insert('tbl_jobcard',$data3);
+			}
+			
+			foreach($items_array as $key=>$component_name){
+				$component_details = $this->getComponentByPid($product_id,$vid='',$component_name);	
+				$this->db->set('status', 3, FALSE);
+				$this->db->set('product_serial', $serial, FALSE);
+				$this->db->where('id', $component_details[0]['component_serial_id']);
+				$this->db->update('tbl_component_serials');
 			}
 			//echo $this->db->last_query();
 			
@@ -590,6 +604,7 @@ class Invoices_model extends CI_Model
 			'final_condition' => $j_c_d->final_condition,
 			'sub_cat' => $j_c_d->sub_cat,
 			'sub_sub_cat' => $j_c_d->sub_sub_cat,
+			'jobwork_service_type' => $j_c_d->jobwork_service_type,
 			'date_created' => $j_c_d->date_created,
 			'date_modified' => date('Y-m-d H:i:s')
 		);			
@@ -826,7 +841,8 @@ class Invoices_model extends CI_Model
 			foreach ($query->result() as $key=>$row) {				
 				if($row->rel_id !=0){
 					$ptitle = $this->GetParentCatTitleById($row->rel_id);
-					$row->title = $ptitle.' &rArr; '.$row->title;
+					//$row->title = $ptitle.' &rArr; '.$row->title;
+					$row->title = $row->title;
 				}					
 				$data[] = $row;
 			}			
@@ -868,11 +884,14 @@ class Invoices_model extends CI_Model
 	}
 	
 	public function JobWorkComponent($serial)
-	{
+	{	
+		$warehouse_details = $this->getWarehouse();
 	  	$this->db->select("b.component_name,a.serial");
 	  	$this->db->from("tbl_component_serials as a");	  	
 	  	$this->db->join("tbl_component as b","a.component_id=b.id",'left');
-	  	$this->db->where('a.product_serial',$serial);
+	  	$this->db->where('a.product_serial',$serial);			
+		$this->db->where("a.twid",$warehouse_details[0][id]);
+	  	$this->db->where('a.status',3);
 	  	$query = $this->db->get();
 		//echo $this->db->last_query(); exit;
 		$data = array(); 
@@ -942,6 +961,7 @@ class Invoices_model extends CI_Model
 		$this->db->select("*");
 		$this->db->from("geopos_warehouse");
 		$this->db->where("franchise_id",$this->session->userdata('user_details')[0]->users_id);
+		$this->db->where("warehouse_type",2);
 		$query = $this->db->get();
 		
 		return $query->result_array();
@@ -1064,7 +1084,7 @@ class Invoices_model extends CI_Model
 	public function get_qc_component_bySerial($serial){
 		$this->db->where("imei1",$serial);
 		$query = $this->db->get('tbl_qc_data');
-		echo $this->db->last_query(); die;
+		//echo $this->db->last_query(); die;
 		$data = array();
 		if($query->num_rows()>0)
 		{
@@ -1075,6 +1095,97 @@ class Invoices_model extends CI_Model
 			return $data;
 		}
 	}
+	
+	public function getComponentItemMaster($pid)
+	{
+		$getproduct = $this->db->query("select pid,sub,status from geopos_products where pid=$pid and status!=5");
+        $getpro = $getproduct->result_array();
+
+        $getproduct_sub = $this->db->query("select pid,sub,status from geopos_products where pid='".$getpro[0]['sub']."'");
+        $getpro_sub = $getproduct_sub->result_array();
+
+        if($getpro_sub[0]['status']!=5)
+        { 
+        	
+        	
+        		$product_id = $getpro_sub[0]['pid'];
+        	
+        	
+        }
+        else
+        {
+        	$product_id = $pid;
+        }
+
+		$this->db->select("*");
+		$this->db->from("tbl_component");
+		$this->db->where("product_id",$product_id);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die;
+        $data = array();
+
+        if($query->num_rows()>0)
+        {
+        	foreach($query->result() as $key=>$row)
+        	{
+        		$data[] = $row;
+        	}
+        	return $data;
+        }
+
+        return false;
+	}
+
+
+	public function invoice_list()
+	{
+		$this->db->select("a.invoicedate,a.id,a.tid,a.type,a.subtotal,a.twid,a.items");
+		$this->db->from("users_lrp as c");
+		$this->db->join("geopos_warehouse as b","c.users_id=b.franchise_id","left");
+		$this->db->join("geopos_invoices as a","b.id=a.twid","left");
+		$this->db->where("c.users_id",$this->session->userdata('user_details')[0]->users_id);
+		$this->db->where("a.type",5);
+		$this->db->or_where("a.type",8);
+		$query = $this->db->get();
+		//echo $this->db->last_query(); die;
+
+		$data = array();
+		if($query->num_rows()>0)
+		{
+			foreach ($query->result() as $key => $value) {
+				if($value->type==5)
+				{
+				$value->pending = $this->sparepart_qty_status(1,$value->id,$value->twid);
+				$value->received = $this->sparepart_qty_status(2,$value->id,$value->twid);
+				}
+				else
+				{
+				$value->pending = $this->get_pending_qty($value->id);
+				$value->received = $this->get_recieved_qty($value->id); 
+				}
+				$data[] = $value;
+			}
+
+		return $data;
+	}
+
+
+   	return false;
+   }
+
+    public function sparepart_qty_status($status,$invoice_id,$twid)
+   {
+   	$this->db->select("*");
+   	$this->db->from("tbl_component_serials");
+   	$this->db->where("lrp_status",$status);
+   	$this->db->where("invoice_id",$invoice_id);
+   	$this->db->where("twid",$twid);
+   	$query = $this->db->get();
+   	//echo $this->db->last_query(); die;
+   	//$data = array();
+    return	$query->num_rows(); 
+
+   }
 
 	
 }

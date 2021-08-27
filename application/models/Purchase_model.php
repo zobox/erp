@@ -2284,11 +2284,21 @@ class Purchase_model extends CI_Model
         $this->db->join("geopos_product_cat as cat","e.pcat=cat.id",'left');
         $this->db->join("geopos_supplier as s","c.csd=s.id",'left');
         
-		$status_val = array('0'=>2,'1'=>7); 
-		$this->db->where_in('b.status',$status_val);
-		$this->db->where('b.status !=',8);
+		/* $status_val = array('0'=>2,'1'=>7); 
+		$this->db->where_in('b.status',$status_val); */
+		
+		$twid_val = array('0'=>0,'1'=>1); 
+		$this->db->where_in('a.twid',$twid_val);
+		
+		$this->db->where('a.status !=',0);
+		$this->db->where('a.status !=',2);
+		$this->db->where('a.status !=',3);
+		$this->db->where('a.status !=',8);
+		$this->db->where('a.is_present',1);
+		
+		$this->db->where('b.status !=',8);		
+		$this->db->where('a.status !=',0);
 		$this->db->where('b.serial !=','');
-		$this->db->where('a.status',1);
 		
 		$this->db->group_by('b.serial');
 		$this->db->order_by('a.id','DESC');
