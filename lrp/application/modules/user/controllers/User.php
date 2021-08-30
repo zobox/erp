@@ -91,7 +91,7 @@ class User extends CI_Controller
      */
     public function auth_user($page = '')
     {
-
+		
         if ($this->captcha) {
             $this->load->helper('recaptchalib_helper');
             $reCaptcha = new ReCaptcha($this->general->public_key()->recaptcha_s);

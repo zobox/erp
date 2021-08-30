@@ -9,6 +9,11 @@ $password ='';
 $database ='zobox';	
 
 
+/* $hostname ='curriernyou.cuqutsj5sluo.ap-south-1.rds.amazonaws.com';
+$username ='CURRIERNYOU';
+$password ='Ilovezobox';
+$database ='geopostest'; */	
+
 
 $db['default'] = array(
 	'dsn'	=> '',

@@ -1473,8 +1473,7 @@ class Productcategory extends CI_Controller
 		echo $this->products_cat->recieve($id,$wid,$invoice_id);
 	}
 	
-	public function not_recieved(){
-		//echo "TTTTTTTTTTTTTTTTTTTTTTT";
+	public function not_recieved(){		
 		$id = $this->input->post('id');
 		$wid = $this->input->post('wid');
 		$invoice_id = $this->input->post('invoice_id');
@@ -1563,6 +1562,39 @@ class Productcategory extends CI_Controller
 		$serial = $this->input->post('serial');		
 		//$serial = 354554103000509;		
 		echo $this->products_cat->sendjobwork($serial);
+	}
+	
+	public function lrp_panding_inventory()
+    { 
+		$data['list'] = $this->products_cat->getLRPPendingInvoice($type=9);
+        /* $this->load->model('invoices_model', 'invocies');
+        $data['list'] = $this->invocies->get_datatables($this->limited,$type=7); */     
+        $id = $this->input->get('id');       
+        $head['title'] = "Pending Purchase Orders";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('products/lrp_panding_inventory',$data);
+        $this->load->view('fixed/footer');
+    }
+    
+    public function lrp_panding_inventory_view()
+    {           
+        $id = $this->input->get('id');
+        $data['list'] = $this->products_cat->getInvoiceDTlIMEIWiseLRP($id,10);
+		$data['warehouse'] = $this->products_cat->getwarehouseexceptthisid($data['list'][0]->fwid);
+        $head['title'] = "Pending Purchase Orders";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('products/lrp_panding_inventory_view',$data);
+        $this->load->view('fixed/footer');
+    }
+	
+	
+	public function recievelrp(){
+		$id = $this->input->post('id');
+		$wid = $this->input->post('wid');
+		$invoice_id = $this->input->post('invoice_id');
+		echo $this->products_cat->recievelrp($id,$wid,$invoice_id);
 	}
 
 }

@@ -18,19 +18,23 @@
                   <form method="post" enctype="multipart/form-data" action="<?=base_url()?>/spareparts/receive_sparepart">
                   <div class="card-body px-0">
                     <div class="row">
+                       <div class="col-sm-6">
+                        <div class="form-group">
+                          <label> Invoice Type </label>
+                          <select class="form-control" id="invoice_type" name="invoice_type" required="required">
+                            <option value="">Select Invoice Type</option>
+                            <option value="1">Zobox Sale</option>
+                            <option value="2">Direct Purchase From Supplier</option>
+                            
+                          </select>
+                        </div>
+                      </div>
                       <div class="col-sm-6">
                         <div class="form-group">
                           <label> Supplier </label>
                           <select class="form-control" id="product_cat" name="supplier_id" required="required">
                             <option value="">Select Supplier</option>
-                            <?php
-                            foreach($supplier_list as $data => $row)
-                            {
-                              ?>
-                              <option value="<?=$row->id?>"><?=$row->company?></option>
-                              <?php
-                            }
-                            ?>
+                            
                             
                           </select>
                         </div>
@@ -179,6 +183,25 @@ $('.statusChange').change(function(event) {
   });
 });
 
+$('#invoice_type').on('change',function(event){
+        var invoice_type = $(this).val();
+
+        $('#sub_cat').html("<option value='' disabled='' selected=''> --- Select --- </option>");
+        $.ajax({
+            type : 'POST',
+            url : baseurl+'spareparts/getSupplierByInvoice',
+            data : {id : invoice_type},
+            cache : false,
+            success : function(result){
+              //console.log(result);
+                if(result != 0){
+                $('#product_cat').html(result);
+              }
+            }
+        });
+    });
+
+
 $('#product_cat').on('change',function(event){
         var productcat = $(this).val();
 
@@ -189,8 +212,11 @@ $('#product_cat').on('change',function(event){
             data : {id : productcat},
             cache : false,
             success : function(result){
-                console.log(result);
-                $('#sub_cat').append(result);
+              console.log(result);
+                if(result != 0){
+                $('#sub_cat').html(result);
+                 }
+
             }
         });
     }); 
@@ -208,7 +234,7 @@ $('#product_cat').on('change',function(event){
       success : function(result){
         console.log(result);
         if(result != 0){
-           $('#sub_sub_cat').append(result);                    
+           $('#sub_sub_cat').html(result);                    
         }                
       }
     });
@@ -223,13 +249,13 @@ $('#product_cat').on('change',function(event){
             data : {id : productcat},
             cache : false,
             success : function(result){
-                console.log(result);
+                //console.log(result);
                 if(result != 0){
           var res = result.split("#");
           
                     $('#zupc').val(res[0]);
-                    $('#qty').val(res[1]);
-                    $('#qty').attr("max",res[1]);
+                    $('#qty').val(res[2]);
+                    $('#qty').attr("max",res[2]);
                     
                 }
             }

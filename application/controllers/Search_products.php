@@ -1606,10 +1606,9 @@ class Search_products extends CI_Controller
         }
         $qw.= 'tbl_warehouse_serials.status!=0 && tbl_warehouse_serials.status!=2 &&
                 tbl_warehouse_serials.status!=3 && tbl_warehouse_serials.status!=8 && tbl_warehouse_serials.is_present=1 && geopos_product_serials.status!=8
-                && geopos_product_serials.status!=0 && geopos_product_serials.status=2 &&';
+                && geopos_product_serials.status!=0 &&';
 
         if ($name) {
-
             if ($billing_settings['key1'] == 2) {
                 $e .= ',geopos_product_serials.serial,geopos_product_serials.id as serial_id,geopos_product_serials.purchase_id,geopos_product_serials.purchase_pid';
                 $sql = "SELECT count(tbl_warehouse_serials.id) as qty, geopos_products.pid,geopos_products.product_name,geopos_products.sale_price,geopos_products.product_price,geopos_products.zobulk_sale_price,geopos_products.hsn_code,geopos_products.taxrate,geopos_products.disrate,geopos_products.product_des,geopos_products.qty as pqty,geopos_products.unit $e  FROM geopos_product_serials LEFT JOIN geopos_products  ON geopos_products.pid=geopos_product_serials.product_id $join WHERE " . $qw . "(UPPER(geopos_product_serials.serial) = '" . strtoupper($name) . "') GROUP By(geopos_products.pid)  LIMIT 1";
@@ -1626,14 +1625,14 @@ class Search_products extends CI_Controller
             if($query->num_rows()==1)
             {
             $result = $query->result_array();
-            foreach ($result as $row) {
-				$purchase_record = $this->products->getPurchasePriceByPID($row['purchase_id'],$row['purchase_pid']);
-				$purchase_price = $purchase_record[0]['price'];
-                //$name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
-                $name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
-                array_push($out, $name);
-            } 
-        }               
+				foreach ($result as $row) {
+					$purchase_record = $this->products->getPurchasePriceByPID($row['purchase_id'],$row['purchase_pid']);
+					$purchase_price = $purchase_record[0]['price'];
+					//$name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
+					$name = array($row['product_name'], amountExchange_s($purchase_price, 0, $this->aauth->get_user()->loc), $row['pid'], amountFormat_general($row['taxrate']), amountFormat_general($row['disrate']), $row['product_des'], $row['unit'], $row['hsn_code'], amountFormat_general($row['qty']), $row_num, @$row['serial'], @$row['serial_id']);
+					array_push($out, $name);
+				} 
+			}               
             echo json_encode($name);
         }
     }

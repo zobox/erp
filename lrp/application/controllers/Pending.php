@@ -16,7 +16,8 @@ class Pending extends CI_Controller{
     {		
         $head['title'] = "Pending Receives";
         $this->load->view('includes/header',$head);
-		$data['list'] = $this->invocies->invoice_details();
+		//$data['list'] = $this->invocies->invoice_details();
+		$data['list'] = $this->invocies->invoice_list();
         $this->load->view('pending/index',$data);
         $this->load->view('includes/footer');
     }

@@ -321,9 +321,15 @@ class Categories_model extends CI_Model
 		$this->db->join('tbl_warehouse_serials as b', 'a.id = b.twid', 'left');
 		$this->db->join('geopos_product_serials as c', 'b.serial_id = c.id', 'left');
 		$this->db->join('geopos_products as d', 'd.pid = c.product_id', 'left');
-		$this->db->where('b.status', 1);
+		
+		$this->db->where('b.status !=', 0);
+		$this->db->where('b.status !=', 2);
+		$this->db->where('b.status !=', 3);
+		$this->db->where('b.status !=', 8);
 		$this->db->where('b.is_present', 1);
 		$this->db->where('c.status !=', 8);
+		$this->db->where('c.status !=', 0);
+		
 		//$this->db->where('a.id !=', 1);		
 		if($wid)
 		$this->db->where('a.id', $wid);		
@@ -1059,9 +1065,13 @@ class Categories_model extends CI_Model
 		$this->db->join("geopos_units as g",'g.id=d.vb','left');
 		$this->db->join("geopos_conditions as h",'h.id=d.vc','left');
 		$this->db->join("geopos_colours as i",'i.id=d.colour_id','left');
-		$this->db->where('b.status', 1);
+		$this->db->where('b.status !=', 0);
+		$this->db->where('b.status !=', 2);
+		$this->db->where('b.status !=', 3);
+		$this->db->where('b.status !=', 8);
 		$this->db->where('b.is_present', 1);
 		$this->db->where('c.status !=', 8);
+		$this->db->where('c.status !=', 0);
 		//$this->db->where('a.id !=', 1);
 		if($wid)
 		$this->db->where('b.twid', $wid);		
@@ -1076,26 +1086,6 @@ class Categories_model extends CI_Model
 			return $data;
 		}
 		return false;
-		
-		/* $this->db->select('a.*,b.qty,c.product_name,c.product_code,c.product_price,c.pid,c.pcat');
-		$this->db->from("geopos_warehouse as a");		
-		$this->db->join('tbl_warehouse_product as b', 'a.id = b.wid', 'left');
-		$this->db->join('geopos_products as c', 'b.pid = c.pid', 'left');
-		$this->db->where('a.id !=', 1);
-		if($wid)
-		$this->db->where('a.id', $wid);
-		$this->db->group_by('c.pid');
-		$query = $this->db->get();
-		
-		$data = array();
-		if ($query->num_rows() > 0) {
-			foreach ($query->result() as $key=>$row) {	
-				$row->c_title = $this->GetParentCatTitleById($row->pcat);
-				$data[] = $row;
-			}			
-			return $data;
-		}
-		return false; */
 	}
 	
 	public function save_job_work_cost(){
@@ -1787,7 +1777,7 @@ class Categories_model extends CI_Model
 		}
 		return false;
 	}
-	
+
 	public function getInvoiceDTlIMEIWise($id=''){
 		
 		$this->db->select('a.id,a.twid,d.price,d.tax,d.subtotal,b.serial,e.product_name');
@@ -1813,10 +1803,11 @@ class Categories_model extends CI_Model
 		
 	}
 	
-	
 	public function getwarehouseexceptthisid($id){
 		$this->db->where('id !=', $id);
+		$this->db->where('warehouse_type', 1);
 		$query = $this->db->get('geopos_warehouse');
+		
 		//echo $this->db->last_query(); exit;
 		if ($query->num_rows() > 0) {
 			foreach ($query->result() as $key=>$row) {				
@@ -2061,5 +2052,147 @@ class Categories_model extends CI_Model
 	    }
 	    return false;
 	}
+	
+	
+	public function getInvoiceDTlIMEIWiseLRP($id='',$status=9){
+		$this->db->select('a.id,a.twid,a.fwid,d.price,d.tax,d.subtotal,b.serial,e.product_name,b.purchase_id,b.purchase_pid,f.jobwork_service_type');
+		$this->db->from("tbl_warehouse_serials as a");		
+		$this->db->join('geopos_product_serials as b', 'b.id = a.serial_id', 'left');
+		$this->db->join('geopos_invoices as c', 'c.id = a.invoice_id', 'left');
+		$this->db->join('geopos_invoice_items as d', 'd.tid = c.id', 'left');
+		$this->db->join('geopos_products as e', 'e.pid = b.product_id', 'left');
+		$this->db->join('tbl_jobcard as f', 'f.serial = b.serial', 'left');
+		
+		$this->db->where('a.invoice_id', $id);	
+		$this->db->where('a.status', $status);	
+		$this->db->where('a.is_present', 0);
+		$this->db->group_by('b.serial');
+		$query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		$data = array();
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $key=>$row) {
+				$row->purchase_record = $this->products->getPurchasePriceByPID($row->purchase_id,$row->purchase_pid);
+				$component_details = $this->JobWorkComponent($row->serial,$row->fwid);	
+				$row->component_details = $component_details;
+				$components = array();
+				$total_component_price = 0;
+				foreach($component_details as $key1=>$component){
+					$component_id = $component->component_id; 
+					$purchase_id = $component->purchase_id;
+					$price = json_decode(json_encode($this->getComponentPrice($purchase_id,$component_id)));
+					$component_price = $price[0]->price; 
+					
+					$components['component_name'][] = $component->component_name;
+					$components['serial'][] = $component->serial;
+					$components['price'][] = $component_price;
+					$total_component_price += $component_price; 
+				}
+				$row->total_component_price = $total_component_price;	
+				
+				$data[] = $row;
+			}			
+			return $data;
+		}
+		return false;
+		
+	}
+	
+	
+	public function getLRPPendingInvoice($type=''){
+		$this->db->select('a.id,a.tid,a.invoicedate,count(DISTINCT(b.pid)) as total_product,sum(b.qty) as stock_quantity,c.franchise_code,a.stock_return_status,e.warehouse_code,f.name');
+		$this->db->from("geopos_invoices as a");		
+		$this->db->join('geopos_invoice_items as b', 'b.tid = a.id', 'left');
+		$this->db->join('geopos_customers as c', 'a.csd = c.id', 'left');
+		$this->db->join('tbl_warehouse_serials as d', 'a.id = d.invoice_id', 'inner');
+		$this->db->join('geopos_warehouse as e', 'e.id = a.fwid', 'left');
+		$this->db->join('users_lrp as f', 'f.users_id = e.franchise_id', 'left');
+		$this->db->group_by('a.id');
+		$this->db->where('a.type', $type);		
+		$this->db->where('d.status', 10);
+		$this->db->where('d.is_present', 0);
+		$this->db->order_by('id','DESC');				
+		$query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		$data = array();
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $key=>$row) {
+				$data[] = $row;
+			}			
+			return $data;
+		}
+		return false;
+	}
+	
+	
+	public function JobWorkComponent($serial,$twid)
+	{
+		
+		$this->db->select("b.component_name,a.*");
+		$this->db->from("tbl_component_serials as a");	  	
+		$this->db->join("tbl_component as b","a.component_id=b.id",'left');
+		$this->db->where('a.product_serial',$serial);
+		$this->db->where("a.twid",$twid);
+		$this->db->where("a.status",3);
+		$query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		$data = array(); 
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $key=>$row){                 
+				$data[] =$row;
+			}			
+			return $data;
+		}
+		return false;
+	}
+	  
+	  
+	public function JobWorkComponentQty($serial)
+	{
+		$warehouse_details = $this->invocies->getWarehouse();
+		$this->db->select("b.component_name,a.serial");
+		$this->db->from("tbl_component_serials as a");	  	
+		$this->db->join("tbl_component as b","a.component_id=b.id",'left');
+		$this->db->where('a.product_serial',$serial);
+		$this->db->where("a.twid",$warehouse_details[0][id]);
+		$this->db->where("a.status",3);
+		$query = $this->db->get();
+		//echo $this->db->last_query();
+		return $query->num_rows();
+	}
+	
+	public function getComponentPrice($purchase_id,$component_id)
+    {
+        $this->db->select('b.price');
+        $this->db->from("geopos_purchase as a");
+        $this->db->join("geopos_purchase_items as b","a.id=b.tid");
+        $this->db->where("a.id",$purchase_id);
+        $this->db->where("a.type",3);
+        $this->db->where("b.pid",$component_id);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die;
+        $data = array();
+        if($query->num_rows()>0)
+        {
+            $result = $query->result_array();
+            return $result;
+        }
+        return false;
+    }
+	
+	
+	public function recievelrp($id,$wid,$invoice_id){
+		$data = array(
+            'twid' => $wid,
+            'is_present' => 1,
+            'date_modified' => date('Y-m-d h:i:s')
+        );
+        $this->db->set($data);
+        $this->db->where('id', $id);
+		$this->db->update('tbl_warehouse_serials');
+		echo $this->db->last_query(); exit;
+	}
+	
 	
 }

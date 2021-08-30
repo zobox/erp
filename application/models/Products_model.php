@@ -2381,9 +2381,16 @@ FROM geopos_products $whr");
         $this->db->join("geopos_products as p","w.pid=p.pid",'LEFT');
         $this->db->where('w.pid',$pid);
         $this->db->where('w.twid',$wid);
-        $this->db->where('w.status',1);
-		$this->db->where('w.is_present',1);
-        $this->db->where('s.status !=',8);
+        //$this->db->where('w.status',1);
+			
+		$this->db->where('w.status !=', 0);
+		$this->db->where('w.status !=', 2);
+		$this->db->where('w.status !=', 3);
+		$this->db->where('w.status !=', 8);
+		$this->db->where('w.is_present', 1);
+		$this->db->where('s.status !=', 8);
+		$this->db->where('s.status !=', 0);
+		
         $query = $this->db->get();  
         //echo $this->db->last_query();
         $data = array();
@@ -3515,7 +3522,7 @@ FROM geopos_products $whr");
         
         $query = $this->db->get();  
         $pro_list = array();
-        return $query->result_array();  
+        return $query->result_array();
       }
       
 	  

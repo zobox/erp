@@ -357,7 +357,7 @@
                                 </td>
                                 <td align="right" colspan="4"><input type="submit" class="btn btn-success sub-btn"
                                                                      value="<?php echo $this->lang->line('Generate Order') ?>"
-                                                                     id="submit-data" data-loading-text="Creating...">
+                                                                     id="submit-data11" data-loading-text="Creating...">
 
                                 </td>
                             </tr>

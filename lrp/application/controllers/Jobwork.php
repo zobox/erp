@@ -45,11 +45,10 @@ class Jobwork extends CI_Controller{
 		$data['varients'] = $this->invocies->getProductVarients($data['list'][0]->pid);
 		$data['product_category_array'] = array_reverse(explode("-",substr($this->invocies->getParentcategory($data['list'][0]->pcat),1)));
 		$data['product_category_array_title'] = $this->invocies->getCategoryNames($data['product_category_array']);
-		$data['cat'] = $this->invocies->category_list();
+		$data['cat'] = $this->invocies->category_list();		
 		$data['components'] = $this->invocies->JobWorkComponent($data['list'][0]->serial);
-		$data['qc_components'] = $this->invocies->get_qc_component_bySerial($data['list'][0]->serial);
-		$data['item_component'] = $this->invocies->getComponentItemMaster($data['list'][0]->pid);
-		
+		$data['qc_components'] = $this->invocies->get_qc_component_bySerial($data['list'][0]->serial);		
+		$data['item_component'] = $this->invocies->getComponentItemMaster($data['list'][0]->pid);		
         $this->load->view('jobwork/open-view',$data);
         $this->load->view('includes/footer');		
 			
@@ -384,7 +383,10 @@ class Jobwork extends CI_Controller{
 	
 	public function lrc_new_invoice()
     {
-        $this->load->view('includes/header',$head);
+		$this->load->view('includes/header',$head);
+		$warehouse = $this->invocies->getWarehouse();
+		$data['lastinvoice'] = $this->invocies->lastinvoice(); 		
+		$data['wid'] = json_decode(json_encode($warehouse[0]));
 		$data['warehouse_list'] = $this->jobwork->getAllWarehouseExceptLoggedLRC();
         $this->load->view('jobwork/lrc-new-invoice',$data);
         $this->load->view('includes/footer');

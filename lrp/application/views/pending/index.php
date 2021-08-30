@@ -32,8 +32,9 @@
             </thead>
             <tbody>
 			<?php
+			$i=1;
 			foreach($list as $key=>$row){ 
-				$i=1;
+				
 				switch($row->type){
 					case 1: $prefix = 'STFO#';
 					break;
@@ -47,7 +48,9 @@
 					break;
 					case 7: $prefix = 'STR#';
 					break;
-					case 8: $prefix = 'LRP#';
+					case 8: $prefix = 'LRCIMEI#'; $item_type="IMEI";
+					break;
+					case 5: $prefix = 'LRCSP#'; $item_type="Sparepart";
 					break;
 				}			
 			?>
@@ -55,11 +58,11 @@
                 <td><?php echo $i; ?></td>
                 <td><?php echo $row->invoicedate; ?></td>
                 <td><?php echo $prefix.$row->tid; ?></td>
-                <td><?php echo $row->category; ?></td>
-                <td><?php echo $row->qty; ?></td>
-				<td><?php echo $row->pending_qty; ?></td>
-				<td><?php echo $row->recieved_qty; ?></td>
-                <td><a href="<?php  echo base_url(); ?>pending/receive_view" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
+                <td><?php echo $item_type; ?></td>
+                <td><?php echo $row->items; ?></td>
+				<td><?php echo $row->pending; ?></td>
+				<td><?php echo $row->received; ?></td>
+                <td><a href="<?php  echo base_url(); ?>pending/receive_view?id=<?php echo $row->id; ?>" class="btn btn-success btn-sm view-object"><span class="fa fa-eye"></span> View</a></td>
               </tr>
             <?php $i++; } ?> 
             </tbody>

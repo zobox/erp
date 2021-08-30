@@ -1628,8 +1628,6 @@ class Invoices extends CI_Controller
     }
 	
 	
-	
-	
 	public function action2()
     {		
 		$currency = $this->input->post('mcurrency');
@@ -1640,11 +1638,12 @@ class Invoices extends CI_Controller
 		$flag = 1;
 		foreach($pid as $key3=>$pidval){		
 			$aval_qty = $this->ewb->getAvailableSerialByPIDINV2($pidval,$fwid);
-			$rq_qty = $product_qty[$key3];
+			$rq_qty = $product_qty[$key3]; 
 			if($aval_qty < $rq_qty){
 				$flag = 0;			
 			}
 		}
+		
 		
 		if($flag==1){	
 		
@@ -1969,7 +1968,7 @@ class Invoices extends CI_Controller
 				$this->custom->save_fields_data($invocieno, 2);
 
 			}
-		}else{
+		}else{			
 			echo json_encode(array('status' => 'Error', 'message' =>"Insufficient Quantity !"));
 						$transok = false;
 		}

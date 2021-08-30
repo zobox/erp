@@ -239,6 +239,8 @@ class Invoices_model extends CI_Model
 		return false;
     }
 	
+
+	
 	
 	public function invoice_serial_details($invoice_id='',$serial='',$status='',$is_present='',$product_serial_status='',$jobcard_id='')
     {   
@@ -689,6 +691,15 @@ class Invoices_model extends CI_Model
 				$this->db->set($data);
 				$this->db->where('serial_id', $row->id);
 				$this->db->update('tbl_warehouse_serials');
+				
+				$data1 = array( 
+					'status' => 2,					
+					'date_modified' => date('Y-m-d H:i:s')
+				);
+				$this->db->set($data1);
+				$this->db->where('serial',$serial);
+				$this->db->where('status !=',8);	
+				$this->db->update('geopos_product_serials');
 			}
 			return true;
 		}
@@ -1040,18 +1051,26 @@ class Invoices_model extends CI_Model
         }
     }
 	
-    public function getReveiveGoods($invoice_id='',$pid)
-    {
-        $total = 0;
+   public function getReveiveGoods($invoice_id='',$pid,$purchase_id="")
+    {   
+        $total = 0;  
         $this->db->select("count(id) as received_qty");
         $this->db->from("tbl_component_serials");
-        if($purchase_id!='')
+        if($invoice_id!='')
         {
-        $this->db->where("invoice_id",$purchase_id);
+        $this->db->where("invoice_id",$invoice_id);
         }
-        $this->db->where("id",$pid);
+        if($purchase_id)
+        {
+        $this->db->where("purchase_id",$purchase_id);
+        }
+        $this->db->where("component_id",$pid);
         $this->db->where("lrp_status",2);
+        $this->db->where("status",4);
         $query = $this->db->get();
+        
+        //echo $this->db->last_query();
+       
         if($query->num_rows()>0)
         {
             $result = $query->result_array();
@@ -1059,27 +1078,48 @@ class Invoices_model extends CI_Model
         }
         return $total;
     }
+
 	
-	public function getvarient($component_id,$invoice_id)
-	{
-		//$data = array();
-		$this->db->select("a.warehouse_product_code,b.qty");
-		$this->db->from("geopos_invoice_items as b");
-		$this->db->join("tbl_component as a","b.pid=a.id","left");
-		$this->db->where("a.id",$component_id);
-		$this->db->where("b.tid",$invoice_id);
-		$query = $this->db->get();
-		//echo $this->db->last_query(); die;
-		$data = array();
-		if($query->num_rows()>0)
-		{
-			foreach($query->result() as $key=>$row)
-			{
-				$data[] = $row;
-			}
-			return $data;
-		}
-	}
+	public function getvarient($component_id,$invoice_id="",$purchase_id="")
+    {  
+        //$data = array();
+        $this->db->select("a.warehouse_product_code,b.qty");
+        
+        if($invoice_id)
+        {
+        $this->db->from("geopos_invoice_items as b");
+        $this->db->join("tbl_component as a","b.pid=a.id","left");       
+        $this->db->where("a.id",$component_id);
+        $this->db->where("b.tid",$invoice_id);
+        }
+        if($purchase_id)
+        {
+        $this->db->from("geopos_purchase_items as b");
+        $this->db->join("tbl_component as a","b.pid=a.id","left");       
+        $this->db->where("a.id",$component_id);	
+        $this->db->where("b.tid",$purchase_id);
+        }
+
+        $query = $this->db->get();
+        
+        $data = array();
+        if($query->num_rows()>0)
+        {
+            foreach($query->result() as $key=>$row)
+            {
+            	$total_received_good = $this->getReveiveGoods($invoice_id,$component_id,$purchase_id);
+
+                if($row->qty>$total_received_good)
+                {
+                $row->total_remains_qty = round($row->qty-$total_received_good);
+                $data[] = $row;
+                }
+                
+            }
+
+            return $data;
+        }
+    }
 	
 	public function get_qc_component_bySerial($serial){
 		$this->db->where("imei1",$serial);
@@ -1132,7 +1172,7 @@ class Invoices_model extends CI_Model
         	}
         	return $data;
         }
-
+ 
         return false;
 	}
 
@@ -1146,6 +1186,7 @@ class Invoices_model extends CI_Model
 		$this->db->where("c.users_id",$this->session->userdata('user_details')[0]->users_id);
 		$this->db->where("a.type",5);
 		$this->db->or_where("a.type",8);
+		$this->db->order_by("a.id","desc");
 		$query = $this->db->get();
 		//echo $this->db->last_query(); die;
 
@@ -1186,6 +1227,92 @@ class Invoices_model extends CI_Model
     return	$query->num_rows(); 
 
    }
+
+
+   public function getItemByPurchase($purchase_id)
+    {
+        $data=array(); 
+        $this->db->select("*");
+        $this->db->from("geopos_purchase_items");
+        $this->db->where("geopos_purchase_items.tid",$purchase_id);
+
+        
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+       
+        if($query->num_rows()>0)
+        {
+            foreach($query->result() as $key=>$row)
+            { 
+                
+                $total_received_good = $this->getReveiveGoods('',$row->pid,$purchase_id);
+
+                if($row->qty>$total_received_good)
+                {
+                $row->total_remains_qty = $row->qty-$total_received_good;
+                $data[] = $row;
+                }
+            }
+            return $data;
+        }
+    } 
+	
+	
+	public function lastinvoice()
+    {
+        $this->db->select('tid');
+        $this->db->from($this->table);
+        $this->db->order_by('tid', 'DESC');
+        $this->db->limit(1);
+        //$this->db->where('i_class', 0);
+        $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+        if ($query->num_rows() > 0) {
+            return $query->row()->tid;
+        } else {
+            return 1000;
+        }
+    }
+	
+	
+	public function getInvoiceDetailsByID($id)
+    {
+        $this->db->select('*');
+        $this->db->where('id',$id);
+        $this->db->from('geopos_invoices');
+        $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+        return $query->result_array();
+    }
+	
+	
+	public function invoice_details_lrp($id, $eid = '',$p=true)
+    {
+        $this->db->select('a.*,SUM(a.shipping + a.ship_tax) AS shipping,a.loc as loc,a.id AS iid,
+		c.name,
+		c.address,
+		c.city,
+		c.region,
+		c.country,
+		c.phone,
+		c.gst_number,
+		c.pincode,
+		d.id AS termid,d.title AS termtit,
+		d.terms AS terms,e.ewayBillNo');
+        $this->db->from('geopos_invoices as a');
+        $this->db->where('a.id', $id);
+        if ($eid) {
+            $this->db->where('a.eid', $eid);
+        }
+        
+        $this->db->join('geopos_warehouse as b', 'a.twid = b.id', 'left');
+        $this->db->join('users_lrp as c', 'b.franchise_id = c.users_id', 'left');
+        $this->db->join('geopos_terms as d', 'd.id = a.term', 'left');
+		$this->db->join('tbl_ewaybill as e', 'e.invoice_number = a.tid', 'left');
+        $query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+        return $query->row_array();
+    }
 
 	
 }

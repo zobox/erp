@@ -275,7 +275,8 @@ class Jobwork_model extends CI_Model
 		}
 		return false;
 	  }
-	  
+	
+	
 	public function getAllWarehouseExceptLoggedLRC()
 	{
 		
@@ -288,5 +289,77 @@ class Jobwork_model extends CI_Model
 		return json_decode(json_encode($query->result_array()));
 	}
 	
+	
+	public function getPurchasePriceByPID($purchase_id,$pid)
+	{
+		$this->db->select('a.type,b.price');
+		$this->db->from("geopos_purchase as a");
+		$this->db->join("geopos_purchase_items as b","a.id=b.tid",'left');
+		$this->db->where("a.id",$purchase_id);
+		$this->db->where("b.pid",$pid);
+		$this->db->limit(1);
+
+		$query = $this->db->get();  
+		$pro_list = array();
+		return $query->result_array();  
+	}
+	
+	public function getComponentPrice($purchase_id,$component_id)
+    {
+        $this->db->select('b.price');
+        $this->db->from("geopos_purchase as a");
+        $this->db->join("geopos_purchase_items as b","a.id=b.tid");
+        $this->db->where("a.id",$purchase_id);
+        $this->db->where("a.type",3);
+        $this->db->where("b.pid",$component_id);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die;
+        $data = array();
+        if($query->num_rows()>0)
+        {
+            $result = $query->result_array();
+            return $result;
+        }
+        return false;
+    }
+	
+	public function getAvailableSerialByPIDB2B($product_id,$fwid){
+		$this->db->select('COUNT(b.id) as qty');
+		$this->db->from('tbl_warehouse_serials as a');
+        $this->db->join('geopos_product_serials as b', 'a.serial_id = b.id', 'left');
+		$this->db->where('a.pid', $product_id);
+		$this->db->where('a.twid', $fwid);
+		//$this->db->where('a.status',1);
+		$this->db->where('b.status !=',8);
+		$this->db->where('b.status !=',0);
+		$this->db->where('a.status !=',0);
+		$this->db->where('a.status !=',2);
+		$this->db->where('a.status !=',3);
+		$this->db->where('a.status !=',8);
+		$this->db->where('a.is_present',1);
+		$query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		if($query->num_rows() > 0){
+			foreach($query->result() as $rows){
+				return $rows->qty;
+			}			
+		}
+		return false;
+	}
+	
+	
+	public function getwarehousebyid($id=''){
+		$this->db->where('id', $id);
+		$query = $this->db->get('geopos_warehouse');
+		//echo $this->db->last_query(); exit;
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $key=>$row) {				
+				$data =$row;								
+			}			
+			return $data;
+		}
+		return false;
+	} 
 	
 }

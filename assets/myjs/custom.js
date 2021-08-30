@@ -3211,12 +3211,12 @@ $("#serial_no_lrp").change(function()
 				if (custom_discount > 0) discount = deciFormat(custom_discount);
 				//alert(data[1]);
 				//var purchase_price = ((data[1]*100)/(100+t_r));
-				var purchase_price = ((data[1]*100)/((100+parseInt(t_r))));
+				//var purchase_price = ((data[1]*100)/((100+parseInt(t_r))));
 				//alert(purchase_price);
 				$('#sale_lrp-0').val(data[0]);
 				$('#amount-0').val(1);
-				//$('#price-0').val(data[1]);
-				$('#price-0').val(purchase_price);
+				$('#price-0').val(data[1]);
+				//$('#price-0').val(purchase_price);
 				$('#pid-0').val(data[2]);
 				//$('#vat-0').val(t_r);
 				$('#vat-0').val(0);
@@ -3281,13 +3281,13 @@ $("#serial_no_lrp").change(function()
         if (custom_discount > 0) discount = deciFormat(custom_discount);
 		
 		//var purchase_price = ((data[1]*100)/(100+t_r));
-		var purchase_price = ((data[1]*100)/((100+parseInt(t_r))));
+		//var purchase_price = ((data[1]*100)/((100+parseInt(t_r))));
 		//alert(purchase_price);
 		
         $('#sale_lrp-'+cvalue).val(data[0]);
         $('#amount-'+cvalue).val(1);
-        //$('#price-'+cvalue).val(data[1]);
-        $('#price-'+cvalue).val(purchase_price);
+        $('#price-'+cvalue).val(data[1]);
+        //$('#price-'+cvalue).val(purchase_price);
         $('#pid-'+cvalue).val(data[2]);
         //$('#vat-'+cvalue).val(t_r);
         $('#vat-'+cvalue).val(0);
@@ -3476,10 +3476,10 @@ $('#addproduct_sale_lrp').on('click', function () {
             var custom_discount = $('#custom_discount').val();
             if (custom_discount > 0) discount = deciFormat(custom_discount);
 			
-			var purchase_price = ((ui.item.data[1]*100)/((100+parseInt(t_r))));
+			//var purchase_price = ((ui.item.data[1]*100)/((100+parseInt(t_r))));
 
             $('#amount-' + id[1]).val(1);
-            $('#price-' + id[1]).val(purchase_price);
+            $('#price-' + id[1]).val(data[1]);
             $('#pid-' + id[1]).val(ui.item.data[2]);
             //$('#vat-' + id[1]).val(t_r);
             $('#vat-' + id[1]).val(0);
@@ -3547,8 +3547,8 @@ $('#sale_lrp-0').autocomplete({
 		
 		
         $('#amount-0').val(1);
-        //$('#price-0').val(ui.item.data[1]);
-        $('#price-0').val(purchase_price);
+        $('#price-0').val(ui.item.data[1]);
+        //$('#price-0').val(purchase_price);
         $('#pid-0').val(ui.item.data[2]);
         //$('#vat-0').val(t_r);
         $('#vat-0').val(0);

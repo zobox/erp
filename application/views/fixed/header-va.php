@@ -877,6 +877,9 @@
 							<li data-menu=""><a class="dropdown-item" href="<?php echo base_url(); ?>productcategory/stock_return_panding_franchise"
 												data-toggle="dropdown"><?= $this->lang->line('Stock Return Pending Inventory'); ?> </a>
 							</li>
+							<li data-menu=""><a class="dropdown-item" href="<?php echo base_url(); ?>productcategory/lrp_panding_inventory"
+                                                    data-toggle="dropdown"><?= $this->lang->line('LRP Return Pending Inventory'); ?> </a>
+                                </li>
 						<?php } ?>
                         <li data-menu=""><a class="dropdown-item"
                                             href="<?php echo base_url(); ?>asset/assetbrand"
