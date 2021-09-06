@@ -409,7 +409,46 @@ class Invoices extends CI_Controller
         $data['invoice'] = $this->invocies->invoice_details_lrp($tid, $this->limited);
 		
         if ($data['invoice']['id']) $data['products'] = $this->invocies->invoice_products($tid);
-        
+		$serial = $data['products'][0]['serial'];
+		$component_details = $this->jobwork->JobWorkComponent($data['products'][0]['serial']);
+		$product_serial_details =  $this->invocies->getRecordByProductSerial($serial);
+		$purchase_record = $this->jobwork->getPurchasePriceByPID($product_serial_details->purchase_id,$product_serial_details->purchase_pid);
+		$data['purchase_price'] = $purchase_record[0]['price']; 
+		$data['component_details'] = $component_details;
+		$components = array();
+		$total_component_price = 0;
+		foreach($component_details as $key=>$component){
+			$component_id = $component->component_id; 
+			$purchase_id = $component->purchase_id;
+			$price = json_decode(json_encode($this->jobwork->getComponentPrice($purchase_id,$component_id)));
+			$component_price = $price[0]->price; 
+			
+			$components['component_name'][] = $component->component_name;
+			$components['serial'][] = $component->serial;
+			$components['price'][] = $component_price;
+			$total_component_price += $component_price; 
+		}
+		$data['components'] = $components;
+		$data['total_component_price'] = $total_component_price;
+		
+		
+		$jobcard_details = $this->invocies->getJobCardrecordBySerial($serial);
+		
+						
+		
+		$jobwork_service_type = $jobcard_details->jobwork_service_type;
+		switch($jobwork_service_type){
+			case 1: $service_type = 'L1'; $service_charge = 25; $gst_service_charge = 4.5; $total_service_charge = 29.5; 
+			break;
+			case 2: $service_type = 'L2'; $service_charge = 100; $gst_service_charge = 18; $total_service_charge = 118; 
+			break;
+			case 3: $service_type = 'L3'; $service_charge = 150; $gst_service_charge = 27; $total_service_charge = 177; 
+			break;
+		}
+		$data['service_type'] = $service_type;
+		$data['service_charge'] = $service_charge;
+		$data['gst_service_charge'] = $gst_service_charge;
+		$data['total_service_charge'] = $total_service_charge;
         
         if (CUSTOM) $data['c_custom_fields'] = $this->custom->view_fields_data($data['invoice']['cid'], 1, 1);
         $data['general'] = array('title' => $this->lang->line('Invoice'), 'person' => $this->lang->line('Customer'), 'prefix' => $pref, 't_type' => 0);

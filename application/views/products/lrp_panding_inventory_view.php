@@ -19,7 +19,7 @@
             <div class="card-body">
                 <table id="catgtable" class="table table-striped table-bordered zero-configuration dataTable dtr-inline no-footer">
                     <thead>
-                        <tr>
+                        <!--<tr>
                             <th>#</th>
                             <th>Description</th>
                             
@@ -28,6 +28,20 @@
                            <th>Third Party Job work Cost</th>
                             <th>GST</th>
                             <th>Amount</th>
+                            <th>Warehouse</th>
+                            <th>IMEI</th>
+                            <th>Action</th>
+                        </tr>-->
+                        <tr>
+                            <th>#</th>
+                            <th>Product<br> Name</th>
+                            <th>Product<br> Pruchase Price</th>
+                            <th>Spareparts<br> Name</th>
+                            <th>Total<br> Spareparts Cost</th>
+                            <th>LRP<br> Service Type</th>
+                            <th>Net<br> Service price</th>
+                            <th>GST<br> Amount</th>
+                            <th>Total Amount</th>
                             <th>Warehouse</th>
                             <th>IMEI</th>
                             <th>Action</th>
@@ -44,13 +58,16 @@
 						foreach($list as $key=>$row){
 							$jobwork_service_type = $row->jobwork_service_type;
 							switch($jobwork_service_type){
-								case 1: $service_type = 'L1'; $service_charge = 29.5;
+								case 1: $service_type = 'L1'; $service_charge = 25; $service_gst=4.5; $total_service_charge = 29.5;
 								break;
-								case 2: $service_type = 'L2'; $service_charge = 118;
+								case 2: $service_type = 'L2'; $service_charge = 100; $service_gst=18; $total_service_charge = 118;
 								break;
-								case 3: $service_type = 'L3'; $service_charge = 177;
+								case 3: $service_type = 'L3'; $service_charge = 150; $service_gst=27; $total_service_charge = 177
+;
 								break;
 							}
+							
+							$total_amount = $row->purchase_record[0]['price']+$row->total_component_price+$service_charge +$service_gst;
 						?>
 					   <tr>
                             <th scope="row">1</th>
@@ -58,10 +75,12 @@
                             <td><?php echo $row->product_name; ?></td>
                             
                             <td><?php echo $row->purchase_record[0]['price']; ?></td>
+                            <td><?php echo implode(',',$row->components['component_name']); ?></td>
                             <td><?php echo $row->total_component_price; ?></td>
+							<td>L<?php echo $row->jobwork_service_type; ?></td>
                             <td><?php echo $service_charge; ?></td>
-                            <td><?php echo $row->tax; ?></td>
-                            <td width="10%;"> ₹ <?php echo $row->price; ?></td>
+							<td><?php echo $service_gst; ?></td>
+                            <td width="10%;"> ₹ <?php echo $total_amount; ?></td>				
                             <td>
 								<select class="form-control round" name='warehouse' id="warehouse-<?php echo  $row->id; ?>">
 								<?php foreach($warehouse as $key1=>$data){ ?>
@@ -71,10 +90,11 @@
                             </td>
                             
                             <td><?php echo $row->serial; ?></td>
+
                             <td width="10%;">
                                 <!--<button class="btn btn-success btn-sm recieve">Yes</button>
                                 <button class="btn btn-danger btn-sm not_recieve">No</button>-->
-								 <input type="button" id="<?php echo  $row->id; ?>" class="btn btn-success margin-bottom recieve" value="Yes">
+								 <input type="button" id="<?php echo  $row->id; ?>" class="btn btn-success margin-bottom recieve btn-sm" value="Yes">
                                 <!--<input type="button" id="<?php echo  $row->id; ?>" class="btn btn-danger margin-bottom not_recieve" value="No">-->
                             </td>
                         </tr>
@@ -82,7 +102,7 @@
 						
                     </tbody>
                     <tfoot>
-                                                <tr>
+                        <!--<tr>
                             <th>#</th>
                             <th>Description</th>
                            <th>Product Cost</th>
@@ -90,6 +110,19 @@
                            <th>Third Party Job work Cost</th>
                             <th>GST</th>
                             <th>Amount</th>
+                            <th>Warehouse</th>
+                            <th>IMEI</th>
+                            <th>Action</th>
+                        </tr>-->
+                        <tr>
+                            <th>#</th>
+                            <th>Product<br> Name</th>
+                            <th>Product<br> Pruchase Price</th>
+                            <th>Spareparts<br> Name</th>
+                            <th>Total<br> Spareparts Cost</th>
+                            <th>LRP<br> Service Type</th>
+                            <th>Net<br> Service price</th>
+                            <th>GST<br> Amount</th>
                             <th>Warehouse</th>
                             <th>IMEI</th>
                             <th>Action</th>
@@ -139,7 +172,7 @@
                         extend: 'excelHtml5',
                         footer: true,
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3, 4, 5,6,7,8,9,10]
                         }
                     }
                 ],

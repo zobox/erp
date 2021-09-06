@@ -89,7 +89,7 @@ $('#serialno').change(function(){
 		cache : false,
 		success : function(result){				
 			if(result!=null){
-				$('#imei_transfer').show();
+				//$('#imei_transfer').show();
 				$( "#tow" ).html(result);				
 			}else{				
 				
@@ -97,7 +97,6 @@ $('#serialno').change(function(){
 		}
 	});
 });
-
 
 $('#serialno').change(function(){
 	var serial = $(this).val();

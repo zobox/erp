@@ -90,7 +90,8 @@
 											<input type="number" name="quantity" id="qty-3" class="form-control" value="<?php echo $list[0]->imei2; ?>" readonly> </div>
 									</div>
 								</div>
-							</div>
+							</div>							
+							
 							<div class="form-group row">
 								<div class="col-md-4">
 									<div class="row">
@@ -117,7 +118,7 @@
 									<div class="row">
 										<div class="col-md-5">Convert To</div>
 										<div class="col-md-7">
-											<select class="form-control" name="previous_condition" id="previous_condition" disabled>
+											<select class="form-control" name="current_condition" id="current_condition" disabled>
 												<!--<option value="" selected="selected">--Select--</option>
 												<option value="1" <?php if($product_info->convert_to==1){ ?> selected='selected'
 													<?php } ?>>Excellent</option>

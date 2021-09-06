@@ -25,8 +25,11 @@ class Pending extends CI_Controller{
 	public function receive_view()
     {
 		if ($this->input->post('serial', true)) {
-			$serial = $this->input->post('serial', true);
-			$data['list'] = $this->invocies->invoice_serial_details($invoice_id='',$serial,$status=6,$is_present=0);			
+			$invoice_id = $this->input->post('id', true);			
+			$serial = $this->input->post('serial', true);			
+			$serial_list = $this->input->post('serial_list', true);				
+			$serial_list[] = $serial;						
+			$data['list'] = $this->invocies->invoice_serial_details($invoice_id,$serial,$status=6,$is_present=0,$product_serial_status='',$jobcard_id='',$serial_list);						
 		}
 		$id = $this->input->get('id');
         $head['title'] = "Pending Receives View";
@@ -84,7 +87,7 @@ class Pending extends CI_Controller{
 		echo "</pre>"; exit; */	
 		
 		$jobwork_required = $this->input->post('jobwork_required');	
-		if($jobwork_required==1){
+		if($jobwork_required==1 || $jobwork_required==3){
 			$res = $this->invocies->send_to_jobwork();
 			if($res=1){
 				//redirect('pending/manage_iqc_work');
@@ -171,10 +174,12 @@ class Pending extends CI_Controller{
 		}
 	}
 	
+	
 	public function save_receive_view(){	
-		$serial = $this->input->post('serial');
-		if($serial){
-			$res = $this->invocies->save_receive_view($serial);
+		//$serial = $this->input->post('serial');
+		$serial_list = $this->input->post('serial_list');
+		if($serial_list){
+			$res = $this->invocies->save_receive_view($serial_list);
 			if($res){
 				redirect('pending');
 			}

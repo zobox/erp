@@ -15,7 +15,7 @@
 		  </form>
 		  <?php //echo "<pre>";print_r($list);?>
 		  <div class="table-responsive">
-          <table class="table table-striped table-bordered zero-configuration dataTable dtr-inline">
+          <table class="table table-striped table-bordered zero-configuration dataTable dtr-inline" id="cgrtable">
             <thead>
 								<tr>
 									<th>#</th>
@@ -101,6 +101,31 @@
   </div>
 </div>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+
+            //datatables
+            $('#cgrtable').DataTable({
+                responsive: true,
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "orderable": true,
+                    },
+                ], dom: 'Blfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        footer: true,
+                        exportOptions: {
+                            columns: [1, 2, 3, 4]
+                        }
+                    }
+                ],
+
+        });
+        });
+    </script>
 <script type="text/javascript">
 	$(document).ready(function(event){
 		/*$('.source').change(function(){

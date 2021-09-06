@@ -84,24 +84,21 @@ class Search_products extends CI_Controller
             foreach ($result as $row) {
 				$purchase_record = $this->jobwork->getPurchasePriceByPID($row['purchase_id'],$row['purchase_pid']);
 				$component_details = $this->jobwork->JobWorkComponent($row['serial']);
-				
-				
+								
 				$components = array();
 				$total_component_price = 0;
 				foreach($component_details as $key=>$component){
 					$component_id = $component->component_id; 
 					$purchase_id = $component->purchase_id;
-					$price = json_decode(json_encode($this->jobwork->getComponentPrice($purchase_id,$component_id)));
-					$component_price = $price[0]->price; 
+					$cprice = json_decode(json_encode($this->jobwork->getComponentPrice($purchase_id,$component_id))); 
+					$component_price = $cprice[0]->price; 
 					
 					$components['component_name'][] = $component->component_name;
 					$components['serial'][] = $component->serial;
 					$components['price'][] = $component_price;
 					$total_component_price += $component_price; 
 				}
-				
 								
-				
 				$jobwork_service_type = $row['jobwork_service_type'];
 				switch($jobwork_service_type){
 					case 1: $service_type = 'L1'; $service_charge = 29.5;

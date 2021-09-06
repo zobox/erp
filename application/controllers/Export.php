@@ -29,12 +29,13 @@ class Export extends CI_Controller
 		$this->load->library('excel');
         $this->load->model('export_model', 'export');
 		$this->load->model('customers_model', 'customers');
+		$this->load->model('products_model', 'products');
         if (!$this->aauth->is_loggedin()) {
             redirect('/user/', 'refresh');
             exit;
         }
-		
-        if ($this->aauth->get_user()->roleid < 5 && $this->aauth->get_user()->roleid! = 1 && $this->aauth->get_user()->roleid! = -1) {
+
+        if ($this->aauth->get_user()->roleid < 5 && $this->aauth->get_user()->roleid!=1) {
 
             exit('Not Allowed!');
         }
@@ -1262,6 +1263,56 @@ class Export extends CI_Controller
             $head['usernm'] = $this->aauth->get_user()->username;
             //$this->load->view('fixed/header', $head);
             $this->load->view('export/jobwork_product_cost_report_list_old',$data);
+            //$this->load->view('fixed/footer');        
+        }
+    }
+	
+	
+	function franchise_salewise_cost_report()
+    {        
+        $head['title'] = "Franchise Salewise Cost Report";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('export/franchise_salewise_cost_report',$data);
+        $this->load->view('fixed/footer');
+    }
+
+    public function franchise_salewise_cost_report_export()
+    {
+        $type = $this->input->post('type');
+        if($type!=''){
+            $record = $this->export->franchise_salewise_cost_report_export($type);        
+            $data['record'] = $record;
+            
+            
+            $head['title'] = "Franchise Salewise Cost Report";
+           
+            //$this->load->view('fixed/header', $head);
+            $this->load->view('export/franchise_salewise_cost_report_export',$data);
+            //$this->load->view('fixed/footer');        
+        }
+    }
+	
+	
+	function erpmasterreport()
+    {        
+        $head['title'] = "ERP Master Report";
+        $head['usernm'] = $this->aauth->get_user()->username;
+        $this->load->view('fixed/header', $head);
+        $this->load->view('export/erpmasterreport',$data);
+        $this->load->view('fixed/footer');
+    }
+
+    public function erpmasterreport_export()
+    {
+		$type = $this->input->post('type');
+        if($type!=''){
+            $records = $this->export->erpmasterreport_export($type);        
+            $data['records'] = $records;
+            $head['title'] = "ERP Master Report";
+           
+            //$this->load->view('fixed/header', $head);
+            $this->load->view('export/erpmasterreport_export',$data);
             //$this->load->view('fixed/footer');        
         }
     }

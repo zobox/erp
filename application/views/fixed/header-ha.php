@@ -1761,17 +1761,18 @@
                                         <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/products"><i
                                                         class="fa fa-caret-right"></i><?php echo $this->lang->line('Export Products'); ?>
                                             </a></li>
-                   <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/commission_all"><i
-                                                        class="fa fa-caret-right"></i>Export All Commission Data 
-                                            </a></li>
-                    <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/franchise_commision"><i
-                                                        class="fa fa-caret-right"></i><?php echo $this->lang->line('Franchise Sales Commission'); ?>
-                                            </a></li>
-
-
-                                            <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/jobwork_report_cost"><i
-                                                        class="fa fa-caret-right"></i>Jobwork Cost Report
-                                            </a></li>
+									   <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/commission_all"><i
+																			class="fa fa-caret-right"></i>Export All Commission Data 
+																</a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/franchise_commision"><i
+																			class="fa fa-caret-right"></i><?php echo $this->lang->line('Franchise Sales Commission'); ?>
+																</a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/jobwork_report_cost"><i
+													class="fa fa-caret-right"></i>Jobwork Cost Report
+										</a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/franchise_salewise_cost_report"><i
+													class="fa fa-caret-right"></i>Franchise Sale Wise Cost Report
+										</a></li>										
                                     </ul>
                                 </li>
                             </ul>
@@ -1791,16 +1792,19 @@
                                                         class="fa fa-caret-right"></i><?php echo $this->lang->line('Database Backup'); ?>
                                             </a></li>
                       
-                      <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/franchise_sales"><i
-                                                        class="fa fa-caret-right"></i><?php echo $this->lang->line('Franchise Sales Report'); ?>
-                                            </a></li>
-                      <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/POS_report"><i
-                                                        class="fa fa-caret-right"></i><?php echo $this->lang->line('POS Sales Report'); ?>
-                                            </a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/franchise_sales"><i
+																		class="fa fa-caret-right"></i><?php echo $this->lang->line('Franchise Sales Report'); ?>
+															</a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/POS_report"><i
+																		class="fa fa-caret-right"></i><?php echo $this->lang->line('POS Sales Report'); ?>
+															</a></li>
 
-                            <li><a class="dropdown-item" href="<?php echo base_url(); ?>export/productReportByCondition"><i
-                                                        class="fa fa-caret-right"></i>Product Sale Price Report
-                                            </a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/productReportByCondition"><i
+																	class="fa fa-caret-right"></i>Product Sale Price Report
+														</a></li>
+										<li><a class="dropdown-item" href="<?php echo base_url(); ?>export/erpmasterreport"><i
+																	class="fa fa-caret-right"></i>ERP Master Report
+														</a></li>
                                     </ul>
                                 </li>
                             </ul>

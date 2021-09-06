@@ -3245,7 +3245,7 @@ class Invoices extends CI_Controller
 							if($serial_no[$key]){
 							$this->db->where('b.serial',$serial_no[$key]);
 							}
-							$this->db->where('a.status',1);
+							//$this->db->where('a.status',1);
 							$this->db->where('a.is_present',1);
 							$this->db->order_by("a.id", "asc");
 							$this->db->limit(1);            

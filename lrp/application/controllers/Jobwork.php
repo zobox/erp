@@ -340,7 +340,7 @@ class Jobwork extends CI_Controller{
 		$pro_component_serial = $this->input->post('pro_component_serial');
 		$component_zupc_code = $this->input->post('component_zupc_code');
 		$component_qty = $this->input->post('component_qty');
-
+		$warehouse_details = $this->invocies->getWarehouse();
 
         $data = array();
 		for($i=0;$i<$component_qty;$i++)
@@ -353,6 +353,7 @@ class Jobwork extends CI_Controller{
              'product_serial' => $pro_component_serial,
              'qty'            => 1,
              'serial_in_type' => 2,
+			 'twid' 		  => $warehouse_details[0][id],
              'status'         => 1
 			);
 			$this->db->insert("tbl_component_serials",$data);		
@@ -363,8 +364,44 @@ class Jobwork extends CI_Controller{
 	public function save(){
 		$id = $this->input->post('id');
 		$res = $this->jobwork->savejobwork();
-		if($res){				
-			redirect('jobwork/open', 'refresh');
+		$res=1;
+		if($res=1){	
+			//redirect('jobwork/open', 'refresh');			
+			
+			
+			$serial= $this->input->post('serial');
+			$jobwork_service_type= $this->input->post('jobwork_service_type');
+			$final_condition= $this->input->post('final_condition');
+			
+			$product_details = json_decode(json_encode($this->invocies->getProductDetailsByPID($final_condition)));
+									
+			$lebal_detail = array(
+				'serial' => $serial,
+				'product_name' => $product_details[0]->warehouse_product_name,
+				'zupc_code' => $product_details[0]->warehouse_product_code,
+				'colour_name' => $product_details[0]->colour,
+				'varient' => $product_details[0]->varient,				
+				'jobwork_service_type' => $jobwork_service_type				
+			);
+			$data['lebal_detail'] = json_decode(json_encode($lebal_detail));
+						
+			$data['label_type'] = $type;
+			ini_set('memory_limit', '64M');
+
+			$html = $this->load->view('print_files/new_custom_label1', $data, true);
+			
+			$this->load->library('pdf'); 
+
+			$header = "";
+			$pdf = $this->pdf->prexo_with_grade(array('margin_top' => 0.5));
+			$pdf->SetHTMLHeader($header);
+		   
+			$pdf->SetHTMLFooter('<div style="text-align: center;font-family: serif; font-size: 8pt; color: #5C5C5C; font-style: italic;margin-top:-6pt;"></div>');
+		
+			
+			$pdf->WriteHTML($html);			
+			$pdf->Output($data['product_detail'][0]->product_name . '_label.pdf', 'I');
+			
 		}else{
 			redirect('jobwork/open_view?id='.$id, 'refresh');
 		}
@@ -394,7 +431,8 @@ class Jobwork extends CI_Controller{
 	
 	public function lrc_manage_invoice()
     {
-		$this->load->view('includes/header',$head);		
+		$this->load->view('includes/header',$head);	
+        $data['invoice_records'] = $this->invocies->invoice_details($invoice_id='',$product_serial_status='',$type=9);
         $this->load->view('jobwork/lrc-manage-invoice',$data);
         $this->load->view('includes/footer');
     }

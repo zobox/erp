@@ -2094,8 +2094,7 @@ class Categories_model extends CI_Model
 			}			
 			return $data;
 		}
-		return false;
-		
+		return false;		
 	}
 	
 	

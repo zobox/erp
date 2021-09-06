@@ -137,6 +137,7 @@
   //  alert( this.value ); // or $(this).val()
   if(this.value == "1") {
 	$("#final_grade").attr("required", "true");
+	$("#conditionsdp1").prop('required',true);
 	$("#items").attr("required", "true");
     $('.JobworkYes').show();
     //$('.JobworkNo').hide();
@@ -146,11 +147,12 @@
     
 
   }else if(this.value == "2"){
-    $('#jobwork_not_required').val('2');
+   // $('#jobwork_not_required').val('2');
     $('#jobwork').val('');
     $('.JobworkYes').hide();
     //$('.JobworkNo').show();
   }else if(this.value == "3"){
+	$("#conditionsdp1").prop('required',false);
 	$('#jobwork_not_required').val('3');
 	$('#jobwork').val('3');
 	$('.PraxoYes').hide();

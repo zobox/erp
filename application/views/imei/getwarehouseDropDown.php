@@ -4,3 +4,15 @@
 		echo '<option value="' . $row->id . '">' . $row->title . '</option>';
 	} ?>
 </select>
+
+<script>
+$('#to_warehouses').change(function(){
+	//alert("oks");
+	if($(this).val()!=''){
+		$('#imei_transfer').show();
+	}else{
+		$('#imei_transfer').hide();
+	}
+	
+});
+</script>

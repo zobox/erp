@@ -14,7 +14,7 @@
                   <h4 class="card-title">Spareparts More Details</h4>
                   <hr>
                   <div class="card-body px-0">
-                      <table class="table table-striped table-bordered zero-configuration dataTable">
+                      <table class="table table-striped table-bordered zero-configuration dataTable" id="cgrtable">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -68,6 +68,31 @@
 </div>
 <script src="<?php echo assets_url('assets/myjs/jquery.ui.widget.js'); ?>"></script>
 <script src="<?php echo assets_url('assets/myjs/jquery.fileupload.js') ?>"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+
+            //datatables
+            $('#cgrtable').DataTable({
+                responsive: true,
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "orderable": true,
+                    },
+                ], dom: 'Blfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        footer: true,
+                        exportOptions: {
+                            columns: [1, 2, 3, 4]
+                        }
+                    }
+                ],
+
+        });
+        });
+    </script>
 <script>
 /*jslint unparam: true */
 /*global window, $ */

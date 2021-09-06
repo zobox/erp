@@ -505,7 +505,7 @@ class Purchase_model extends CI_Model
 				$this->db->where('product_name',$productname);
 				$products = $this->db->get('geopos_products')->result();
 				$productId = $products[0]->pid;
-				$data2 = array('product_id'=>$productId,'purchase_pid'=> $productId,'purchase_id'=>$purchase_id,'serial'=>$rows['serialNumber']);
+				$data2 = array('product_id'=>$productId,'purchase_pid'=> $productId,'purchase_id'=>$purchase_id,'serial'=>$rows['serialNumber'],'receiving_agent'=> $_SESSION['loggedin']);
 				$save = $this->db->insert('geopos_product_serials', $data2);
 				$serailid = $this->db->insert_id();
 				$this->aauth->applog("[Serial Number Added] $serailid ID " . $serailid, $this->aauth->get_user()->username);
@@ -580,7 +580,8 @@ class Purchase_model extends CI_Model
 						$data = array(
 							'product_id' => $key,            
 							'purchase_pid' => $key,            
-							'serial' => $serial            
+							'serial' => $serial,
+							'receiving_agent'   => $_SESSION['loggedin']
 						);
 						$save = $this->db->insert('geopos_product_serials', $data);			
 						
@@ -698,6 +699,7 @@ class Purchase_model extends CI_Model
 		'purchase_pid' => $productid,
 		'purchase_id'=>$purchaseid,
 		'status'=>$serial_status,
+		'receiving_agent'   => $_SESSION['loggedin'],
 		'serial'=>$serialno);		
 		$this->db->insert('geopos_product_serials',$data);
 		
@@ -775,6 +777,7 @@ class Purchase_model extends CI_Model
 			'sticker'=>$sticker,
 			'imei2'=>$imei2,
 			'status'=>$serial_status,
+			'receiving_agent'  => $_SESSION['loggedin'],
 			'serial'=>$imei1);		
 			$this->db->insert('geopos_product_serials',$data);
 			
@@ -1234,7 +1237,8 @@ class Purchase_model extends CI_Model
          'status'            => 2,
          'sticker'           => $sticker_no[$i],
          'current_condition' => $current_grade[$i],
-         'convert_to'        => $final_grade[$i]
+         'convert_to'        => $final_grade[$i],
+		 'receiving_agent'   => $_SESSION['loggedin']
         );
         $this->db->insert("geopos_product_serials",$insert_data2);
         $serial_id = $this->db->insert_id();
@@ -1300,7 +1304,8 @@ class Purchase_model extends CI_Model
          'status'            => 1,
          'sticker'           => $sticker_no[$i],
          'current_condition' => $current_grade[$i],
-         'convert_to'        => $final_grade[$i]
+         'convert_to'        => $final_grade[$i],
+		 'receiving_agent'   => $_SESSION['loggedin']
         );
         $this->db->insert("geopos_product_serials",$insert_data1);
         $serial_id = $this->db->insert_id();
@@ -1549,7 +1554,8 @@ class Purchase_model extends CI_Model
 		 'status'            => 2,
 		 'sticker'           => $sticker_no,
 		 'current_condition' => $current_grade,
-		 'convert_to'        => $final_grade
+		 'convert_to'        => $final_grade,
+		 'receiving_agent'   => $_SESSION['loggedin']
 		);
 		$this->db->insert("geopos_product_serials",$insert_data1);
 		$serial_id = $this->db->insert_id();
@@ -1631,7 +1637,8 @@ class Purchase_model extends CI_Model
 			'imei2'             => $imei_2,
 			'status'            => 7,
 			'sticker'           => $sticker_no,
-			'current_condition' => $current_grade			
+			'current_condition' => $current_grade,
+			'receiving_agent'   => $_SESSION['loggedin']
 			);
 			
 		$this->db->insert("geopos_product_serials",$insert_data1);		
@@ -1790,6 +1797,7 @@ class Purchase_model extends CI_Model
 			'purchase_pid' => $productid,
 			'purchase_id'=>$row->purchase_id,
 			'status'=>$serial_status,
+			'receiving_agent'   => $_SESSION['loggedin'],
 			'serial'=>$serialno);		
 			$this->db->insert('geopos_product_serials',$data);
 			
@@ -2008,7 +2016,8 @@ class Purchase_model extends CI_Model
 		 'status'            => 6,
 		 'sticker'           => $sticker_no,
 		 'current_condition' => $current_grade,
-		 'convert_to'        => $final_grade
+		 'convert_to'        => $final_grade,
+		 'receiving_agent'   => $_SESSION['loggedin']
 		);
 		$this->db->insert("geopos_product_serials",$insert_data1);
 		$serial_id = $this->db->insert_id();
@@ -2132,6 +2141,7 @@ class Purchase_model extends CI_Model
 		 'serial'            => $serial_no1,
 		 'imei2'             => $imei_2,
 		 'status'            => 2,
+		 'receiving_agent'   => $_SESSION['loggedin']
 		 //'sticker'           => $sticker_no,
 		 //'current_condition' => $current_grade,
 		 //'convert_to'        => $final_grade
@@ -2225,7 +2235,8 @@ class Purchase_model extends CI_Model
 			'purchase_id'       => $purchase_id,
 			'serial'            => $serial_no1,
 			'imei2'             => $imei_2,
-			'status'            => 7
+			'status'            => 7,
+			'receiving_agent'   => $_SESSION['loggedin']
 			//'sticker'           => $sticker_no,
 			//'current_condition' => $current_grade			
 			);

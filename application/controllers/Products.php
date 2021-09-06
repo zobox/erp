@@ -735,8 +735,7 @@ class Products extends CI_Controller
             //"recordsFiltered" => $this->products->count_filtered($catid, true),
             "recordsFiltered" => $no,
             "data" => $data,
-        );  
-        
+        );        
         echo json_encode($output);
     }
     

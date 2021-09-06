@@ -40,11 +40,11 @@
                         <tr>
                           <td>2</td>
                           <td> Old Spareparts</td>
-                          <td>W1</td>
-                          <td>212</td>
-                          <td>1921</td>
+                          <td><?=$warehouse['title']?></td>
+                          <td><?=$old_total_product?></td>
+                          <td><?=$old_total_qty?></td>
                           <td>
-                            <a href="<?php echo base_url('spareparts/manage_spare_add') ?>" class="btn btn-success btn-sm"> <span class="fa fa-eye"></span>
+                            <a href="<?php echo base_url('spareparts/manage_old_spare_add') ?>" class="btn btn-success btn-sm"> <span class="fa fa-eye"></span>
                             View</a>
                             </td>
                         </tr>

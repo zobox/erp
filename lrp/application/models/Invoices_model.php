@@ -181,7 +181,7 @@ class Invoices_model extends CI_Model
     }
 	
 	
-	public function invoice_details($invoice_id='',$product_serial_status='')
+	public function invoice_details($invoice_id='',$product_serial_status='',$type='')
     {		
         $this->db->select('a.pid,b.serial,a.fwid,a.twid,a.status,a.is_present,a.hold_status,
 		b.status as product_serial_status,b.current_condition,b.convert_to,b.jobwork_req_id,
@@ -220,6 +220,9 @@ class Invoices_model extends CI_Model
 		if($product_serial_status){
 			$this->db->where('b.status', $product_serial_status);
 		}
+		if($type){
+			$this->db->where('c.type', $type);
+		}
 		
 		$this->db->where('f.users_id', $this->session->userdata('user_details')[0]->users_id);
 		
@@ -242,7 +245,7 @@ class Invoices_model extends CI_Model
 
 	
 	
-	public function invoice_serial_details($invoice_id='',$serial='',$status='',$is_present='',$product_serial_status='',$jobcard_id='')
+	public function invoice_serial_details($invoice_id='',$serial='',$status='',$is_present='',$product_serial_status='',$jobcard_id='',$serial_list='')
     {   
         $this->db->select('a.pid,b.serial,b.imei2,a.fwid,a.twid,a.status,a.is_present,a.hold_status,
 		b.status as product_serial_status,b.current_condition,b.convert_to,b.jobwork_req_id,
@@ -264,7 +267,9 @@ class Invoices_model extends CI_Model
 		if($invoice_id){
 			$this->db->where('c.id', $invoice_id);
 		}
-		if($serial){
+		if($serial_list){
+			$this->db->where_in('b.serial', $serial_list);
+		}else if($serial){
 			$this->db->where('b.serial', $serial);
 		}
 		if($status){
@@ -279,6 +284,8 @@ class Invoices_model extends CI_Model
 		if($jobcard_id){
 			$this->db->where('o.id', $jobcard_id);
 		}
+		
+		$this->db->where('i.status !=',5);
 		
 		$this->db->where('f.users_id', $this->session->userdata('user_details')[0]->users_id);
         
@@ -296,6 +303,7 @@ class Invoices_model extends CI_Model
 		$this->db->join('geopos_conditions as m', 'm.id = b.convert_to', 'left');
 		$this->db->join('tbl_jobcard as o', 'o.serial = b.serial', 'left');
 		
+		$this->db->group_by('b.serial');
         $query = $this->db->get();
 		//echo $this->db->last_query(); exit;
         return $query->result();
@@ -461,6 +469,11 @@ class Invoices_model extends CI_Model
 		$serial = $this->input->post('serial');
 		$product_id = $this->input->post('pid');
 		$jobwork_required = $this->input->post('jobwork_required');
+		if($jobwork_required==1){
+			$status = 4;
+		}elseif($jobwork_required==3){
+			$status = 6;
+		}
 		$current_grade = $this->input->post('current_grade');
 		$final_grade = $this->input->post('final_grade');
 		$items_array = $this->input->post('items');
@@ -492,7 +505,7 @@ class Invoices_model extends CI_Model
 			$this->db->update('tbl_qc_data');
 			
 			$data1 = array(            
-				'status' => 4,
+				'status' => $status,
 				'current_condition' => $current_grade,				
 				'convert_to' => $final_grade,				
 				'date_modified' => date('Y-m-d H:i:s')				
@@ -677,8 +690,8 @@ class Invoices_model extends CI_Model
 		return 0;	
 	}
 	
-	public function save_receive_view($serial){
-		$this->db->where('serial',$serial);
+	public function save_receive_view($serial_list){
+		$this->db->where_in('serial',$serial_list);
 		$this->db->where('status !=',8);		
         $query = $this->db->get('geopos_product_serials');		
         if ($query->num_rows() > 0) {			
@@ -691,16 +704,16 @@ class Invoices_model extends CI_Model
 				$this->db->set($data);
 				$this->db->where('serial_id', $row->id);
 				$this->db->update('tbl_warehouse_serials');
-				
-				$data1 = array( 
-					'status' => 2,					
-					'date_modified' => date('Y-m-d H:i:s')
-				);
-				$this->db->set($data1);
-				$this->db->where('serial',$serial);
-				$this->db->where('status !=',8);	
-				$this->db->update('geopos_product_serials');
 			}
+			$data1 = array( 
+				'status' => 2,					
+				'date_modified' => date('Y-m-d H:i:s')
+			);
+			$this->db->set($data1);
+			//$this->db->where('serial',$serial);
+			$this->db->where_in('serial',$serial_list);
+			$this->db->where('status !=',8);	
+			$this->db->update('geopos_product_serials');
 			return true;
 		}
 		return false;
@@ -1313,6 +1326,40 @@ class Invoices_model extends CI_Model
 		//echo $this->db->last_query(); exit;
         return $query->row_array();
     }
+
+
+    public function getOldSerialComponent($pid,$twid)
+    {
+        $this->db->select("p.component_name,s.serial_in_type,p.hsn_code,s.serial,s.id,s.component_id,p.warehouse_product_code");
+        $this->db->from("tbl_component_serials as s");
+        $this->db->join("tbl_component as p","s.component_id=p.id",'LEFT');
+        $this->db->where('s.component_id',$pid);
+        $this->db->where('s.twid',$twid);
+        $this->db->where('s.status',1);
+        $this->db->where('s.serial_in_type',2);
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        $data = array();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                    $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
+    }
+	
+	public function getProductDetailsByPID($pid){
+		$this->db->select('a.*,b.name as condition,b.new_name as new_condition_name,c.name as varient,d.name as colour');
+		$this->db->where('a.pid',$pid);
+		$this->db->from("geopos_products as a");
+		$this->db->join("geopos_conditions as b","a.vc=b.id",'left');
+		$this->db->join("geopos_units as c","a.vb=c.id",'left');
+		$this->db->join("geopos_colours as d","a.colour_id=d.id",'left');
+		$query = $this->db->get();
+		//echo $this->db->last_query(); exit;
+		return $query->result_array();
+	}
 
 	
 }

@@ -3513,7 +3513,7 @@ FROM geopos_products $whr");
 	  
 	  public function getPurchasePriceByPID($purchase_id,$pid)
       {
-        $this->db->select('a.type,b.price');
+        $this->db->select('a.type,a.ship_tax_type,b.price,b.tax as purchase_items_tax');
         $this->db->from("geopos_purchase as a");
         $this->db->join("geopos_purchase_items as b","a.id=b.tid",'left');
         $this->db->where("a.id",$purchase_id);

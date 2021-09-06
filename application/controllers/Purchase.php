@@ -467,7 +467,26 @@ class Purchase extends CI_Controller
         //Invoice Data
         $bill_date = datefordatabase($invoicedate);
         $bill_due_date = datefordatabase($invocieduedate);
-        $data = array('tid' => $invocieno, 'invoicedate' => $bill_date, 'invoiceduedate' => $bill_due_date, 'subtotal' => $subtotal, 'shipping' => $shipping, 'ship_tax' => $shipping_tax, 'ship_tax_type' => $ship_taxtype, 'total' => $total, 'notes' => $notes, 'csd' => $customer_id, 'eid' => $this->aauth->get_user()->id, 'taxstatus' => $tax, 'discstatus' => $discstatus, 'format_discount' => $discountFormat, 'refer' => $refer, 'term' => $pterms, 'loc' => $this->aauth->get_user()->loc, 'multi' => $currency, 'type' => $type);
+		
+        $data = array('tid' => $invocieno, 
+		'invoicedate' => $bill_date, 
+		'invoiceduedate' => $bill_due_date, 
+		'subtotal' => $subtotal, 
+		'shipping' => $shipping, 
+		'ship_tax' => $shipping_tax, 
+		'ship_tax_type' => $ship_taxtype, 
+		'total' => $total, 
+		'notes' => $notes, 
+		'csd' => $customer_id, 
+		'eid' => $this->aauth->get_user()->id, 
+		'taxstatus' => $tax, 
+		'discstatus' => $discstatus, 
+		'format_discount' => $discountFormat, 
+		'refer' => $refer, 
+		'term' => $pterms, 
+		'loc' => $this->aauth->get_user()->loc, 
+		'multi' => $currency, 
+		'type' => $type);
 
 
         if ($this->db->insert('geopos_purchase', $data)) {

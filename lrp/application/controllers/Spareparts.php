@@ -33,10 +33,18 @@ class Spareparts extends CI_Controller{
 
         $qty = $this->db->query("select * from tbl_component_serials where twid='".$twid['id'] ."' and lrp_status=2 and status=4");
         $total_qty = $qty->num_rows();
-        $data['result'] = $query->result_array();
-        
+        //$data['result'] = $query->result_array();
+        $old_sp_query = $this->db->query("select * from tbl_component_serials where twid='".$twid['id'] ."' and serial_in_type=2 and status=1 group by component_id");
+        $sparepart_count = $old_sp_query->num_rows();
+
+        $sparepart_qty = $this->db->query("select * from tbl_component_serials where twid='".$twid['id'] ."' and serial_in_type=2 and status=1");
+        $total_sp_qty = $sparepart_qty->num_rows();
+
+
         $data['total_product']=$count;
         $data['total_qty']=$total_qty;
+        $data['old_total_product']=$sparepart_count;
+        $data['old_total_qty']=$total_sp_qty;
         $head['title'] = "View Component Warehouses";
         $this->load->view('includes/header',$head);
         $this->load->view('spareparts/manage-spare',$data);
@@ -58,6 +66,10 @@ class Spareparts extends CI_Controller{
         $this->load->view('spareparts/spare-more-details',$data);
         $this->load->view('includes/footer');
     }
+
+    
+
+    
     public function manage_spare_add()
     {
     	$twid = $this->invocies->getWarehouse()[0];
@@ -97,6 +109,7 @@ class Spareparts extends CI_Controller{
         $this->load->view('spareparts/manage-spare-add',$data);
         $this->load->view('includes/footer');
     }
+    
 	public function create()
     {
 		$head['title'] = "Create New Lead";
@@ -437,6 +450,64 @@ class Spareparts extends CI_Controller{
     }
 
    }
+
+   public function manage_old_spare_add()
+    {
+      $twid = $this->invocies->getWarehouse()[0];
+      $data['warehouse'] = $twid;
+
+      $query = $this->db->query("select tbl_component_serials.component_id,tbl_component_serials.serial_in_type,tbl_component_serials.purchase_id, tbl_component.component_name as product, tbl_component.warehouse_product_code from tbl_component_serials LEFT JOIN tbl_component on tbl_component_serials.component_id=tbl_component.id where tbl_component_serials.twid='".$twid['id'] ."' and tbl_component_serials.serial_in_type=2 and tbl_component_serials.status=1 group by tbl_component_serials.component_id");
+       $record = array();
+      $qty = array();
+      $by_po_qty = array();
+      $by_jobwork_qty = array();
+      
+        if ($query->num_rows() > 0) {
+
+            foreach ($query->result() as $key=>$row) {  
+              
+                $record[] = $row;
+
+
+                $qty_query = $this->db->query("select * from tbl_component_serials where status=1 and serial_in_type=2 and component_id='".$row->component_id."' and twid='".$twid['id'] ."'");
+                if($qty_query->num_rows() > 0)
+                {
+                    $qty[] = $qty_query->num_rows();
+                }else{
+                    $qty[] = 0;
+                }
+
+
+
+            }           
+            
+        }
+ 
+        $data['result']=$record;
+        
+        $data['qty']=$qty;
+        $head['title'] = "View Product Warehouses";
+        $this->load->view('includes/header',$head);
+        $this->load->view('spareparts/manage-old-spare-add',$data);
+        $this->load->view('includes/footer');
+    }
+
+   public function old_spare_more_details()
+    {
+      $pid = intval($this->input->get('pid'));
+      $wid = intval($this->input->get('wid'));
+      $twid = $this->invocies->getWarehouse()[0];
+      
+      $data['warehouse'] = $twid; 
+        $data['serial_list'] = $this->invocies->getOldSerialComponent($pid,$wid);
+
+        $head['usernm'] = '';
+        $head['title'] = 'Serial List';
+        $head['title'] = "View Product Warehouses";
+        $this->load->view('includes/header',$head);
+        $this->load->view('spareparts/old_spare_more_details',$data);
+        $this->load->view('includes/footer');
+    }
 
 	
 }
